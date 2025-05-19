@@ -1,0 +1,2 @@
+            <h1 class="text-2xl font-bold mb-4 text-blue-800">JSON Editor</h1>
+                <button id="parse-json" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Formatar JSON</button> 
