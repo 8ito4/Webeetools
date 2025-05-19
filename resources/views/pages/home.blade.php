@@ -11,13 +11,8 @@
                     Bem-vindo à Webeetools
                 </h1>
                 <p class="mt-6 max-w-lg mx-auto text-xl text-indigo-100">
-                    Central de ferramentas para desenvolvedores modernos
+                    Central de ferramentas para desenvolvedores
                 </p>
-                <div class="mt-10">
-                    <a href="#tools" class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50">
-                        Ver Ferramentas
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -36,106 +31,81 @@
 
             <div class="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 <!-- Webhook Tester -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <a href="{{ route('tools.webhook') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
                             <i class="fas fa-link"></i>
                         </div>
                         <h3 class="text-lg font-medium text-gray-900">Webhook Tester</h3>
                         <p class="mt-2 text-gray-500">Teste e depure seus webhooks facilmente</p>
-                        <a href="{{ route('tools.webhook') }}" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-500">
-                            Acessar ferramenta
-                            <svg class="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
                     </div>
-                </div>
+                </a>
 
                 <!-- JSON Converter -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <a href="{{ route('tools.json') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
                             <i class="fas fa-code"></i>
                         </div>
                         <h3 class="text-lg font-medium text-gray-900">Conversor JSON</h3>
                         <p class="mt-2 text-gray-500">Converta e valide seus dados JSON</p>
-                        <a href="{{ route('tools.json') }}" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-500">
-                            Acessar ferramenta
-                            <svg class="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
                     </div>
-                </div>
+                </a>
 
                 <!-- Password Generator -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <a href="{{ route('tools.password') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
                             <i class="fas fa-key"></i>
                         </div>
                         <h3 class="text-lg font-medium text-gray-900">Gerador de Senha</h3>
                         <p class="mt-2 text-gray-500">Crie senhas fortes e seguras</p>
-                        <a href="{{ route('tools.password') }}" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-500">
-                            Acessar ferramenta
-                            <svg class="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
                     </div>
-                </div>
+                </a>
 
-                <!-- Base64 Encoder -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <!-- Pomodoro Timer -->
+                <a href="{{ route('tools.pomodoro') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
-                            <i class="fas fa-file-code"></i>
+                            <i class="fas fa-clock"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900">Codificador Base64</h3>
-                        <p class="mt-2 text-gray-500">Codifique e decodifique strings em Base64</p>
-                        <a href="{{ route('tools.base64') }}" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-500">
-                            Acessar ferramenta
-                            <svg class="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
+                        <h3 class="text-lg font-medium text-gray-900">Pomodoro</h3>
+                        <p class="mt-2 text-gray-500">Aumente sua produtividade com o método Pomodoro</p>
                     </div>
-                </div>
+                </a>
 
-                <!-- QR Code Generator -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <!-- Cellphone Number Generator -->
+                <a href="{{ route('tools.cellphone') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
-                            <i class="fas fa-qrcode"></i>
+                            <i class="fas fa-mobile-alt"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900">Gerador de QR Code</h3>
-                        <p class="mt-2 text-gray-500">Crie QR Codes personalizados</p>
-                        <a href="{{ route('tools.qrcode') }}" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-500">
-                            Acessar ferramenta
-                            <svg class="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
+                        <h3 class="text-lg font-medium text-gray-900">Gerador de Número de Celular</h3>
+                        <p class="mt-2 text-gray-500">Gere números de celular válidos para testes</p>
                     </div>
-                </div>
+                </a>
 
                 <!-- Email Validator -->
-                <div class="bg-white overflow-hidden shadow rounded-lg">
+                <a href="{{ route('tools.document') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
-                            <i class="fas fa-envelope"></i>
+                            <i class="fas fa-id-card"></i>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900">Validador de Email</h3>
-                        <p class="mt-2 text-gray-500">Verifique a validade de endereços de email</p>
-                        <a href="{{ route('tools.email') }}" class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-500">
-                            Acessar ferramenta
-                            <svg class="ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
+                        <h3 class="text-lg font-medium text-gray-900">Gerador de CPF/CNPJ</h3>
+                        <p class="mt-2 text-gray-500">Gere documentos brasileiros válidos</p>
                     </div>
-                </div>
+                </a>
+
+                <!-- Planning Poker -->
+                <a href="{{ route('planning-poker.index') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
+                    <div class="p-6">
+                        <div class="text-3xl text-indigo-600 mb-4">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900">Planning Poker</h3>
+                        <p class="mt-2 text-gray-500">Faça estimativas ágeis em equipe de forma divertida</p>
+                    </div>
+                </a>
             </div>
         </div>
     </div>

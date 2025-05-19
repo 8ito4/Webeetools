@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Interfaces\Services\WebhookServiceInterface;
+use App\Repositories\CellphoneGeneratorRepository;
 
 class ToolController extends Controller
 {
@@ -58,6 +59,11 @@ class ToolController extends Controller
         return view('tools.email');
     }
 
+    public function document()
+    {
+        return view('tools.document');
+    }
+
     public function sha256()
     {
         return view('tools.sha256');
@@ -66,5 +72,20 @@ class ToolController extends Controller
     public function xml()
     {
         return view('tools.xml');
+    }
+
+    public function cellphone(Request $request, CellphoneGeneratorRepository $repository)
+    {
+        if ($request->isMethod('post')) {
+            $ddd = $request->input('ddd');
+            $cellphone = $repository->generate($ddd);
+            return redirect()->route('tools.cellphone')->with('cellphone', $cellphone);
+        }
+        return view('tools.cellphone');
+    }
+
+    public function pomodoro()
+    {
+        return view('tools.pomodoro');
     }
 } 
