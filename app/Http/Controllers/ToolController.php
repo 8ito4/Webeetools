@@ -14,11 +14,36 @@ class ToolController extends Controller
 
     public function webhook()
     {
-        $token = $this->webhookService->generateUniqueUrl();
-        $webhook = $this->webhookService->findByToken($token);
-        $requests = $this->webhookService->getLatestRequests($webhook);
+        $webhook = session('webhook');
+        $requests = $webhook ? $this->webhookService->getLatestRequests($webhook) : [];
+        return view('tools.webhook', compact('webhook', 'requests'));
+    }
 
-        return view('tools.webhook', compact('token', 'requests'));
+    public function createWebhook(Request $request)
+    {
+        $webhook = $this->webhookService->create([
+            'name' => $request->input('project_name'),
+            'description' => 'Webhook criado para teste'
+        ]);
+        
+        session(['webhook' => $webhook]);
+        return redirect()->route('tools.webhook');
+    }
+
+    public function deleteWebhook()
+    {
+        $webhook = session('webhook');
+        if ($webhook) {
+            $this->webhookService->delete($webhook);
+            session()->forget('webhook');
+        }
+        return redirect()->route('tools.webhook');
+    }
+
+    public function clearWebhookSession()
+    {
+        session()->forget('webhook');
+        return response()->json(['message' => 'Sessão limpa com sucesso']);
     }
 
     public function webhookReceive(Request $request, string $token)

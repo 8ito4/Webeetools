@@ -1,0 +1,2 @@
+            <h1 class="text-2xl font-bold mb-4 text-blue-800">Cellphone Tester</h1>
+                <button id="test-cellphone" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Testar Número</button> 

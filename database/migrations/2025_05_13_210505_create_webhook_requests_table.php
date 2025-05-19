@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('headers');
             $table->json('query_parameters')->nullable();
             $table->json('body')->nullable();
-            $table->string('ip_address');
+            $table->string('ip_address')->nullable();
             $table->timestamps();
         });
     }

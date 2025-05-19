@@ -11,9 +11,14 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Webhook Routes (sem CSRF)
 Route::middleware(['throttle:60,1'])->group(function () {
-    Route::post('/tools/webhook/{token}', [ToolController::class, 'webhookReceive'])
+    Route::post('/tools/webhook/create', [ToolController::class, 'createWebhook'])->name('tools.webhook.create');
+    Route::post('/tools/webhook/delete', [ToolController::class, 'deleteWebhook'])->name('tools.webhook.delete');
+    Route::post('/tools/webhook/clear-session', [ToolController::class, 'clearWebhookSession'])
         ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])
-        ->name('tools.webhook.receive');
+        ->name('tools.webhook.clear-session');
+    // Route::any('/tools/webhook/{token}', [ToolController::class, 'webhookReceive'])
+    //     ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])
+    //     ->name('tools.webhook.receive');
 });
 
 // Rotas das Ferramentas
