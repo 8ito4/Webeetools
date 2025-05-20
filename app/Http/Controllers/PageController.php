@@ -25,4 +25,28 @@ class PageController extends Controller
     {
         return view('pages.privacy');
     }
+
+    public function suggestions()
+    {
+        return view('pages.suggestions');
+    }
+
+    public function contact(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'subject' => 'nullable|string|max:255',
+                'message' => 'required|string',
+            ]);
+
+            // TODO: Implementar envio de email ou salvar no banco de dados
+
+            return redirect()->route('contact')->with('success', 'Sua mensagem foi enviada com sucesso!');
+
+        } else {
+            return view('pages.contact');
+        }
+    }
 } 

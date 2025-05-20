@@ -48,7 +48,7 @@
             </div>
 
             {{-- Lista de requisições individuais --}}
-            <div class="mt-12 bg-white shadow rounded-lg text-left overflow-hidden">
+            <div class="mt-12 bg-white shadow rounded-lg text-left overflow-hidden" id="requests-container">
                 @forelse($requests as $request)
                     <div class="border-b border-gray-200 last:border-b-0" x-data="{ requestOpen: false }">
                         {{-- Header da requisição individual --}}
@@ -121,6 +121,7 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
 // Script para limpar a sessão do webhook ao sair da página
 window.addEventListener('beforeunload', function() {
@@ -150,6 +151,65 @@ function copyToClipboard() {
         button.innerHTML = originalText;
     }, 2000);
 }
+
+// Configuração do Pusher para realtime
+@if(isset($webhook) && $webhook)
+const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+    cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}'
+});
+
+const channel = pusher.subscribe('webhook.{{ $webhook->token }}');
+channel.bind('new-request', function(data) {
+    const container = document.getElementById('requests-container');
+    const emptyMessage = container.querySelector('.text-center');
+    if (emptyMessage) {
+        container.innerHTML = '';
+    }
+
+    const request = data.request;
+    const requestHtml = `
+        <div class="border-b border-gray-200 last:border-b-0" x-data="{ requestOpen: false }">
+            <button @click="requestOpen = !requestOpen" class="w-full flex items-center justify-between p-4 focus:outline-none hover:bg-gray-100 transition">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${request.method === 'GET' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}">
+                    ${request.method}
+                </span>
+                <span class="text-sm text-gray-500">
+                    ${new Date(request.created_at).toLocaleString()}
+                </span>
+                <svg :class="{'transform rotate-180': requestOpen}" class="h-4 w-4 text-gray-500 transition-transform duration-200 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            <div x-show="requestOpen" x-transition class="px-4 pb-4 bg-white">
+                <div class="mt-2">
+                    <div class="mb-2">
+                        <h4 class="text-sm font-medium text-gray-700">Headers:</h4>
+                        <pre class="mt-1 text-sm text-gray-600 bg-gray-100 p-2 rounded">${JSON.stringify(request.headers, null, 2)}</pre>
+                    </div>
+                    ${request.query_parameters ? `
+                    <div class="mb-2">
+                        <h4 class="text-sm font-medium text-gray-700">Query Parameters:</h4>
+                        <pre class="mt-1 text-sm text-gray-600 bg-gray-100 p-2 rounded">${JSON.stringify(request.query_parameters, null, 2)}</pre>
+                    </div>
+                    ` : ''}
+                    ${request.body ? `
+                    <div class="mb-2">
+                        <h4 class="text-sm font-medium text-gray-700">Body:</h4>
+                        <pre class="mt-1 text-sm text-gray-600 bg-gray-100 p-2 rounded">${JSON.stringify(request.body, null, 2)}</pre>
+                    </div>
+                    ` : ''}
+                    <div class="text-sm text-gray-500">
+                        IP: ${request.ip_address}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    container.insertAdjacentHTML('afterbegin', requestHtml);
+});
+@endif
 </script>
 @endpush
 @endsection 

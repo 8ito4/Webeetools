@@ -35,6 +35,22 @@ class PlanningPokerController extends Controller
 
     public function joinRoom(Request $request)
     {
+        if ($request->isMethod('get')) {
+            $code = $request->query('code');
+            if (!$code) {
+                return redirect()->route('planning-poker.index');
+            }
+
+            // Verifica se a sala existe
+            $room = $this->service->getRoom($code);
+            if (!$room) {
+                return redirect()->route('planning-poker.index')->withErrors(['code' => 'Código de sala inválido.']);
+            }
+
+            // Redireciona para a sala com o modal de nome
+            return redirect()->route('planning-poker.room', ['code' => $code, 'show_name_modal' => true]);
+        }
+
         $request->validate([
             'name' => 'required|string|max:50',
             'code' => 'required|string|size:6',
@@ -52,9 +68,17 @@ class PlanningPokerController extends Controller
     {
         $room = $this->service->getRoom($code);
         $name = session('planning_poker_name');
-        if (!$room || !isset($room['participants'][$name])) {
+        $showNameModal = $request->query('show_name_modal', false);
+
+        // Se não tem nome na sessão e não está mostrando o modal, redireciona para mostrar o modal
+        if (!$name && !$showNameModal) {
+            return redirect()->route('planning-poker.room', ['code' => $code, 'show_name_modal' => true]);
+        }
+
+        if (!$room) {
             return redirect()->route('planning-poker.index')->withErrors(['code' => 'Acesso negado à sala.']);
         }
+
         $timer = $this->service->getTimer($code);
         $history = $this->service->getHistory($code);
         $average = $this->service->getAverage($code);
@@ -66,6 +90,7 @@ class PlanningPokerController extends Controller
             'timer' => $timer,
             'history' => $history,
             'average' => $average,
+            'showNameModal' => $showNameModal
         ]);
     }
 
@@ -110,12 +135,16 @@ class PlanningPokerController extends Controller
         return redirect()->route('planning-poker.room', $code);
     }
 
-    public function setTimer($code, Request $request)
+    public function setTimer(Request $request, $code)
     {
-        $request->validate(['minutes' => 'required|integer|min:1|max:60']);
-        $seconds = $request->input('minutes') * 60;
+        $minutes = $request->input('minutes');
+        $seconds = $minutes * 60;
+        
         $this->service->setTimer($code, $seconds);
-        return redirect()->route('planning-poker.room', $code);
+        
+        event(new \App\Events\PlanningPokerTimerStarted($code, $seconds));
+        
+        return redirect()->back();
     }
 
     public function reveal($code, Request $request)
@@ -133,5 +162,15 @@ class PlanningPokerController extends Controller
     {
         $this->service->nextTask($code);
         return redirect()->route('planning-poker.room', $code);
+    }
+
+    public function pauseTimer($code)
+    {
+        $timer = $this->service->getTimer($code);
+        if ($timer) {
+            event(new \App\Events\PlanningPokerTimerPaused($code, true));
+        }
+        
+        return redirect()->back();
     }
 } 

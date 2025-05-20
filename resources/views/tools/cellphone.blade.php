@@ -3,41 +3,91 @@
 @section('title', 'Gerador de Número de Celular')
 
 @section('content')
-<div class="max-w-xl mx-auto mt-12 bg-white p-8 rounded-lg shadow-lg">
-    <h1 class="text-3xl font-bold text-indigo-700 mb-4 flex items-center gap-2">
-        <i class="fas fa-mobile-alt"></i> Gerador de Número de Celular
-    </h1>
-    <form method="POST" action="{{ route('tools.cellphone') }}" class="flex flex-col gap-4">
-        @csrf
-        <label class="block font-semibold text-gray-700">DDD (opcional)</label>
-        <input type="text" name="ddd" maxlength="2" class="block w-24 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2 text-center" placeholder="Ex: 11">
-        <div class="relative w-full">
-            <input id="cellphoneOutput" type="text" readonly value="{{ session('cellphone') ?? '' }}" class="w-full text-center font-mono text-xl bg-gray-50 border border-gray-300 rounded px-4 py-3 focus:outline-none cursor-default select-all shadow-sm pr-12">
-            <button onclick="copyCellphone()" type="button" class="absolute right-2 top-1/2 -translate-y-1/2 p-1 bg-transparent hover:bg-gray-200 rounded transition" title="Copiar">
-                <i class="far fa-copy text-gray-500 hover:text-gray-700"></i>
-            </button>
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-mobile-alt text-2xl text-blue-600 mr-3"></i>
+                <h1 class="text-2xl font-bold text-gray-800">Gerador de Número de Celular</h1>
+            </div>
+
+            <div class="mb-6">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="ddd">
+                        DDD (opcional)
+                    </label>
+                    <input type="text" id="ddd" maxlength="2" 
+                        class="shadow appearance-none border rounded w-24 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-center"
+                        placeholder="Ex: 11">
+                </div>
+
+                <div class="relative mb-4">
+                    <input id="cellphoneOutput" type="text" readonly 
+                        class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-lg font-mono text-center"
+                        placeholder="Clique em Gerar">
+                    <button onclick="copyCellphone()" type="button" 
+                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+
+                <button onclick="generateCellphone()" type="button" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                    Gerar Número
+                </button>
+            </div>
+
+            <div class="mt-6">
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Dicas para Testes:</h2>
+                <ul class="list-disc list-inside text-gray-600">
+                    <li>Use DDDs válidos para sua região</li>
+                    <li>Utilize números diferentes para cada teste</li>
+                    <li>Evite usar números reais em produção</li>
+                    <li>Copie facilmente o número gerado para seus formulários</li>
+                </ul>
+            </div>
         </div>
-        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-4 rounded transition text-lg mt-2">Gerar Número</button>
-    </form>
-    <script>
-        function copyCellphone() {
-            const input = document.getElementById('cellphoneOutput');
-            input.select();
-            document.execCommand('copy');
-            const btn = event.currentTarget;
-            const original = btn.innerHTML;
-            btn.innerHTML = '<i class=\'fas fa-check text-green-600 text-lg\'></i>';
-            setTimeout(() => { btn.innerHTML = original; }, 1200);
-        }
-    </script>
-    <div class="mt-8">
-        <h2 class="font-bold text-lg mb-2 text-gray-800">Dicas para Testes:</h2>
-        <ul class="list-disc pl-5 text-gray-600 space-y-1">
-            <li>Use DDDs válidos para sua região</li>
-            <li>Utilize números diferentes para cada teste</li>
-            <li>Evite usar números reais em produção</li>
-            <li>Copie facilmente o número gerado para seus formulários</li>
-        </ul>
     </div>
 </div>
+
+@push('scripts')
+<script>
+function generateCellphone() {
+    const ddd = document.getElementById('ddd').value;
+    const output = document.getElementById('cellphoneOutput');
+    
+    // Gera os 8 dígitos aleatórios
+    let number = '';
+    for (let i = 0; i < 8; i++) {
+        number += Math.floor(Math.random() * 10);
+    }
+    
+    // Adiciona o 9 no início (padrão de celular)
+    number = '9' + number;
+    
+    // Adiciona o DDD se fornecido
+    if (ddd) {
+        number = ddd + number;
+    }
+    
+    output.value = number;
+}
+
+function copyCellphone() {
+    const input = document.getElementById('cellphoneOutput');
+    input.select();
+    document.execCommand('copy');
+    
+    // Feedback visual
+    const originalValue = input.value;
+    input.value = 'Copiado!';
+    setTimeout(() => {
+        input.value = originalValue;
+    }, 1000);
+}
+
+// Gerar número inicial
+document.addEventListener('DOMContentLoaded', generateCellphone);
+</script>
+@endpush
 @endsection 

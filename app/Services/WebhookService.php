@@ -33,10 +33,14 @@ class WebhookService implements WebhookServiceInterface
             'query_parameters' => $request->query->all(),
             'body' => $request->all(),
             'ip_address' => $request->ip(),
+            'created_at' => now()->toDateTimeString()
         ];
 
-        $this->webhookRepository->saveRequest($webhook, $requestData);
+        $savedRequest = $this->webhookRepository->saveRequest($webhook, $requestData);
         $webhook->incrementRequestCount();
+
+        // Disparar evento de nova requisição
+        event(new \App\Events\WebhookRequestReceived($savedRequest->toArray(), $webhook->token));
     }
 
     public function getLatestRequests(Webhook $webhook, int $limit = 10): array
