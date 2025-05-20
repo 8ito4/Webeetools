@@ -57,6 +57,7 @@ class PlanningPokerRepository
         $rooms[$code]['current_task'] = $task;
         $rooms[$code]['votes'] = [];
         $rooms[$code]['revealed'] = false;
+        unset($rooms[$code]['timer']);
         foreach ($rooms[$code]['participants'] as &$p) {
             $p['vote'] = null;
         }
@@ -101,7 +102,8 @@ class PlanningPokerRepository
         if (!isset($rooms[$code])) return false;
         $rooms[$code]['timer'] = [
             'start' => time(),
-            'duration' => $seconds
+            'duration' => $seconds,
+            'remaining' => $seconds
         ];
         $this->saveAllRooms($rooms);
         return true;
@@ -194,8 +196,18 @@ class PlanningPokerRepository
         return $avg;
     }
 
-    public function getAverage($code) {
-        $rooms = $this->getAllRooms();
-        return $rooms[$code]['average'] ?? null;
+    public function getAverage($code)
+    {
+        $room = $this->getRoom($code);
+        if (!$room || !$room['revealed']) return null;
+        
+        $votes = collect($room['participants'])
+            ->map(fn($p) => $p['vote'])
+            ->filter(fn($v) => $v !== null && $v !== '?')
+            ->map(fn($v) => $v === '☕' ? 0 : (float)$v);
+            
+        if ($votes->isEmpty()) return null;
+        
+        return round($votes->avg(), 1);
     }
 } 

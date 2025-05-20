@@ -43,18 +43,18 @@
                 <button onclick="copyRoomCode()" class="p-1 rounded hover:bg-gray-200 transition" title="Copiar código da sala">
                     <i class="far fa-copy text-gray-700"></i>
                 </button>
-                <a href="{{ route('planning-poker.join') }}?code={{ $code }}" class="p-1 rounded hover:bg-gray-200 transition" title="Compartilhar link da sala">
+                <button onclick="shareRoomLink()" class="p-1 rounded hover:bg-gray-200 transition" title="Compartilhar link da sala">
                     <i class="fas fa-share-alt text-indigo-600"></i>
-                </a>
+                </button>
             </div>
-        </div>
-        <div class="flex items-center gap-2 mb-4 justify-end">
         </div>
         @if($isOwner)
         <form method="POST" action="{{ route('planning-poker.set-timer', $code) }}" class="flex gap-2 mb-2 items-center">
             @csrf
-            <input type="number" name="minutes" min="1" max="60" required pattern="[0-9]*" inputmode="numeric" class="w-32 rounded bg-gray-100 text-gray-900 border-gray-300 px-2 py-1 text-center" placeholder="digite o tempo em minutos">
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded transition" id="startBtn">Iniciar</button>
+            <input type="number" name="minutes" min="1" max="60" required pattern="[0-9]*" inputmode="numeric" 
+                class="w-48 rounded bg-gray-100 text-gray-900 border-gray-300 px-4 py-2 text-center text-lg" 
+                placeholder="Digite o tempo">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2 rounded transition text-lg" id="startBtn">Iniciar</button>
         </form>
         <div class="flex gap-2 mb-4">
             <form method="POST" action="{{ route('planning-poker.reset-timer', $code) }}">
@@ -131,20 +131,44 @@
         @endif
     </div>
 </div>
+
+<!-- Modal de Nome -->
+<div id="modal-name" class="{{ $showNameModal ? '' : 'hidden' }} fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white rounded-lg p-8 shadow-lg w-80 flex flex-col gap-4">
+        <h2 class="text-xl font-bold text-indigo-700 mb-2">Bem-vindo à Sala!</h2>
+        <form method="POST" action="{{ route('planning-poker.join') }}" class="flex flex-col gap-4">
+            @csrf
+            <input type="hidden" name="code" value="{{ $code }}">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Seu nome</label>
+                <input type="text" name="name" id="name" required 
+                    class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 px-3 py-2"
+                    placeholder="Digite seu nome">
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded transition">Entrar na Sala</button>
+        </form>
+    </div>
+</div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+<script src="https://unpkg.com/ztext@latest/dist/ztext.min.js"></script>
 <script>
-function copyRoomCode() {
-    const code = document.getElementById('roomCode');
-    navigator.clipboard.writeText(code.textContent);
-}
-function shareRoomLink() {
-    navigator.clipboard.writeText(window.location.href);
-    alert('Link da sala copiado!');
-}
+// Configuração do Pusher
+const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+    cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}'
+});
+
+const channel = pusher.subscribe('planning-poker.{{ $code }}');
+
 // Timer JS
 let remaining = {{ $timer && $timer['remaining'] > 0 ? $timer['remaining'] : 0 }};
 let paused = false;
+let timerInterval = null;
 const timerDisplay = document.getElementById('timerDisplay');
 const pauseBtn = document.getElementById('pauseBtn');
+
 function updateTimer() {
     if (!paused && remaining > 0) {
         let min = String(Math.floor(remaining / 60)).padStart(2, '0');
@@ -158,16 +182,93 @@ function updateTimer() {
         if (remaining > 0) remaining--;
     }
 }
-if (remaining > 0) setInterval(updateTimer, 1000);
+
+function startTimer(duration) {
+    if (timerInterval) clearInterval(timerInterval);
+    remaining = duration;
+    paused = false;
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+}
+
+if (remaining > 0) {
+    startTimer(remaining);
+}
+
 pauseBtn && (pauseBtn.onclick = function() {
     paused = !paused;
     pauseBtn.textContent = paused ? 'Continuar' : 'Pausar';
 });
+
+// Eventos do Pusher
+channel.bind('timer-started', function(data) {
+    startTimer(data.duration);
+});
+
+channel.bind('timer-paused', function(data) {
+    paused = data.paused;
+    pauseBtn.textContent = paused ? 'Continuar' : 'Pausar';
+});
+
+channel.bind('timer-reset', function(data) {
+    startTimer(data.duration);
+});
+
+channel.bind('vote-received', function(data) {
+    location.reload();
+});
+
+channel.bind('votes-revealed', function(data) {
+    location.reload();
+});
+
+channel.bind('votes-reset', function(data) {
+    location.reload();
+});
+
+channel.bind('new-task', function(data) {
+    location.reload();
+});
+
+function copyRoomCode() {
+    const code = document.getElementById('roomCode');
+    navigator.clipboard.writeText(code.textContent);
+    
+    const button = code.nextElementSibling;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check text-green-600"></i>';
+    setTimeout(() => {
+        button.innerHTML = originalText;
+    }, 2000);
+}
+
+function shareRoomLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    
+    const button = document.querySelector('[title="Compartilhar link da sala"]');
+    const originalText = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check text-green-600"></i>';
+    setTimeout(() => {
+        button.innerHTML = originalText;
+    }, 2000);
+}
+
 function openTaskModal() {
     document.getElementById('modal-task').classList.remove('hidden');
 }
+
 function closeTaskModal() {
     document.getElementById('modal-task').classList.add('hidden');
 }
+
+function openChangeNameModal() {
+    document.getElementById('modal-change-name').classList.remove('hidden');
+}
+
+function closeChangeNameModal() {
+    document.getElementById('modal-change-name').classList.add('hidden');
+}
 </script>
+@endpush
 @endsection 
