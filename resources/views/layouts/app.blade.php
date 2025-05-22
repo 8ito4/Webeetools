@@ -36,14 +36,38 @@
 
                 <!-- Right side: Search and Auth Links -->
                 <div class="flex items-center ml-6">
-                     <!-- Search Bar -->
+                    <!-- Player Lo-Fi Minimalista -->
+                    <div class="mr-4">
+                        <div class="bg-white/80 backdrop-blur-sm rounded-lg p-1.5 shadow-lg flex items-center space-x-2 relative">
+                            <span class="text-xs text-gray-500 font-medium">lo-fi</span>
+                            <button id="playPauseBtn" class="text-gray-700 hover:text-yellow-500 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </button>
+                            <div class="relative inline-block">
+                                <button type="button" id="volumeBtn" class="text-gray-600 hover:text-yellow-500">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                                    </svg>
+                                </button>
+                                <!-- Volume Slider -->
+                                <div id="volumeSlider" class="hidden absolute top-full -left-16 mt-2 bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-lg w-20 z-50">
+                                    <input type="range" min="0" max="100" value="50" class="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-yellow-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Search Bar -->
                     <div class="relative mr-4">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3">
                             <i class="fas fa-search text-gray-400"></i>
                         </span>
                         <input type="text" placeholder="Buscar..." class="w-64 py-2 pl-10 pr-4 text-sm text-gray-700 bg-gray-100 rounded-md focus:outline-none focus:bg-white focus:ring-2 focus:ring-yellow-500">
                     </div>
-                    
+
                     <!-- Auth Links -->
                     <div class="flex items-center space-x-4">
                         @guest
@@ -115,6 +139,74 @@
             const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (scrollTop / scrollHeight) * 100;
             document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Player de áudio lo-fi
+            const audio = new Audio('https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0c6ff1bab.mp3?filename=rain-and-thunder-140894.mp3');
+            audio.loop = true;
+            let isPlaying = false;
+
+            // Elementos do player
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const volumeBtn = document.getElementById('volumeBtn');
+            const volumeSlider = document.getElementById('volumeSlider');
+
+            // Função para atualizar o ícone do botão play/pause
+            function updatePlayPauseIcon() {
+                const icon = playPauseBtn.querySelector('svg');
+                if (isPlaying) {
+                    icon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    `;
+                } else {
+                    icon.innerHTML = `
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    `;
+                }
+            }
+
+            // Controle de play/pause
+            playPauseBtn.addEventListener('click', function() {
+                if (isPlaying) {
+                    audio.pause();
+                } else {
+                    audio.play();
+                }
+                isPlaying = !isPlaying;
+                updatePlayPauseIcon();
+            });
+
+            // Controle de volume
+            const volumeInput = volumeSlider.querySelector('input');
+
+            // Mostrar/esconder o slider de volume
+            volumeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                volumeSlider.classList.toggle('hidden');
+            });
+
+            // Ajustar o volume
+            volumeInput.addEventListener('input', function(e) {
+                e.stopPropagation();
+                const volume = this.value / 100;
+                audio.volume = volume;
+            });
+
+            // Fechar o slider ao clicar fora
+            document.addEventListener('click', function(e) {
+                if (!volumeBtn.contains(e.target) && !volumeSlider.contains(e.target)) {
+                    volumeSlider.classList.add('hidden');
+                }
+            });
+
+            // Inicializar volume
+            audio.volume = 0.5;
+            volumeInput.value = 50;
         });
     </script>
 
