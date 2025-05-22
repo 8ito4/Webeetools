@@ -1,0 +1,30 @@
+// Custom styles
+body {
+    font-family: 'Nunito', sans-serif;
+}
+
+// Auth pages
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8fafc;
+}
+
+// Navbar
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Buttons
+.btn-primary {
+    background-color: #f59e0b;
+    border-color: #f59e0b;
+    
+    &:hover {
+        background-color: #d97706;
+        border-color: #d97706;
+    }
+} 

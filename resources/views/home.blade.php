@@ -197,18 +197,71 @@
 </div>
 
 @push('scripts')
-{{-- <script>
-    // Inicializar Ztext.js manualmente no título
+<script>
     document.addEventListener('DOMContentLoaded', function() {
-        new Ztextify('#webeetools-title', {
-            depth: '0.8em',
-            layers: 10,
-            // Outras opções podem ser adicionadas aqui
-            // event: 'pointer', // Exemplo: reage ao mouse
-            // eventRotation: '30deg' // Exemplo: intensidade da rotação
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const volumeBtn = document.getElementById('volumeBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeInput = volumeSlider.querySelector('input');
+        let isPlaying = false;
+        let audio = new Audio('https://stream.zeno.fm/0r0xa792kwzuv');
+        audio.volume = 0.5; // Volume inicial médio
+
+        // Função para atualizar o ícone do botão play/pause
+        function updatePlayPauseIcon() {
+            const svg = playPauseBtn.querySelector('svg');
+            if (isPlaying) {
+                svg.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                `;
+            } else {
+                svg.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                `;
+            }
+        }
+
+        // Controle de play/pause
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+            } else {
+                audio.play();
+            }
+            isPlaying = !isPlaying;
+            updatePlayPauseIcon();
+        });
+
+        // Controle de volume
+        volumeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            volumeSlider.classList.toggle('hidden');
+        });
+
+        // Atualizar volume quando o slider é movido
+        volumeInput.addEventListener('input', (e) => {
+            const volume = e.target.value / 100;
+            audio.volume = volume;
+        });
+
+        // Fechar o slider quando clicar fora
+        document.addEventListener('click', (e) => {
+            if (!volumeSlider.contains(e.target) && e.target !== volumeBtn) {
+                volumeSlider.classList.add('hidden');
+            }
+        });
+
+        // Iniciar automaticamente
+        audio.play().then(() => {
+            isPlaying = true;
+            updatePlayPauseIcon();
+        }).catch(error => {
+            console.log('Autoplay prevented:', error);
         });
     });
-</script> --}}
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
 <script>
