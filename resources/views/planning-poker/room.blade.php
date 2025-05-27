@@ -4,7 +4,6 @@
 
 @section('content')
 <div class="flex flex-col lg:flex-row gap-8 max-w-6xl mx-auto mt-10">
-    <!-- Grid de Cartas -->
     <div class="flex-1 flex flex-col items-center">
         <h2 class="text-gray-900 text-2xl font-bold mb-6 mt-2">{{ $room['current_task'] ?? 'Sem tarefa selecionada' }}</h2>
         @if($room['revealed'] ?? false)
@@ -34,7 +33,6 @@
             </form>
         @endif
     </div>
-    <!-- Painel Lateral -->
     <div class="w-full lg:w-96 bg-white rounded-lg shadow-lg p-6 flex flex-col gap-6">
         <div class="flex items-center justify-between mb-4">
             <div class="text-lg text-gray-900 font-semibold">Código da sala:</div>
@@ -69,9 +67,7 @@
             <span id="timerDisplay" class="font-mono text-2xl px-3 py-1 rounded bg-gray-100 text-gray-900">{{ $timer ? gmdate('i:s', $timer['remaining']) : '05:00' }}</span>
         </div>
         @endif
-        <!-- Botão para abrir modal de nova discussão -->
         <button type="button" onclick="openTaskModal()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded transition mb-4">Criar nova discussão</button>
-        <!-- Modal Nova Discussão -->
         <div id="modal-task" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
             <div class="bg-white rounded-lg p-8 shadow-lg w-80 flex flex-col gap-4">
                 <h2 class="text-xl font-bold text-green-700 mb-2">Nova Discussão</h2>
@@ -132,7 +128,6 @@
     </div>
 </div>
 
-<!-- Modal de Nome -->
 <div id="modal-name" class="{{ $showNameModal ? '' : 'hidden' }} fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
     <div class="bg-white rounded-lg p-8 shadow-lg w-80 flex flex-col gap-4">
         <h2 class="text-xl font-bold text-indigo-700 mb-2">Bem-vindo à Sala!</h2>
@@ -155,14 +150,12 @@
 <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script src="https://unpkg.com/ztext@latest/dist/ztext.min.js"></script>
 <script>
-// Configuração do Pusher
 const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
     cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}'
 });
 
 const channel = pusher.subscribe('planning-poker.{{ $code }}');
 
-// Timer JS
 let remaining = {{ $timer && $timer['remaining'] > 0 ? $timer['remaining'] : 0 }};
 let paused = false;
 let timerInterval = null;
@@ -200,7 +193,6 @@ pauseBtn && (pauseBtn.onclick = function() {
     pauseBtn.textContent = paused ? 'Continuar' : 'Pausar';
 });
 
-// Eventos do Pusher
 channel.bind('timer-started', function(data) {
     startTimer(data.duration);
 });

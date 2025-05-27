@@ -60,10 +60,8 @@
 
 @push('scripts')
 <script>
-// Registrar o plugin TextPlugin do GSAP
 gsap.registerPlugin(TextPlugin);
 
-// Animação do texto quando a página carrega
 gsap.to("#animatedText", {
     duration: 2,
     text: "Criar sua conta",
@@ -72,18 +70,15 @@ gsap.to("#animatedText", {
     delay: 0.5
 });
 
-// Animação quando o formulário é enviado
 document.getElementById('registerForm').addEventListener('submit', function(e) {
     e.preventDefault(); // Previne o envio do formulário temporariamente
     
-    // Animação do texto
     gsap.to("#animatedText", {
         duration: 1,
         text: "Conta criada com sucesso!",
         ease: "none",
         type: "chars",
         onComplete: function() {
-            // Após a animação, envia o formulário
             setTimeout(() => {
                 e.target.submit();
             }, 1000);

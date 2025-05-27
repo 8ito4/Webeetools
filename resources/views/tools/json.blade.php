@@ -1,161 +1,230 @@
-@extends('layouts.app')
+@extends('layouts.modern')
 
-@section('content')
-<style>
-/* Estilo para a sintaxe do JSON */
+@section('title', 'Formatador JSON - Webeetools')
+
+@section('styles')
+/* JSON Syntax Highlighting */
 .json-string { color: #ce9178; }
 .json-number { color: #b5cea8; }
 .json-boolean { color: #569cd6; }
 .json-null { color: #569cd6; }
 .json-key { color: #9cdcfe; }
+
 .json-output {
     white-space: pre;
-    font-family: monospace;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.875rem;
     line-height: 1.25rem;
     tab-size: 4;
-    padding: 0.5rem 0.75rem;
-    padding-right: 3rem; /* Aumentado para dar mais espaço ao botão */
-    background-color: #1e1e1e;
+    padding: 1rem;
+    background: rgba(2, 6, 23, 0.8);
     color: #d4d4d4;
-    border-radius: 0.375rem;
-    border: 1px solid #374151;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(71, 85, 105, 0.5);
     overflow: auto;
-    height: calc(30 * 1.25rem + 1rem); /* 30 linhas + padding */
+    min-height: 400px;
+    position: relative;
 }
 
-/* Estilo da barra de rolagem */
 .json-output::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
+    width: 8px;
+    height: 8px;
 }
 
 .json-output::-webkit-scrollbar-track {
-    background: #1e1e1e;
-    border-left: 1px solid #2d2d2d;
+    background: rgba(2, 6, 23, 0.8);
 }
 
 .json-output::-webkit-scrollbar-thumb {
-    background: #424242;
-    border: 3px solid #1e1e1e;
-    border-radius: 7px;
+    background: var(--accent-600);
+    border-radius: 4px;
 }
 
 .json-output::-webkit-scrollbar-thumb:hover {
-    background: #4f4f4f;
+    background: var(--accent-500);
 }
 
-/* Canto onde as barras se encontram */
-.json-output::-webkit-scrollbar-corner {
-    background: #1e1e1e;
-}
-
-/* Posição do botão de copiar */
 .copy-button {
     position: absolute;
-    top: 0.5rem;
-    right: 1.25rem; /* Ajustado para ficar mais à esquerda */
+    top: 0.75rem;
+    right: 0.75rem;
     z-index: 10;
-    padding: 0.25rem;
+    padding: 0.5rem;
     border-radius: 0.25rem;
-    background-color: rgba(30, 30, 30, 0.8); /* Fundo semi-transparente */
+    background: rgba(15, 23, 42, 0.8);
+    color: #9ca3af;
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .copy-button:hover {
-    background-color: rgba(30, 30, 30, 0.9);
+    background: rgba(30, 41, 59, 0.8);
+    color: var(--accent-400);
+    border-color: var(--accent-400);
 }
-</style>
 
-<div class="container-fluid px-4 py-4">
-    <div class="max-w-full mx-4">
-        <div class="bg-white rounded-lg shadow-lg p-6">
-            <div class="flex items-center mb-6">
-                <i class="fas fa-code text-2xl text-blue-600 mr-3"></i>
-                <h1 class="text-2xl font-bold text-gray-800">Conversor JSON</h1>
-            </div>
+.status-message {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 1rem;
+    font-weight: 500;
+}
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Input -->
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="input">
-                            JSON de Entrada
-                        </label>
-                        <div class="relative">
-                            <textarea id="input" rows="30"
-                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline font-mono text-sm"
-                                placeholder='{"exemplo": "Cole seu JSON aqui"}'></textarea>
-                            <button onclick="clearInput()" 
-                                class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
+.status-success {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #10b981;
+}
+
+.status-error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.status-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+}
+
+.clear-button {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.clear-button:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.tips-section {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.tips-title {
+    color: #e2e8f0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tips-list {
+    list-style: none;
+    padding: 0;
+}
+
+.tips-list li {
+    color: #9ca3af;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.tips-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent-400);
+    font-weight: bold;
+}
+@endsection
+
+@section('content')
+<div class="tool-container">
+    <div class="tool-header">
+        <h1 class="tool-title">
+            <i class="fas fa-code" style="color: var(--accent-400); margin-right: 0.5rem;"></i>
+            Formatador JSON
+        </h1>
+        <p class="tool-description">
+            Formate, valide e minifique seus dados JSON com facilidade e precisão
+        </p>
+    </div>
+
+    <div class="tool-content">
+        <div class="grid grid-cols-2">
+            <div class="form-group">
+                <label class="form-label" for="input">
+                    <i class="fas fa-edit"></i> JSON de Entrada
+                </label>
+                <div style="position: relative;">
+                    <textarea id="input" 
+                        class="form-textarea" 
+                        style="min-height: 400px; font-family: 'JetBrains Mono', monospace;"
+                        placeholder='{"exemplo": "Cole seu JSON aqui"}'></textarea>
+                    <button onclick="clearInput()" class="clear-button">
+                        <i class="fas fa-times"></i>
+                    </button>
                 </div>
+            </div>
 
-                <!-- Output -->
-                <div>
-                    <div class="mb-4">
-                        <label class="block text-gray-700 text-sm font-bold mb-2" for="output">
-                            JSON Formatado
-                        </label>
-                        <div class="relative">
-                            <pre id="output" class="json-output"></pre>
-                            <button onclick="copyOutput()" 
-                                class="copy-button text-gray-300 hover:text-white">
-                                <i class="far fa-copy"></i>
-                            </button>
-                        </div>
-                    </div>
+            <div class="form-group">
+                <label class="form-label" for="output">
+                    <i class="fas fa-code"></i> JSON Formatado
+                </label>
+                <div style="position: relative;">
+                    <pre id="output" class="json-output"></pre>
+                    <button onclick="copyOutput()" class="copy-button">
+                        <i class="far fa-copy"></i>
+                    </button>
                 </div>
             </div>
+        </div>
 
-            <!-- Ações -->
-            <div class="flex flex-wrap gap-4 mt-4">
-                <button onclick="formatJSON()" 
-                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    <i class="fas fa-indent mr-2"></i>
-                    Formatar
-                </button>
-                <button onclick="minifyJSON()" 
-                    class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    <i class="fas fa-compress-alt mr-2"></i>
-                    Minificar
-                </button>
-                <button onclick="validateJSON()" 
-                    class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                    <i class="fas fa-check mr-2"></i>
-                    Validar
-                </button>
-            </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
+            <button onclick="formatJSON()" class="btn btn-primary">
+                <i class="fas fa-indent"></i>
+                Formatar
+            </button>
+            <button onclick="minifyJSON()" class="btn btn-secondary">
+                <i class="fas fa-compress-alt"></i>
+                Minificar
+            </button>
+            <button onclick="validateJSON()" class="btn btn-secondary">
+                <i class="fas fa-check"></i>
+                Validar
+            </button>
+        </div>
 
-            <!-- Status -->
-            <div id="status" class="mt-4 p-4 rounded-lg hidden">
-            </div>
+        <div id="status" class="hidden"></div>
 
-            <!-- Dicas -->
-            <div class="mt-6">
-                <h2 class="text-lg font-semibold text-gray-800 mb-2">Dicas:</h2>
-                <ul class="list-disc list-inside text-gray-600">
-                    <li>Use "Formatar" para tornar o JSON mais legível com indentação adequada</li>
-                    <li>Use "Minificar" para remover espaços em branco e reduzir o tamanho</li>
-                    <li>Use "Validar" para verificar se o JSON está sintaticamente correto</li>
-                    <li>Clique no ícone de cópia para copiar o resultado para a área de transferência</li>
-                </ul>
-            </div>
+        <div class="tips-section">
+            <h2 class="tips-title">
+                <i class="fas fa-lightbulb"></i>
+                Dicas de Uso
+            </h2>
+            <ul class="tips-list">
+                <li>Use "Formatar" para tornar o JSON mais legível com indentação adequada</li>
+                <li>Use "Minificar" para remover espaços em branco e reduzir o tamanho</li>
+                <li>Use "Validar" para verificar se o JSON está sintaticamente correto</li>
+                <li>Clique no ícone de cópia para copiar o resultado para a área de transferência</li>
+            </ul>
         </div>
     </div>
 </div>
+@endsection
 
-@push('scripts')
-<script>
+@section('scripts')
 function colorizeJSON(json) {
-    // Primeiro escapa os caracteres HTML
     json = json.replace(/&/g, '&amp;')
                .replace(/</g, '&lt;')
                .replace(/>/g, '&gt;');
                
-    // Depois aplica a colorização
     return json.replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
                .replace(/"([^"]+)"(?!:)/g, '<span class="json-string">"$1"</span>')
                .replace(/\b(true|false)\b/g, '<span class="json-boolean">$1</span>')
@@ -166,19 +235,8 @@ function colorizeJSON(json) {
 function showStatus(message, type = 'success') {
     const status = document.getElementById('status');
     status.textContent = message;
-    status.classList.remove('hidden', 'bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700', 'bg-yellow-100', 'text-yellow-700');
-    
-    switch(type) {
-        case 'success':
-            status.classList.add('bg-green-100', 'text-green-700');
-            break;
-        case 'error':
-            status.classList.add('bg-red-100', 'text-red-700');
-            break;
-        case 'warning':
-            status.classList.add('bg-yellow-100', 'text-yellow-700');
-            break;
-    }
+    status.classList.remove('hidden', 'status-success', 'status-error', 'status-warning');
+    status.classList.add('status-message', 'status-' + type);
     
     setTimeout(() => {
         status.classList.add('hidden');
@@ -232,7 +290,7 @@ function validateJSON() {
         }
         
         JSON.parse(input);
-        showStatus('JSON válido!');
+        showStatus('JSON válido!', 'success');
     } catch (e) {
         showStatus('JSON inválido: ' + e.message, 'error');
     }
@@ -240,29 +298,22 @@ function validateJSON() {
 
 function copyOutput() {
     const output = document.getElementById('output');
-    const textToCopy = output.textContent || output.innerText;
-    navigator.clipboard.writeText(textToCopy).then(() => {
+    const text = output.textContent;
+    
+    if (!text.trim()) {
+        showStatus('Nenhum conteúdo para copiar', 'warning');
+        return;
+    }
+    
+    navigator.clipboard.writeText(text).then(() => {
         showStatus('Copiado para a área de transferência!');
+    }).catch(() => {
+        showStatus('Erro ao copiar', 'error');
     });
 }
 
 function clearInput() {
     document.getElementById('input').value = '';
     document.getElementById('output').innerHTML = '';
-    showStatus('Campos limpos!', 'warning');
 }
-
-// Adicionar evento de input para formatar automaticamente
-document.getElementById('input').addEventListener('input', function() {
-    try {
-        if (this.value.trim()) {
-            JSON.parse(this.value);
-            document.getElementById('input').classList.remove('border-red-500');
-        }
-    } catch (e) {
-        document.getElementById('input').classList.add('border-red-500');
-    }
-});
-</script>
-@endpush
 @endsection 

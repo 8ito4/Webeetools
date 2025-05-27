@@ -1,269 +1,385 @@
-@extends('layouts.app')
+@extends('layouts.modern')
 
-@section('title', 'API Tester')
+@section('title', 'Testador de API - Webeetools')
+
+@section('styles')
+.api-input {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    color: #f1f5f9;
+    transition: all 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.api-input:focus {
+    outline: none;
+    border-color: var(--accent-400);
+    box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+}
+
+.api-select {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    color: #f1f5f9;
+    transition: all 0.3s ease;
+}
+
+.api-select:focus {
+    outline: none;
+    border-color: var(--accent-400);
+    box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+}
+
+.method-select {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    min-width: 100px;
+}
+
+.url-input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    flex: 1;
+}
+
+.section-card {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    color: #e2e8f0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.param-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    align-items: center;
+}
+
+.param-input {
+    flex: 1;
+}
+
+.remove-btn {
+    color: #ef4444;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    transform: scale(1.1);
+}
+
+.add-btn {
+    color: var(--accent-400);
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+.add-btn:hover {
+    background: rgba(234, 179, 8, 0.1);
+    transform: translateX(4px);
+}
+
+.response-container {
+    background: rgba(2, 6, 23, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    min-height: 300px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    color: #d4d4d4;
+    overflow: auto;
+}
+
+.tab-container {
+    border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+    margin-bottom: 1rem;
+}
+
+.tab-button {
+    padding: 0.75rem 1rem;
+    color: #9ca3af;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.tab-button.active {
+    color: var(--accent-400);
+    border-bottom-color: var(--accent-400);
+}
+
+.tab-button:hover {
+    color: #e2e8f0;
+}
+
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.status-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.status-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.saved-request-card {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.saved-request-card:hover {
+    border-color: rgba(234, 179, 8, 0.3);
+    background: rgba(15, 23, 42, 0.6);
+    transform: translateY(-2px);
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(234, 179, 8, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--accent-400);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+@endsection
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-900">API Tester</h1>
-            <p class="mt-2 text-sm text-gray-600">Teste e faça requisições HTTP facilmente</p>
-        </div>
-        <div class="flex space-x-3">
-            <button id="saveRequestBtn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
-                </svg>
+<div class="tool-container">
+    <div class="tool-header">
+        <h1 class="tool-title">
+            <i class="fas fa-plug" style="color: var(--accent-400); margin-right: 0.5rem;"></i>
+            Testador de API
+        </h1>
+        <p class="tool-description">
+            Teste e depure suas APIs com interface intuitiva
+        </p>
+    </div>
+
+    <div class="tool-content">
+        <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-bottom: 2rem;">
+            <button id="saveRequestBtn" class="btn btn-secondary">
+                <i class="fas fa-save"></i>
                 Salvar Requisição
             </button>
-            <button id="loadRequestBtn" class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
-                <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-                </svg>
+            <button id="loadRequestBtn" class="btn btn-secondary">
+                <i class="fas fa-folder-open"></i>
                 Carregar Requisição
             </button>
         </div>
-    </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Request Panel -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-                <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                Configuração da Requisição
-            </h2>
-            <div class="space-y-6">
-                <!-- Método e URL -->
-                <div>
-                    <label for="url" class="block text-sm font-medium text-gray-700 mb-1">URL</label>
-                    <div class="mt-1 flex rounded-md shadow-sm">
-                        <select id="method" class="focus:ring-indigo-500 focus:border-indigo-500 flex-none w-24 block rounded-l-md sm:text-sm border-gray-300 bg-gray-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                            <option value="GET">GET</option>
-                            <option value="POST">POST</option>
-                            <option value="PUT">PUT</option>
-                            <option value="PATCH">PATCH</option>
-                            <option value="DELETE">DELETE</option>
-                        </select>
-                        <input type="url" id="url" placeholder="https://api.exemplo.com/endpoint" 
-                            class="focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-none rounded-r-md sm:text-sm border-gray-300" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                    </div>
-                </div>
-
-                <!-- Headers -->
-                <div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                        </svg>
-                        Headers
-                    </h3>
-                    <div id="headers" class="space-y-2 bg-gray-50 p-3 rounded-lg">
-                        <div class="flex space-x-2">
-                            <input type="text" placeholder="Key" class="form-input flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                            <input type="text" placeholder="Value" class="form-input flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                            <button class="text-red-600 hover:text-red-900 transition-colors duration-200" title="Remover Header">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
+        <div class="grid grid-cols-2" style="gap: 2rem;">
+            <!-- Request Configuration -->
+            <div>
+                <div class="section-card">
+                    <h2 class="section-title">
+                        <i class="fas fa-cog"></i>
+                        Configuração da Requisição
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label class="form-label">URL</label>
+                        <div style="display: flex;">
+                            <select id="method" class="api-select method-select">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="PUT">PUT</option>
+                                <option value="PATCH">PATCH</option>
+                                <option value="DELETE">DELETE</option>
+                            </select>
+                            <input type="url" id="url" placeholder="https://api.exemplo.com/endpoint" class="api-input url-input">
                         </div>
                     </div>
-                    <button id="addHeaderBtn" class="mt-2 text-indigo-600 hover:text-indigo-900 flex items-center text-sm font-medium transition-colors duration-200">
-                        <svg class="-ml-1 mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                        </svg>
-                        Adicionar Header
-                    </button>
-                </div>
 
-                <!-- Query Parameters -->
-                <div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                        Query Parameters
-                    </h3>
-                    <div id="queryParams" class="space-y-2 bg-gray-50 p-3 rounded-lg">
-                        <div class="flex space-x-2">
-                            <input type="text" placeholder="Key" class="form-input flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                            <input type="text" placeholder="Value" class="form-input flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                            <button class="text-red-600 hover:text-red-900 transition-colors duration-200" title="Remover Parâmetro">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                    <button id="addQueryParamBtn" class="mt-2 text-indigo-600 hover:text-indigo-900 flex items-center text-sm font-medium transition-colors duration-200">
-                        <svg class="-ml-1 mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                        </svg>
-                        Adicionar Parâmetro
-                    </button>
-                </div>
-
-                <!-- Request Body -->
-                <div>
-                    <h3 class="text-lg font-medium text-gray-900 mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        Request Body
-                    </h3>
-                    <div class="mb-4">
-                        <select id="bodyType" class="form-select rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-gray-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                            <option value="none">None</option>
-                            <option value="form">Form Data</option>
-                            <option value="json">JSON</option>
-                            <option value="text">Text</option>
-                        </select>
-                    </div>
-                    <div id="bodyContainer" class="bg-gray-50 p-3 rounded-lg">
-                        <!-- Form Data -->
-                        <div id="formBody" class="space-y-2 hidden">
-                            <div class="flex space-x-2">
-                                <input type="text" placeholder="Key" class="form-input flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                                <input type="text" placeholder="Value" class="form-input flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-                                <button class="text-red-600 hover:text-red-900 transition-colors duration-200" title="Remover Campo">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
+                    <div class="form-group">
+                        <h3 class="section-title">
+                            <i class="fas fa-tags"></i>
+                            Headers
+                        </h3>
+                        <div id="headers">
+                            <div class="param-row">
+                                <input type="text" placeholder="Key" class="api-input param-input">
+                                <input type="text" placeholder="Value" class="api-input param-input">
+                                <button class="remove-btn" title="Remover Header">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </div>
-                            <button id="addFormFieldBtn" class="mt-2 text-indigo-600 hover:text-indigo-900 flex items-center text-sm font-medium transition-colors duration-200">
-                                <svg class="-ml-1 mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                </svg>
-                                Adicionar Campo
-                            </button>
                         </div>
+                        <button id="addHeaderBtn" class="add-btn">
+                            <i class="fas fa-plus"></i>
+                            Adicionar Header
+                        </button>
+                    </div>
 
-                        <!-- JSON -->
-                        <div id="jsonBody" class="hidden">
-                            <textarea id="jsonEditor" class="form-textarea w-full h-48 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 font-mono text-sm" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;"></textarea>
+                    <div class="form-group">
+                        <h3 class="section-title">
+                            <i class="fas fa-search"></i>
+                            Query Parameters
+                        </h3>
+                        <div id="queryParams">
+                            <div class="param-row">
+                                <input type="text" placeholder="Key" class="api-input param-input">
+                                <input type="text" placeholder="Value" class="api-input param-input">
+                                <button class="remove-btn" title="Remover Parâmetro">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
+                        <button id="addQueryParamBtn" class="add-btn">
+                            <i class="fas fa-plus"></i>
+                            Adicionar Parâmetro
+                        </button>
+                    </div>
 
-                        <!-- Text -->
-                        <div id="textBody" class="hidden">
-                            <textarea id="textEditor" class="form-textarea w-full h-48 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;"></textarea>
+                    <div class="form-group">
+                        <h3 class="section-title">
+                            <i class="fas fa-file-alt"></i>
+                            Request Body
+                        </h3>
+                        <div class="form-group">
+                            <select id="bodyType" class="api-select">
+                                <option value="none">None</option>
+                                <option value="form">Form Data</option>
+                                <option value="json">JSON</option>
+                                <option value="text">Text</option>
+                            </select>
+                        </div>
+                        
+                        <div id="bodyContainer">
+                            <div id="formBody" class="hidden">
+                                <div class="param-row">
+                                    <input type="text" placeholder="Key" class="api-input param-input">
+                                    <input type="text" placeholder="Value" class="api-input param-input">
+                                    <button class="remove-btn" title="Remover Campo">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                <button id="addFormFieldBtn" class="add-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Adicionar Campo
+                                </button>
+                            </div>
+
+                            <div id="jsonBody" class="hidden">
+                                <textarea id="jsonEditor" class="api-input" style="min-height: 200px; width: 100%; resize: vertical;" placeholder='{"key": "value"}'></textarea>
+                            </div>
+
+                            <div id="textBody" class="hidden">
+                                <textarea id="textEditor" class="api-input" style="min-height: 200px; width: 100%; resize: vertical;" placeholder="Texto do corpo da requisição"></textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="flex justify-end">
-                     <button id="sendBtn" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
-                        <svg class="-ml-1 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
+                    <button id="sendBtn" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-paper-plane"></i>
                         Enviar Requisição
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Response Panel -->
-        <div class="bg-white rounded-lg shadow-lg p-6 border border-gray-100">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-semibold text-gray-900 flex items-center">
-                    <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-                    </svg>
-                    Resposta
-                </h2>
-                <div class="flex items-center space-x-2">
-                    <span id="responseStatus" class="px-3 py-1 rounded-full text-sm font-medium"></span>
-                    <span id="responseTime" class="text-gray-500 text-sm"></span>
-                </div>
-            </div>
-
-            <div class="mb-4 border-b border-gray-200">
-                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                    <button class="tab-button text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200" data-tab="body">Body</button>
-                    <button class="tab-button text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200" data-tab="headers">Headers</button>
-                </nav>
-            </div>
-
-            <div id="responseBody" class="bg-gray-50 rounded-lg p-4 overflow-x-auto">
-                <pre class="text-sm font-mono whitespace-pre-wrap text-gray-800"></pre>
-            </div>
-
-            <div id="responseHeaders" class="hidden bg-gray-50 rounded-lg p-4 overflow-x-auto">
-                <div class="space-y-2 text-sm text-gray-800"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Requisições Salvas -->
-    <div class="mt-8 bg-white rounded-lg shadow-lg p-6 border border-gray-100">
-        <h2 class="text-xl font-semibold text-gray-900 mb-6 flex items-center">
-            <svg class="w-6 h-6 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"/>
-            </svg>
-            Requisições Salvas
-        </h2>
-        <div id="savedRequests" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- As requisições salvas serão carregadas aqui via JavaScript -->
-        </div>
-    </div>
-</div>
-
-<!-- Save Request Modal -->
-<div id="saveRequestModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center px-4 py-6 z-50">
-    <div class="relative bg-white rounded-lg p-6 shadow-xl w-full max-w-md">
-        <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
-            </svg>
-            Salvar Requisição
-        </h3>
-        <div class="space-y-4">
+            <!-- Response -->
             <div>
-                <label for="requestName" class="block text-sm font-medium text-gray-700">Nome</label>
-                <input type="text" id="requestName" required
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 sm:text-sm" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;">
-            </div>
-            <div>
-                <label for="requestDescription" class="block text-sm font-medium text-gray-700">Descrição (Opcional)</label>
-                <textarea id="requestDescription"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 sm:text-sm" style="border: 1px solid #d1d5db !important; padding-left: 0.5rem !important;"></textarea>
-            </div>
-        </div>
-        <div class="mt-6 flex justify-end space-x-3">
-            <button type="button" id="cancelSaveBtn" class="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">Cancelar</button>
-            <button type="button" id="confirmSaveBtn" class="inline-flex justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">Salvar</button>
-        </div>
-    </div>
-</div>
+                <div class="section-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <h2 class="section-title" style="margin-bottom: 0;">
+                            <i class="fas fa-clipboard-list"></i>
+                            Resposta
+                        </h2>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span id="responseStatus" class="status-badge"></span>
+                            <span id="responseTime" style="color: #9ca3af; font-size: 0.875rem;"></span>
+                        </div>
+                    </div>
 
-<!-- Load Request Modal -->
-<div id="loadRequestModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center px-4 py-6 z-50">
-    <div class="relative bg-white rounded-lg p-6 shadow-xl w-full max-w-2xl">
-        <h3 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
-            </svg>
-            Carregar Requisição
-        </h3>
-        <div class="space-y-4">
-            <div class="max-h-96 overflow-y-auto border border-gray-200 rounded-md p-2">
-                <div id="savedRequestsList" class="space-y-3">
-                    <!-- Saved requests will be listed here -->
+                    <div class="tab-container">
+                        <div style="display: flex;">
+                            <button class="tab-button active" data-tab="body">Body</button>
+                            <button class="tab-button" data-tab="headers">Headers</button>
+                        </div>
+                    </div>
+
+                    <div id="responseBody" class="response-container">
+                        <pre style="margin: 0; white-space: pre-wrap; color: #9ca3af;">Envie uma requisição para ver a resposta...</pre>
+                    </div>
+
+                    <div id="responseHeaders" class="response-container hidden">
+                        <div style="color: #9ca3af;">Nenhum header de resposta ainda...</div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="mt-6 flex justify-end">
-            <button type="button" id="closeLoadBtn" class="px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">Fechar</button>
+
+        <!-- Saved Requests -->
+        <div class="section-card" style="margin-top: 2rem;">
+            <h2 class="section-title">
+                <i class="fas fa-bookmark"></i>
+                Requisições Salvas
+            </h2>
+            <div id="savedRequests" class="grid grid-cols-1" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                <div style="color: #9ca3af; text-align: center; padding: 2rem;">
+                    Nenhuma requisição salva ainda...
+                </div>
+            </div>
         </div>
     </div>
 </div>
+@endsection
 
-@push('scripts')
+@section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Elements
     const methodSelect = document.getElementById('method');
     const urlInput = document.getElementById('url');
     const sendBtn = document.getElementById('sendBtn');
@@ -292,7 +408,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeLoadBtn = document.getElementById('closeLoadBtn');
     const savedRequestsList = document.getElementById('savedRequestsList');
 
-    // Add Header
     function addHeader(key = '', value = '') {
         const headerDiv = document.createElement('div');
         headerDiv.className = 'flex items-center space-x-2';
@@ -303,7 +418,6 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteBtn.addEventListener('click', () => headerDiv.remove());
     }
 
-    // Add Query Parameter
     function addQueryParam(key = '', value = '') {
         const paramDiv = document.createElement('div');
         paramDiv.className = 'flex items-center space-x-2';
@@ -314,7 +428,6 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteBtn.addEventListener('click', () => paramDiv.remove());
     }
 
-    // Add Form Field
     function addFormField(key = '', value = '') {
         const fieldDiv = document.createElement('div');
         fieldDiv.className = 'flex items-center space-x-2';
@@ -325,14 +438,12 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteBtn.addEventListener('click', () => fieldDiv.remove());
     }
 
-    // Handle Body Type Change
     function handleBodyTypeChange() {
         const type = bodyTypeSelect.value;
         formBody.classList.add('hidden');
         jsonBody.classList.add('hidden');
         textBody.classList.add('hidden');
 
-        // Clear previous body content when changing type
         formBody.innerHTML = ''; // Clear form fields (except the add button)
         const addFormFieldBtn = document.createElement('button');
         addFormFieldBtn.id = 'addFormFieldBtn';
@@ -359,19 +470,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Send Request
     async function sendRequest() {
         const startTime = performance.now();
         const method = methodSelect.value;
         const url = urlInput.value;
 
-        // Basic URL validation
         if (!url) {
             alert('Por favor, insira uma URL.');
             return;
         }
 
-        // Coletar headers
         const headers = {};
         headersContainer.querySelectorAll('> div').forEach(div => {
             const [keyInput, valueInput] = div.querySelectorAll('input[type="text"]');
@@ -380,7 +488,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Coletar query parameters
         const queryParams = {};
         queryParamsContainer.querySelectorAll('> div').forEach(div => {
             const [keyInput, valueInput] = div.querySelectorAll('input[type="text"]');
@@ -389,7 +496,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Preparar request body
         let body = null;
         const bodyType = bodyTypeSelect.value;
 
@@ -415,11 +521,9 @@ document.addEventListener('DOMContentLoaded', function() {
             body = textEditor.value;
         }
 
-        // Desabilitar botão de enviar e mostrar feedback (opcional)
         sendBtn.disabled = true;
         sendBtn.textContent = 'Enviando...';
 
-        // Limpar resultados anteriores
         responseStatus.textContent = '';
         responseTime.textContent = '';
         responseBody.querySelector('pre').textContent = '';
@@ -450,7 +554,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             const endTime = performance.now();
 
-            // Update response UI
             if (data.status) {
                  responseStatus.textContent = `Status: ${data.status}`;
                  responseStatus.className = `px-3 py-1 rounded-full text-sm font-medium ${
@@ -465,7 +568,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             responseTime.textContent = `${Math.round(endTime - startTime)}ms`;
 
-            // Update response body
             if (data.body) {
                  try {
                      const json = JSON.parse(data.body);
@@ -478,7 +580,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
 
-            // Update response headers
             if (data.headers) {
                  const headersHtml = Object.entries(data.headers)
                      .map(([key, value]) => `
@@ -501,13 +602,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Save Request
     function saveRequest() {
-        // Preencher campos do modal com dados da requisição atual
         const method = methodSelect.value;
         const url = urlInput.value;
         
-        // Gerar um nome padrão se a URL existir
         if (url) {
             try {
                  const urlObj = new URL(url);
@@ -524,13 +622,11 @@ document.addEventListener('DOMContentLoaded', function() {
         saveRequestModal.classList.add('flex');
     }
 
-    // Close Save Request Modal
     function closeSaveModal() {
         saveRequestModal.classList.add('hidden');
         saveRequestModal.classList.remove('flex');
     }
 
-    // Confirm Save Request
     confirmSaveBtn.addEventListener('click', async () => {
         const name = requestName.value.trim();
         const description = requestDescription.value.trim();
@@ -575,10 +671,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Cancel Save Request
     cancelSaveBtn.addEventListener('click', closeSaveModal);
 
-    // Load saved requests
     function loadSavedRequests() {
         fetch('{{ route('tools.api-tester.list') }}')
             .then(response => response.json())
@@ -612,7 +706,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     savedRequestsList.appendChild(requestElement);
                 });
 
-                // Add event listeners for load and delete buttons
                 document.querySelectorAll('.load-request').forEach(button => {
                     button.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -635,30 +728,24 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Load a specific request
     function loadRequest(id) {
         fetch(`/tools/api-tester/load/${id}`)
             .then(response => response.json())
             .then(data => {
-                // Set method
                 methodSelect.value = data.method;
                 
-                // Set URL
                 urlInput.value = data.url;
                 
-                // Set headers
                 headersContainer.innerHTML = '';
                 Object.entries(data.headers || {}).forEach(([key, value]) => {
                     addHeader(key, value);
                 });
                 
-                // Set query parameters
                 queryParamsContainer.innerHTML = '';
                 Object.entries(data.query_params || {}).forEach(([key, value]) => {
                     addQueryParam(key, value);
                 });
                 
-                // Set body
                 if (data.body) {
                     bodyTypeSelect.value = data.body_type;
                     updateBodyType();
@@ -684,7 +771,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    // Delete Request
     async function deleteRequest(id) {
         if (!confirm('Tem certeza que deseja excluir esta requisição?')) return;
 
@@ -709,32 +795,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Close Load Request Modal
     closeLoadBtn.addEventListener('click', () => {
         loadRequestModal.classList.add('hidden');
         loadRequestModal.classList.remove('flex');
     });
 
-    // Response tabs functionality
     document.querySelectorAll('.tab-button').forEach(button => {
         button.addEventListener('click', () => {
             const tab = button.dataset.tab;
             
-            // Remove active styles from all tabs
             document.querySelectorAll('.tab-button').forEach(btn => {
                 btn.classList.remove('border-indigo-500', 'text-indigo-600');
                 btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
             });
             
-            // Add active styles to the clicked tab
             button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300');
             button.classList.add('border-indigo-500', 'text-indigo-600');
 
-            // Hide all tab content
             responseBody.classList.add('hidden');
             responseHeaders.classList.add('hidden');
 
-            // Show the content for the clicked tab
             if (tab === 'body') {
                 responseBody.classList.remove('hidden');
             } else if (tab === 'headers') {
@@ -744,7 +824,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-    // Funções auxiliares para coletar dados
     function getHeaders() {
         const headers = {};
         headersContainer.querySelectorAll('> div').forEach(div => {
@@ -793,15 +872,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Initial setup
      addHeader(); // Add one empty header field on load
      addQueryParam(); // Add one empty query param field on load
     handleBodyTypeChange(); // Initialize body section visibility
     loadSavedRequests(); // Load saved requests on page load
 
-    // Set initial active tab style
      document.querySelector('.tab-button[data-tab="body"]').classList.add('border-indigo-500', 'text-indigo-600');
 });
 </script>
-@endpush
 @endsection 

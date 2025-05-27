@@ -7,25 +7,21 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PlanningPokerController;
 use Illuminate\Support\Facades\Auth;
 
-// Rotas de Autenticação padrão do Laravel
 Auth::routes();
 
-// Página Inicial
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', function () {
+    return response()->file(public_path('index.html'));
+})->name('home');
 
-// Webhook Routes (sem CSRF)
 Route::middleware(['throttle:60,1'])->group(function () {
     Route::post('/tools/webhook/create', [ToolController::class, 'createWebhook'])->name('tools.webhook.create');
     Route::post('/tools/webhook/delete', [ToolController::class, 'deleteWebhook'])->name('tools.webhook.delete');
     Route::post('/tools/webhook/clear-session', [ToolController::class, 'clearWebhookSession'])
         ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])
         ->name('tools.webhook.clear-session');
-    // Route::any('/tools/webhook/{token}', [ToolController::class, 'webhookReceive'])
-    //     ->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class])
-    //     ->name('tools.webhook.receive');
+    Route::get('/tools/webhook/requests/{token}', [ToolController::class, 'webhookRequests'])->name('tools.webhook.requests');
 });
 
-// Rotas das Ferramentas
 Route::prefix('tools')->group(function () {
     Route::get('/webhook', [ToolController::class, 'webhook'])->name('tools.webhook');
     Route::get('/json', [ToolController::class, 'json'])->name('tools.json');
@@ -38,6 +34,8 @@ Route::prefix('tools')->group(function () {
     Route::get('/xml', [ToolController::class, 'xml'])->name('tools.xml');
     Route::match(['get', 'post'], '/cellphone', [ToolController::class, 'cellphone'])->name('tools.cellphone');
     Route::get('/pomodoro', [ToolController::class, 'pomodoro'])->name('tools.pomodoro');
+    Route::get('/lorem', [ToolController::class, 'lorem'])->name('tools.lorem');
+    Route::get('/ai-chat', [ToolController::class, 'aiChat'])->name('tools.ai-chat');
     Route::get('/api-tester', [ToolController::class, 'apiTester'])->name('tools.api-tester');
     Route::post('/api-tester/send', [ToolController::class, 'sendRequest'])->name('tools.api-tester.send');
     Route::post('/api-tester/save', [ToolController::class, 'saveRequest'])->name('tools.api-tester.save');
@@ -46,17 +44,14 @@ Route::prefix('tools')->group(function () {
     Route::delete('/api-tester/delete/{id}', [ToolController::class, 'deleteRequest'])->name('tools.api-tester.delete');
 });
 
-// Páginas Estáticas
 Route::get('/documentation', [PageController::class, 'documentation'])->name('documentation');
 Route::get('/support', [PageController::class, 'support'])->name('support');
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
 
-// Novas rotas de Sugestões e Fale Conosco
 Route::get('/suggestions', [PageController::class, 'suggestions'])->name('suggestions');
 Route::match(['get', 'post'], '/contact', [PageController::class, 'contact'])->name('contact');
 
-// Planning Poker Routes
 Route::prefix('planning-poker')->name('planning-poker.')->group(function () {
     Route::get('/', [PlanningPokerController::class, 'index'])->name('index');
     Route::post('/create', [PlanningPokerController::class, 'createRoom'])->name('create');

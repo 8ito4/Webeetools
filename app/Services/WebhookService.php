@@ -16,6 +16,13 @@ class WebhookService implements WebhookServiceInterface
 
     public function create(array $data): Webhook
     {
+        // Se custom_url foi fornecida, validar se é única
+        if (isset($data['custom_url'])) {
+            if ($this->webhookRepository->customUrlExists($data['custom_url'])) {
+                throw new \InvalidArgumentException('Esta URL personalizada já está em uso.');
+            }
+        }
+        
         $data['token'] = $this->generateUniqueToken();
         return $this->webhookRepository->create($data);
     }
@@ -23,6 +30,11 @@ class WebhookService implements WebhookServiceInterface
     public function findByToken(string $token): ?Webhook
     {
         return $this->webhookRepository->findByToken($token);
+    }
+
+    public function findByCustomUrl(string $customUrl): ?Webhook
+    {
+        return $this->webhookRepository->findByCustomUrl($customUrl);
     }
 
     public function processRequest(Webhook $webhook, Request $request): void
@@ -39,13 +51,12 @@ class WebhookService implements WebhookServiceInterface
         $savedRequest = $this->webhookRepository->saveRequest($webhook, $requestData);
         $webhook->incrementRequestCount();
 
-        // Disparar evento de nova requisição
         event(new \App\Events\WebhookRequestReceived($savedRequest->toArray(), $webhook->token));
     }
 
-    public function getLatestRequests(Webhook $webhook, int $limit = 10): array
+    public function getLatestRequests(Webhook $webhook, int $lastId = 0): array
     {
-        return $this->webhookRepository->getLatestRequests($webhook, $limit);
+        return $this->webhookRepository->getLatestRequests($webhook, $lastId);
     }
 
     public function update(Webhook $webhook, array $data): Webhook

@@ -3,7 +3,6 @@
 @section('title', 'Início')
 
 @section('content')
-    <!-- Hero Section -->
     <div class="bg-indigo-600">
         <div class="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
             <div class="text-center">
@@ -17,7 +16,6 @@
         </div>
     </div>
 
-    <!-- Tools Section -->
     <div id="tools" class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
@@ -30,7 +28,6 @@
             </div>
 
             <div class="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-                <!-- Webhook Tester -->
                 <a href="{{ route('tools.webhook') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
@@ -41,7 +38,6 @@
                     </div>
                 </a>
 
-                <!-- JSON Converter -->
                 <a href="{{ route('tools.json') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
@@ -52,7 +48,6 @@
                     </div>
                 </a>
 
-                <!-- Password Generator -->
                 <a href="{{ route('tools.password') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
@@ -63,7 +58,6 @@
                     </div>
                 </a>
 
-                <!-- Pomodoro Timer -->
                 <a href="{{ route('tools.pomodoro') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
@@ -74,7 +68,6 @@
                     </div>
                 </a>
 
-                <!-- Cellphone Number Generator -->
                 <a href="{{ route('tools.cellphone') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
@@ -85,7 +78,6 @@
                     </div>
                 </a>
 
-                <!-- Email Validator -->
                 <a href="{{ route('tools.document') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
@@ -96,7 +88,6 @@
                     </div>
                 </a>
 
-                <!-- Planning Poker -->
                 <a href="{{ route('planning-poker.index') }}" class="block bg-white overflow-hidden shadow rounded-lg hover:shadow-lg hover:scale-105 transition duration-300">
                     <div class="p-6">
                         <div class="text-3xl text-indigo-600 mb-4">
@@ -110,7 +101,6 @@
         </div>
     </div>
 
-    <!-- News Section -->
     <div class="bg-gray-50 py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-indigo-600 rounded-lg shadow-xl overflow-hidden">

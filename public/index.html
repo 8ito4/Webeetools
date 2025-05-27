@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webeetools - Ferramentas Online para Desenvolvedores</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛠️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --dark-950: #020617;
+            --dark-900: #0f172a;
+            --dark-800: #1e293b;
+            --dark-700: #334155;
+            --dark-600: #475569;
+            --accent-300: #fde047;
+            --accent-400: #facc15;
+            --accent-500: #eab308;
+            --accent-600: #ca8a04;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--dark-950) 0%, var(--dark-900) 25%, var(--dark-800) 50%, var(--dark-900) 75%, var(--dark-950) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--accent-400);
+            border-radius: 50%;
+            animation: particleFloat 20s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: linear-gradient(135deg, rgba(2, 6, 23, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-400), var(--accent-600));
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-950);
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+        }
+
+        .logo-icon .bee-emoji {
+            filter: grayscale(100%) brightness(0);
+            font-size: 1.5rem;
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.1) rotate(12deg);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text .we {
+            color: #f1f5f9;
+        }
+
+        .logo-text .bee {
+            color: var(--accent-400);
+        }
+
+        .logo-text .tools {
+            color: #f1f5f9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-400);
+            transform: scale(1.05);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-400);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Lo-fi Player */
+        .lofi-player {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .lofi-player:hover {
+            border-color: rgba(234, 179, 8, 0.3);
+        }
+
+        .lofi-text {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .play-btn {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+
+        .play-btn:hover {
+            color: var(--accent-400);
+            transform: scale(1.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 4rem;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 1rem 6rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .hero-title .we {
+            color: #f1f5f9;
+        }
+
+        .hero-title .bee {
+            color: var(--accent-400);
+        }
+
+        .hero-title .tools {
+            color: #f1f5f9;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.125rem, 3vw, 2rem);
+            color: #cbd5e1;
+            margin-bottom: 2.5rem;
+            max-width: 56rem;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+            animation: slideUp 1.2s ease-out 0.5s both;
+        }
+
+        .hero-subtitle .accent {
+            background: linear-gradient(135deg, var(--accent-300), var(--accent-600));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 600;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 3rem;
+            animation: slideUp 1.2s ease-out 0.7s both;
+        }
+
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+            }
+        }
+
+        .btn-primary {
+            position: relative;
+            background: linear-gradient(135deg, var(--accent-500), var(--accent-600));
+            color: var(--dark-950);
+            font-weight: 600;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            transform: translateY(0);
+            box-shadow: 0 10px 25px rgba(234, 179, 8, 0.3), 0 0 0 1px rgba(234, 179, 8, 0.1);
+            font-size: 1.125rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05) translateY(-4px);
+            box-shadow: 0 20px 40px rgba(234, 179, 8, 0.4), 0 0 0 1px rgba(234, 179, 8, 0.2);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateX(100%);
+        }
+
+        .btn-secondary {
+            position: relative;
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            color: #f1f5f9;
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.125rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(51, 65, 85, 0.6);
+            border-color: rgba(234, 179, 8, 0.5);
+            transform: scale(1.05) translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 64rem;
+            margin: 0 auto;
+            animation: slideUp 1.2s ease-out 0.9s both;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-300), var(--accent-600));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #9ca3af;
+            font-size: 1.125rem;
+        }
+
+        /* AI Button */
+        .ai-button-container {
+            display: flex;
+            justify-content: center;
+            margin: 3rem 0 2rem;
+            animation: slideUp 1.2s ease-out 1.1s both;
+        }
+
+        .ai-button {
+            position: relative;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8, #1e40af);
+            background-size: 200% 200%;
+            color: white;
+            font-weight: 700;
+            padding: 1.25rem 2.5rem;
+            border-radius: 2rem;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            transform: translateY(0);
+            box-shadow: 
+                0 0 30px rgba(59, 130, 246, 0.4),
+                0 10px 25px rgba(59, 130, 246, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            font-size: 1.125rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            overflow: hidden;
+            animation: aiGlow 3s ease-in-out infinite alternate;
+            border: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .ai-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.8s;
+        }
+
+        .ai-button:hover::before {
+            left: 100%;
+        }
+
+        .ai-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 
+                0 0 50px rgba(59, 130, 246, 0.6),
+                0 20px 40px rgba(59, 130, 246, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            background-position: 100% 0;
+        }
+
+        .ai-button-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+        }
+
+        .ai-button-icon .star {
+            position: absolute;
+            color: #fbbf24;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .ai-button-icon .star:nth-child(1) {
+            font-size: 0.75rem;
+            top: -2px;
+            left: -2px;
+            animation-delay: 0s;
+        }
+
+        .ai-button-icon .star:nth-child(2) {
+            font-size: 1rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: 0.7s;
+        }
+
+        .ai-button-icon .star:nth-child(3) {
+            font-size: 0.625rem;
+            bottom: -2px;
+            right: -2px;
+            animation-delay: 1.4s;
+        }
+
+        @keyframes aiGlow {
+            0% {
+                box-shadow: 
+                    0 0 30px rgba(59, 130, 246, 0.4),
+                    0 10px 25px rgba(59, 130, 246, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            }
+            100% {
+                box-shadow: 
+                    0 0 40px rgba(59, 130, 246, 0.6),
+                    0 15px 35px rgba(59, 130, 246, 0.4),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2) rotate(180deg);
+            }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: -3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: scrollBounce 2s ease-in-out infinite;
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .scroll-mouse {
+            width: 32px;
+            height: 52px;
+            border: 3px solid rgba(234, 179, 8, 0.8);
+            border-radius: 16px;
+            position: relative;
+            background: rgba(234, 179, 8, 0.1);
+        }
+
+        .scroll-wheel {
+            width: 6px;
+            height: 12px;
+            background: var(--accent-400);
+            border-radius: 3px;
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scrollWheel 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(15px); }
+        }
+
+        @keyframes scrollWheel {
+            0% { top: 8px; opacity: 1; }
+            50% { top: 22px; opacity: 0.5; }
+            100% { top: 8px; opacity: 1; }
+        }
+
+        /* Tools Grid */
+        .tools-section {
+            padding: 6rem 1rem;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title .accent {
+            background: linear-gradient(135deg, var(--accent-300), var(--accent-600));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-subtitle {
+            color: #9ca3af;
+            font-size: clamp(1.125rem, 2vw, 1.5rem);
+            max-width: 48rem;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            position: relative;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.6) 0%, rgba(30, 41, 59, 0.4) 50%, rgba(15, 23, 42, 0.6) 100%);
+            background-size: 200% 200%;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(30, 41, 59, 0.5);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.5s ease;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            animation: cardGradientShift 8s ease infinite;
+        }
+
+        @keyframes cardGradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(51, 65, 85, 0.1) 0%, rgba(71, 85, 105, 0.05) 50%, rgba(51, 65, 85, 0.1) 100%);
+            background-size: 200% 200%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: cardOverlayShift 6s ease infinite;
+        }
+
+        @keyframes cardOverlayShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .tool-card:hover {
+            border-color: rgba(71, 85, 105, 0.4);
+            transform: scale(1.02) translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+            animation-play-state: paused;
+        }
+
+        .tool-card:hover::before {
+            opacity: 1;
+        }
+
+        .tool-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.5s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .tool-card:hover .tool-icon {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.1);
+        }
+
+        .tool-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover .tool-title {
+            color: #e2e8f0;
+            text-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tool-description {
+            color: #9ca3af;
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover .tool-description {
+            color: #cbd5e1;
+        }
+
+        .tool-link {
+            color: var(--accent-400);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.125rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-link:hover {
+            color: var(--accent-300);
+            transform: translateX(8px);
+        }
+
+        .tool-link i {
+            transition: transform 0.3s ease;
+        }
+
+        .tool-link:hover i {
+            transform: rotate(45deg);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(50px) scale(0.9); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(80px) rotateX(20deg); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) rotateX(0); 
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero {
+                padding: 3rem 1rem 5rem;
+            }
+
+            .ai-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+                border-radius: 1.5rem;
+            }
+
+            .ai-button-container {
+                margin: 2rem 0 1.5rem;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-900);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-600);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-500);
+        }
+
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #facc15, #eab308);
+            z-index: 9999;
+            transition: width 0.2s ease;
+            box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress" class="scroll-progress"></div>
+    
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <span class="logo-text">
+                    <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                </span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#home">Início</a></li>
+                <li><a href="#tools">Ferramentas</a></li>
+                <li><a href="#support">Suporte</a></li>
+                <li><a href="#contact">Contato</a></li>
+            </ul>
+            
+            <div class="lofi-player">
+                <span class="lofi-text">lo-fi</span>
+                <button class="play-btn" id="playBtn">
+                    <i class="fas fa-play"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <h1 class="hero-title">
+                <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+            </h1>
+            <p class="hero-subtitle">
+                Sua caixa de ferramentas completa para 
+                <span class="accent">desenvolvimento web</span>
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="#tools" class="btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    Explorar Ferramentas
+                </a>
+                <a href="#docs" class="btn-secondary">
+                    <i class="fas fa-book"></i>
+                    Documentação
+                </a>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">10+</div>
+                    <div class="stat-label">Ferramentas</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Gratuito</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Dados Coletados</div>
+                </div>
+            </div>
+
+            <!-- AI Assistant Button -->
+            <div class="ai-button-container">
+                <a href="/tools/ai-chat" class="ai-button">
+                    <div class="ai-button-icon">
+                        <i class="fas fa-star star"></i>
+                        <i class="fas fa-sparkles star"></i>
+                        <i class="fas fa-star star"></i>
+                    </div>
+                    Conversar com IA
+                </a>
+            </div>
+
+            <!-- Scroll Animation Indicator -->
+            <div class="scroll-indicator">
+                <div class="scroll-mouse">
+                    <div class="scroll-wheel"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tools Section -->
+        <section id="tools" class="tools-section">
+            <div class="section-title">
+                <h2><span class="accent">Ferramentas</span> Disponíveis</h2>
+                <p class="section-subtitle">
+                    Conjunto completo de utilitários para acelerar seu desenvolvimento
+                </p>
+            </div>
+            
+            <div class="tools-grid">
+                <!-- JSON Formatter -->
+                <a href="/tools/json" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="tool-title">Formatador JSON</h3>
+                    <p class="tool-description">Formate, valide e minifique seus dados JSON com facilidade e precisão</p>
+                </a>
+                
+                <!-- Password Generator -->
+                <a href="/tools/password" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #10b981, #047857);">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3 class="tool-title">Gerador de Senhas</h3>
+                    <p class="tool-description">Crie senhas seguras e personalizáveis para seus projetos</p>
+                </a>
+                
+                <!-- API Tester -->
+                <a href="/tools/api-tester" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="tool-title">Testador de API</h3>
+                    <p class="tool-description">Teste e depure suas APIs com interface intuitiva</p>
+                </a>
+                
+                <!-- Webhook Tester -->
+                <a href="/tools/webhook" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #eab308, #ca8a04);">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <h3 class="tool-title">Testador de Webhook</h3>
+                    <p class="tool-description">Teste e monitore webhooks em tempo real</p>
+                </a>
+                
+                <!-- Pomodoro Timer -->
+                <a href="/tools/pomodoro" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="tool-title">Pomodoro Timer</h3>
+                    <p class="tool-description">Aumente sua produtividade com a técnica Pomodoro</p>
+                </a>
+                
+                <!-- Document Tool -->
+                <a href="/tools/document" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="tool-title">Ferramenta de Documento</h3>
+                    <p class="tool-description">Gerencie e processe documentos facilmente</p>
+                </a>
+                
+                <!-- Cellphone Validator -->
+                <a href="/tools/cellphone" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #14b8a6, #0f766e);">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="tool-title">Gerador de número de telefone</h3>
+                    <p class="tool-description">Valide e formate números de telefone</p>
+                </a>
+                
+                <!-- Planning Poker -->
+                <a href="/planning-poker" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #a855f7, #9333ea);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="tool-title">Planning Poker</h3>
+                    <p class="tool-description">Ferramenta colaborativa para estimativas ágeis</p>
+                </a>
+                
+                <!-- Lorem Ipsum Generator -->
+                <a href="/tools/lorem" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                        <i class="fas fa-paragraph"></i>
+                    </div>
+                    <h3 class="tool-title">Gerador Lorem Ipsum</h3>
+                    <p class="tool-description">Gere texto placeholder personalizado para seus projetos</p>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Particles Animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Lo-fi Audio Player
+        let audio = null;
+        let isPlaying = false;
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = playBtn.querySelector('i');
+
+        playBtn.addEventListener('click', function() {
+            if (isPlaying && audio) {
+                audio.pause();
+                isPlaying = false;
+                playIcon.className = 'fas fa-play';
+            } else {
+                if (!audio) {
+                    const audioUrls = [
+                        'https://stream.zeno.fm/0r0xa792kwzuv',
+                        'https://stream.zeno.fm/f3wvbbqmdg8uv',
+                        'https://stream.rcast.net/70643',
+                        'https://stream.rcast.net/261654'
+                    ];
+                    
+                    audio = new Audio();
+                    audio.loop = true;
+                    audio.volume = 0.3;
+                    
+                    let currentUrlIndex = 0;
+                    
+                    function tryNextUrl() {
+                        if (currentUrlIndex < audioUrls.length) {
+                            audio.src = audioUrls[currentUrlIndex];
+                            audio.load();
+                            
+                            audio.play().then(() => {
+                                console.log('Áudio iniciado:', audioUrls[currentUrlIndex]);
+                                isPlaying = true;
+                                playIcon.className = 'fas fa-pause';
+                            }).catch(error => {
+                                console.error('Erro:', error);
+                                currentUrlIndex++;
+                                if (currentUrlIndex < audioUrls.length) {
+                                    tryNextUrl();
+                                }
+                            });
+                        }
+                    }
+                    
+                    audio.addEventListener('pause', function() {
+                        isPlaying = false;
+                        playIcon.className = 'fas fa-play';
+                    });
+                    
+                    audio.addEventListener('play', function() {
+                        isPlaying = true;
+                        playIcon.className = 'fas fa-pause';
+                    });
+                    
+                    tryNextUrl();
+                } else {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        playIcon.className = 'fas fa-pause';
+                    });
+                }
+            }
+        });
+
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                
+                // Se for o link "Início" (#home), rolar para o topo absoluto
+                if (targetId === '#home') {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Scroll Indicator Click
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                scrollIndicator.addEventListener('click', function() {
+                    const toolsSection = document.getElementById('tools');
+                    if (toolsSection) {
+                        toolsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            }
+        });
+
+        // Scroll Progress Indicator - Corrigido
+        window.addEventListener('scroll', function() {
+            const scrollTop = window.scrollY;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            
+            // Garantir que o progresso só comece após o primeiro pixel de scroll
+            let scrolled = 0;
+            if (scrollHeight > 0 && scrollTop > 0) {
+                scrolled = (scrollTop / scrollHeight) * 100;
+            }
+            
+            const progressBar = document.getElementById('scroll-progress');
+            if (progressBar) {
+                progressBar.style.width = Math.max(0, Math.min(100, scrolled)) + '%';
+            }
+            
+            // Hide scroll indicator when scrolling
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                if (scrollTop > 100) {
+                    scrollIndicator.style.opacity = '0';
+                    scrollIndicator.style.pointerEvents = 'none';
+                } else {
+                    scrollIndicator.style.opacity = '1';
+                    scrollIndicator.style.pointerEvents = 'auto';
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

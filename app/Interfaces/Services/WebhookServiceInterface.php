@@ -18,6 +18,11 @@ interface WebhookServiceInterface
     public function findByToken(string $token): ?Webhook;
 
     /**
+     * Encontra um webhook pela URL personalizada
+     */
+    public function findByCustomUrl(string $customUrl): ?Webhook;
+
+    /**
      * Processa uma requisição de webhook
      */
     public function processRequest(Webhook $webhook, Request $request): void;
@@ -25,7 +30,7 @@ interface WebhookServiceInterface
     /**
      * Obtém as últimas requisições de um webhook
      */
-    public function getLatestRequests(Webhook $webhook, int $limit = 10): array;
+    public function getLatestRequests(Webhook $webhook, int $lastId = 0): array;
 
     /**
      * Atualiza as informações de um webhook

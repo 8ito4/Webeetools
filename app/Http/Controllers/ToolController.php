@@ -21,13 +21,35 @@ class ToolController extends Controller
 
     public function createWebhook(Request $request)
     {
+        $request->validate([
+            'project_name' => 'nullable|string|max:255',
+        ]);
+
         $webhook = $this->webhookService->create([
             'name' => $request->input('project_name'),
+            'custom_url' => $this->generateUniqueCustomUrl(),
             'description' => 'Webhook criado para teste'
         ]);
         
         session(['webhook' => $webhook]);
-        return redirect()->route('tools.webhook');
+        return redirect()->route('tools.webhook')->with('success', 'Webhook criado com sucesso!');
+    }
+
+    private function generateUniqueCustomUrl(): string
+    {
+        do {
+            // Gera uma URL amigável com palavras + números
+            $adjectives = ['quick', 'smart', 'cool', 'fast', 'bright', 'sharp', 'clean', 'fresh', 'bold', 'neat'];
+            $nouns = ['webhook', 'api', 'endpoint', 'hook', 'listener', 'receiver', 'handler', 'service'];
+            
+            $adjective = $adjectives[array_rand($adjectives)];
+            $noun = $nouns[array_rand($nouns)];
+            $number = rand(100, 999);
+            
+            $customUrl = $adjective . '-' . $noun . '-' . $number;
+        } while ($this->webhookService->findByCustomUrl($customUrl));
+
+        return $customUrl;
     }
 
     public function deleteWebhook()
@@ -46,9 +68,11 @@ class ToolController extends Controller
         return response()->json(['message' => 'Sessão limpa com sucesso']);
     }
 
-    public function webhookReceive(Request $request, string $token)
+    public function webhookReceive(Request $request, string $identifier)
     {
-        $webhook = $this->webhookService->findByToken($token);
+        // Primeiro tenta encontrar por custom_url, depois por token (compatibilidade)
+        $webhook = $this->webhookService->findByCustomUrl($identifier) 
+                   ?? $this->webhookService->findByToken($identifier);
         
         if (!$webhook) {
             return response()->json(['error' => 'Webhook não encontrado'], 404);
@@ -57,6 +81,20 @@ class ToolController extends Controller
         $this->webhookService->processRequest($webhook, $request);
 
         return response()->json(['message' => 'Webhook recebido com sucesso']);
+    }
+
+    public function webhookRequests(string $token, Request $request)
+    {
+        $webhook = $this->webhookService->findByToken($token);
+        
+        if (!$webhook) {
+            return response()->json(['error' => 'Webhook não encontrado'], 404);
+        }
+
+        $lastId = $request->query('last_id', 0);
+        $requests = $this->webhookService->getLatestRequests($webhook, $lastId);
+
+        return response()->json(['requests' => $requests]);
     }
 
     public function json()
@@ -112,6 +150,16 @@ class ToolController extends Controller
     public function pomodoro()
     {
         return view('tools.pomodoro');
+    }
+
+    public function lorem()
+    {
+        return view('tools.lorem');
+    }
+
+    public function aiChat()
+    {
+        return view('tools.ai-chat');
     }
 
     public function apiTester()
