@@ -93,5 +93,4 @@ class PlanningPokerService
         return $this->repository->getAverage($code);
     }
 
-    // Métodos para criar sala, entrar, votar, adicionar tarefa, resetar, etc.
 } 

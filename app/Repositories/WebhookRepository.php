@@ -18,16 +18,26 @@ class WebhookRepository implements WebhookRepositoryInterface
         return Webhook::where('token', $token)->first();
     }
 
+    public function findByCustomUrl(string $customUrl): ?Webhook
+    {
+        return Webhook::where('custom_url', $customUrl)->first();
+    }
+
     public function saveRequest(Webhook $webhook, array $data): WebhookRequest
     {
         return $webhook->requests()->create($data);
     }
 
-    public function getLatestRequests(Webhook $webhook, int $limit = 10): array
+    public function getLatestRequests(Webhook $webhook, int $lastId = 0): array
     {
-        return $webhook->requests()
-            ->orderBy('created_at', 'desc')
-            ->take($limit)
+        $query = $webhook->requests()
+            ->orderBy('created_at', 'desc');
+            
+        if ($lastId > 0) {
+            $query->where('id', '>', $lastId);
+        }
+        
+        return $query->take(50) // Limitar a 50 requisições por vez
             ->get()
             ->toArray();
     }
@@ -46,5 +56,10 @@ class WebhookRepository implements WebhookRepositoryInterface
     public function tokenExists(string $token): bool
     {
         return Webhook::where('token', $token)->exists();
+    }
+
+    public function customUrlExists(string $customUrl): bool
+    {
+        return Webhook::where('custom_url', $customUrl)->exists();
     }
 } 

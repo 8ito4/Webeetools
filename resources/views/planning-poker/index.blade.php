@@ -11,7 +11,6 @@
         <button onclick="openModal('create')" class="w-40 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded transition text-lg">Criar Sala</button>
         <button onclick="openModal('join')" class="w-40 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded transition text-lg">Entrar em Sala</button>
     </div>
-    <!-- Modal Criar Sala -->
     <div id="modal-create" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg p-8 shadow-lg w-80 flex flex-col gap-4">
             <h2 class="text-xl font-bold text-indigo-700 mb-2">Criar Sala</h2>
@@ -24,7 +23,6 @@
             <button onclick="closeModal('create')" class="text-gray-500 hover:text-gray-700 mt-2">Cancelar</button>
         </div>
     </div>
-    <!-- Modal Entrar em Sala -->
     <div id="modal-join" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg p-8 shadow-lg w-80 flex flex-col gap-4">
             <h2 class="text-xl font-bold text-green-700 mb-2">Entrar em Sala</h2>

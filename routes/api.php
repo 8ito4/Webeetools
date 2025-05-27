@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::any('/webhook/{token}', [ToolController::class, 'webhookReceive'])->name('api.webhook.receive'); 
+Route::any('/webhook/{identifier}', [ToolController::class, 'webhookReceive'])->name('api.webhook.receive'); 

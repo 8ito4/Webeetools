@@ -12,6 +12,7 @@ class Webhook extends Model
 
     protected $fillable = [
         'token',
+        'custom_url',
         'name',
         'description',
         'requests_count',

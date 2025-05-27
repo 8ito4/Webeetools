@@ -183,7 +183,6 @@ class PlanningPokerRepository
         $rooms = $this->getAllRooms();
         if (!isset($rooms[$code])) return null;
         $rooms[$code]['revealed'] = true;
-        // Calcular média
         $votes = array_map(fn($p) => $p['vote'], $rooms[$code]['participants']);
         $nums = array_filter($votes, fn($v) => is_numeric($v));
         $avg = null;

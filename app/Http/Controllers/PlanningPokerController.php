@@ -41,13 +41,11 @@ class PlanningPokerController extends Controller
                 return redirect()->route('planning-poker.index');
             }
 
-            // Verifica se a sala existe
             $room = $this->service->getRoom($code);
             if (!$room) {
                 return redirect()->route('planning-poker.index')->withErrors(['code' => 'Código de sala inválido.']);
             }
 
-            // Redireciona para a sala com o modal de nome
             return redirect()->route('planning-poker.room', ['code' => $code, 'show_name_modal' => true]);
         }
 
@@ -70,7 +68,6 @@ class PlanningPokerController extends Controller
         $name = session('planning_poker_name');
         $showNameModal = $request->query('show_name_modal', false);
 
-        // Se não tem nome na sessão e não está mostrando o modal, redireciona para mostrar o modal
         if (!$name && !$showNameModal) {
             return redirect()->route('planning-poker.room', ['code' => $code, 'show_name_modal' => true]);
         }

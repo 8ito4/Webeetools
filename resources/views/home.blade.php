@@ -22,14 +22,11 @@
         </div>
 
         <script>
-            // Inicializar animação do título com GSAP
             window.addEventListener('load', function() {
                 console.log('Window loaded, initializing GSAP animation...');
                 try {
-                    // Registrar o plugin de texto
                     gsap.registerPlugin(TextPlugin);
 
-                    // Animação inicial das letras
                     gsap.from("#webeetools-title span", {
                         duration: 0.5,
                         y: 50,
@@ -38,7 +35,6 @@
                         ease: "back.out(1.7)"
                     });
 
-                    // Adicionar efeito hover
                     const letters = document.querySelectorAll("#webeetools-title span");
                     letters.forEach(letter => {
                         letter.addEventListener("mouseover", () => {
@@ -70,7 +66,6 @@
         </script>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Pomodoro Timer Card -->
             <a href="{{ route('tools.pomodoro') }}" class="group" data-aos="fade-up" data-aos-delay="100">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -85,7 +80,6 @@
                 </div>
             </a>
 
-            <!-- JSON Formatter Card -->
             <a href="{{ route('tools.json') }}" class="group" data-aos="fade-up" data-aos-delay="200">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -100,7 +94,6 @@
                 </div>
             </a>
 
-            <!-- Password Generator Card -->
             <a href="{{ route('tools.password') }}" class="group" data-aos="fade-up" data-aos-delay="300">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -115,7 +108,6 @@
                 </div>
             </a>
 
-            <!-- API Tester Card -->
             <a href="{{ route('tools.api-tester') }}" class="group" data-aos="fade-up" data-aos-delay="400">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -130,7 +122,6 @@
                 </div>
             </a>
 
-            <!-- Webhook Tester Card -->
             <a href="{{ route('tools.webhook') }}" class="group" data-aos="fade-up" data-aos-delay="500">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -147,7 +138,6 @@
                 </div>
             </a>
 
-            <!-- Planning Poker Card -->
             <a href="{{ route('planning-poker.index') }}" class="group" data-aos="fade-up" data-aos-delay="600">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -162,7 +152,6 @@
                 </div>
             </a>
 
-            <!-- Cellphone Generator Card -->
             <a href="{{ route('tools.cellphone') }}" class="group" data-aos="fade-up" data-aos-delay="700">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -178,7 +167,6 @@
                 </div>
             </a>
 
-            <!-- Document Generator Card -->
             <a href="{{ route('tools.document') }}" class="group" data-aos="fade-up" data-aos-delay="800">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
@@ -197,71 +185,6 @@
 </div>
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const volumeBtn = document.getElementById('volumeBtn');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volumeInput = volumeSlider.querySelector('input');
-        let isPlaying = false;
-        let audio = new Audio('https://stream.zeno.fm/0r0xa792kwzuv');
-        audio.volume = 0.5; // Volume inicial médio
-
-        // Função para atualizar o ícone do botão play/pause
-        function updatePlayPauseIcon() {
-            const svg = playPauseBtn.querySelector('svg');
-            if (isPlaying) {
-                svg.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                `;
-            } else {
-                svg.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                `;
-            }
-        }
-
-        // Controle de play/pause
-        playPauseBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                audio.pause();
-            } else {
-                audio.play();
-            }
-            isPlaying = !isPlaying;
-            updatePlayPauseIcon();
-        });
-
-        // Controle de volume
-        volumeBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            volumeSlider.classList.toggle('hidden');
-        });
-
-        // Atualizar volume quando o slider é movido
-        volumeInput.addEventListener('input', (e) => {
-            const volume = e.target.value / 100;
-            audio.volume = volume;
-        });
-
-        // Fechar o slider quando clicar fora
-        document.addEventListener('click', (e) => {
-            if (!volumeSlider.contains(e.target) && e.target !== volumeBtn) {
-                volumeSlider.classList.add('hidden');
-            }
-        });
-
-        // Iniciar automaticamente
-        audio.play().then(() => {
-            isPlaying = true;
-            updatePlayPauseIcon();
-        }).catch(error => {
-            console.log('Autoplay prevented:', error);
-        });
-    });
-</script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.birds.min.js"></script>
 <script>
@@ -275,9 +198,9 @@ VANTA.BIRDS({
     minWidth: 200.00,
     scale: 1.00,
     scaleMobile: 1.00,
-    color1: 0xfbbf24, // Amarelo claro
-    color2: 0xf59e0b, // Amarelo escuro/laranja
-    backgroundColor: 0xffffff, // Branco
+    color1: 0xfbbf24,
+    color2: 0xf59e0b,
+    backgroundColor: 0xffffff,
     birdSize: 1.50,
     speedLimit: 3.00,
     quantity: 4.00,

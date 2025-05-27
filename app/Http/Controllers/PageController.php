@@ -41,7 +41,6 @@ class PageController extends Controller
                 'message' => 'required|string',
             ]);
 
-            // TODO: Implementar envio de email ou salvar no banco de dados
 
             return redirect()->route('contact')->with('success', 'Sua mensagem foi enviada com sucesso!');
 
