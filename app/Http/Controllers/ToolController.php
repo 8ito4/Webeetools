@@ -157,6 +157,16 @@ class ToolController extends Controller
         return view('tools.lorem');
     }
 
+    public function networkTools()
+    {
+        return view('tools.network-tools');
+    }
+
+    public function whatsappLink()
+    {
+        return view('tools.whatsapp-link');
+    }
+
     public function aiChat()
     {
         return view('tools.ai-chat');

@@ -48,7 +48,6 @@
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8 mt-3">
                         <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('home') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Início</a>
-                        <a href="{{ route('support') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('support') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Suporte</a>
                          <a href="{{ route('suggestions') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('suggestions') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Sugestões</a>
                          <a href="{{ route('contact') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('contact') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Fale Conosco</a>
                     </div>
@@ -57,7 +56,7 @@
                 <div class="flex items-center ml-6">
                     <div class="mr-4">
                         <div class="bg-white/80 backdrop-blur-sm rounded-lg p-1.5 shadow-lg flex items-center space-x-2 relative">
-                            <span class="text-xs text-gray-500 font-medium">lo-fi</span>
+                            <span class="text-xs text-gray-500 font-medium">Lo-fi</span>
                             <button id="playPauseBtn" class="text-gray-700 hover:text-yellow-500 transition-colors">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
@@ -86,8 +85,7 @@
 
                     <div class="flex items-center space-x-4">
                         @guest
-                            <a href="{{ route('login') }}" class="text-gray-900 hover:text-yellow-600 transition-colors duration-200">Logar</a>
-                            <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 transition-colors duration-200">Criar Conta</a>
+                            <!-- Login/Register temporariamente removidos -->
                         @endguest
                     </div>
                 </div>

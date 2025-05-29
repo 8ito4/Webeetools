@@ -31,21 +31,8 @@ class PageController extends Controller
         return view('pages.suggestions');
     }
 
-    public function contact(Request $request)
+    public function contact()
     {
-        if ($request->isMethod('post')) {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|max:255',
-                'subject' => 'nullable|string|max:255',
-                'message' => 'required|string',
-            ]);
-
-
-            return redirect()->route('contact')->with('success', 'Sua mensagem foi enviada com sucesso!');
-
-        } else {
-            return view('pages.contact');
-        }
+        return view('pages.contact');
     }
 } 
