@@ -5,8 +5,8 @@
     <div class="tool-header">
         <h1 class="tool-title">Contato</h1>
         <p class="tool-description">Entre em contato conosco</p>
-    </div>
-    
+        </div>
+
     <div class="tool-content">
         <div class="contact-section">
             <div class="contact-card">
@@ -14,18 +14,18 @@
                     <div class="info-header">
                         <i class="fas fa-envelope contact-icon"></i>
                         <h3>E-mail de Contato</h3>
-                    </div>
-                    
+        </div>
+
                     <div class="email-display">
                         <span class="email-text">8ito4.contato@gmail.com</span>
-                    </div>
-                    
+        </div>
+
                     <div class="response-info">
                         <i class="fas fa-clock"></i>
                         <span>Responderemos em até 24 horas</span>
                     </div>
                 </div>
-            </div>
+        </div>
         </div>
     </div>
 </div>
