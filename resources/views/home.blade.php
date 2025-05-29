@@ -99,7 +99,7 @@
                     <div class="p-6">
                         <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-yellow-100 mb-4 group-hover:bg-yellow-200 transition-colors duration-300">
                             <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1721 9z"></path>
                             </svg>
                         </div>
                         <h2 class="text-xl font-semibold text-gray-900 mb-2">Gerador de Senha</h2>
@@ -108,51 +108,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('tools.api-tester') }}" class="group" data-aos="fade-up" data-aos-delay="400">
-                <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-yellow-100 mb-4 group-hover:bg-yellow-200 transition-colors duration-300">
-                            <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-2">Testador de API</h2>
-                        <p class="text-gray-600">Teste e depure seus endpoints de API facilmente</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="{{ route('tools.webhook') }}" class="group" data-aos="fade-up" data-aos-delay="500">
-                <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-yellow-100 mb-4 group-hover:bg-yellow-200 transition-colors duration-300">
-                            <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 1.656-.895 3-2 3s-2-1.344-2-3S9 8 10 8s2 1.344 2 3z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V8m-2 3v3m4-3v3m-2-3h3m-3 0h-3"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z"/>
-                            </svg>
-                        </div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-2">Testador de Webhook</h2>
-                        <p class="text-gray-600">Receba e inspecione requisições de webhook</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="{{ route('planning-poker.index') }}" class="group" data-aos="fade-up" data-aos-delay="600">
-                <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
-                    <div class="p-6">
-                        <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-yellow-100 mb-4 group-hover:bg-yellow-200 transition-colors duration-300">
-                            <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                            </svg>
-                        </div>
-                        <h2 class="text-xl font-semibold text-gray-900 mb-2">Planning Poker</h2>
-                        <p class="text-gray-600">Ferramenta colaborativa para estimativa de pontos</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="{{ route('tools.cellphone') }}" class="group" data-aos="fade-up" data-aos-delay="700">
+            <a href="{{ route('tools.cellphone') }}" class="group" data-aos="fade-up" data-aos-delay="400">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
                         <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-yellow-100 mb-4 group-hover:bg-yellow-200 transition-colors duration-300">
@@ -167,7 +123,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('tools.document') }}" class="group" data-aos="fade-up" data-aos-delay="800">
+            <a href="{{ route('tools.document') }}" class="group" data-aos="fade-up" data-aos-delay="500">
                 <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:rotate-1 hover:scale-105" style="background-color: rgba(230, 230, 230, 0.4); backdrop-filter: blur(10px);">
                     <div class="p-6">
                         <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-yellow-100 mb-4 group-hover:bg-yellow-200 transition-colors duration-300">
@@ -180,6 +136,62 @@
                     </div>
                 </div>
             </a>
+
+            <!-- Testador de Webhook - EM BREVE -->
+            <div class="group relative" data-aos="fade-up" data-aos-delay="600">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 opacity-60 cursor-not-allowed" style="background-color: rgba(200, 200, 200, 0.4); backdrop-filter: blur(10px);">
+                    <div class="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                        EM BREVE
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-200 mb-4">
+                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 1.656-.895 3-2 3s-2-1.344-2-3S9 8 10 8s2 1.344 2 3z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V8m-2 3v3m4-3v3m-2-3h3m-3 0h-3"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-semibold text-gray-500 mb-2">Testador de Webhook</h2>
+                        <p class="text-gray-500">Receba e inspecione requisições de webhook</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testador de API - EM BREVE -->
+            <div class="group relative" data-aos="fade-up" data-aos-delay="700">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 opacity-60 cursor-not-allowed" style="background-color: rgba(200, 200, 200, 0.4); backdrop-filter: blur(10px);">
+                    <div class="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                        EM BREVE
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-200 mb-4">
+                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-semibold text-gray-500 mb-2">Testador de API</h2>
+                        <p class="text-gray-500">Teste e depure seus endpoints de API facilmente</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Planning Poker - EM BREVE -->
+            <div class="group relative" data-aos="fade-up" data-aos-delay="800">
+                <div class="overflow-hidden shadow-sm sm:rounded-lg transition-all duration-300 opacity-60 cursor-not-allowed" style="background-color: rgba(200, 200, 200, 0.4); backdrop-filter: blur(10px);">
+                    <div class="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10">
+                        EM BREVE
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-gray-200 mb-4">
+                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl font-semibold text-gray-500 mb-2">Planning Poker</h2>
+                        <p class="text-gray-500">Ferramenta colaborativa para estimativa de pontos</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

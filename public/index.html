@@ -187,42 +187,114 @@
             width: 100%;
         }
 
-        /* Lo-fi Player */
+        /* Lo-fi Player - Ultra Minimal */
         .lofi-player {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 0.75rem;
-            padding: 0.75rem;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.375rem 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            border: 1px solid rgba(71, 85, 105, 0.3);
-            transition: all 0.3s ease;
+            gap: 0.25rem;
+            border: 1px solid rgba(71, 85, 105, 0.1);
+            transition: all 0.2s ease;
         }
 
         .lofi-player:hover {
-            border-color: rgba(234, 179, 8, 0.3);
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(234, 179, 8, 0.2);
         }
 
         .lofi-text {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            font-weight: 500;
+            font-size: 0.7rem;
+            color: var(--accent-400);
+            font-weight: 400;
+            text-transform: none;
         }
 
         .play-btn {
-            background: none;
+            background: transparent;
             border: none;
-            color: #9ca3af;
+            color: var(--accent-400);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             padding: 0.25rem;
             border-radius: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .play-btn:hover {
-            color: var(--accent-400);
-            transform: scale(1.1);
+            color: var(--accent-300);
+        }
+
+        .play-btn i {
+            font-size: 0.5rem;
+            margin-left: 1px;
+        }
+
+        /* Container para as barrinhas - inicialmente oculto */
+        .music-container {
+            width: 0;
+            height: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+        /* Animação de barrinhas */
+        .music-bars {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 0.75rem;
+        }
+
+        .music-bars .bar {
+            width: 2px;
+            background: var(--accent-400);
+            border-radius: 1px;
+            animation: musicBar 1s ease-in-out infinite;
+        }
+
+        .music-bars .bar:nth-child(1) {
+            height: 0.25rem;
+            animation-delay: 0s;
+        }
+
+        .music-bars .bar:nth-child(2) {
+            height: 0.5rem;
+            animation-delay: 0.2s;
+        }
+
+        .music-bars .bar:nth-child(3) {
+            height: 0.375rem;
+            animation-delay: 0.4s;
+        }
+
+        .music-bars .bar:nth-child(4) {
+            height: 0.25rem;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes musicBar {
+            0%, 100% {
+                transform: scaleY(0.3);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        /* Estado Playing - container se expande */
+        .lofi-player.playing .music-container {
+            width: 20px;
         }
 
         /* Main Content */
@@ -818,12 +890,19 @@
             <ul class="nav-links">
                 <li><a href="#home">Início</a></li>
                 <li><a href="#tools">Ferramentas</a></li>
-                <li><a href="#support">Suporte</a></li>
-                <li><a href="#contact">Contato</a></li>
+                <li><a href="/contact">Contato</a></li>
             </ul>
             
             <div class="lofi-player">
-                <span class="lofi-text">lo-fi</span>
+                <span class="lofi-text">Lo-fi</span>
+                <div class="music-container">
+                    <div class="music-bars">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
                 <button class="play-btn" id="playBtn">
                     <i class="fas fa-play"></i>
                 </button>
@@ -856,7 +935,7 @@
 
             <div class="stats">
                 <div class="stat">
-                    <div class="stat-number">10+</div>
+                    <div class="stat-number">12+</div>
                     <div class="stat-label">Ferramentas</div>
                 </div>
                 <div class="stat">
@@ -869,7 +948,8 @@
                 </div>
             </div>
 
-            <!-- AI Assistant Button -->
+            <!-- AI Assistant Button - TEMPORARIAMENTE REMOVIDO -->
+            <!--
             <div class="ai-button-container">
                 <a href="/tools/ai-chat" class="ai-button">
                     <div class="ai-button-icon">
@@ -880,6 +960,7 @@
                     Conversar com IA
                 </a>
             </div>
+            -->
 
             <!-- Scroll Animation Indicator -->
             <div class="scroll-indicator">
@@ -917,24 +998,6 @@
                     <p class="tool-description">Crie senhas seguras e personalizáveis para seus projetos</p>
                 </a>
                 
-                <!-- API Tester -->
-                <a href="/tools/api-tester" class="tool-card">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
-                        <i class="fas fa-plug"></i>
-                    </div>
-                    <h3 class="tool-title">Testador de API</h3>
-                    <p class="tool-description">Teste e depure suas APIs com interface intuitiva</p>
-                </a>
-                
-                <!-- Webhook Tester -->
-                <a href="/tools/webhook" class="tool-card">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #eab308, #ca8a04);">
-                        <i class="fas fa-satellite-dish"></i>
-                    </div>
-                    <h3 class="tool-title">Testador de Webhook</h3>
-                    <p class="tool-description">Teste e monitore webhooks em tempo real</p>
-                </a>
-                
                 <!-- Pomodoro Timer -->
                 <a href="/tools/pomodoro" class="tool-card">
                     <div class="tool-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
@@ -949,7 +1012,7 @@
                     <div class="tool-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
                         <i class="fas fa-file-alt"></i>
                     </div>
-                    <h3 class="tool-title">Ferramenta de Documento</h3>
+                    <h3 class="tool-title">Gerador de CPF/CNPJ</h3>
                     <p class="tool-description">Gerencie e processe documentos facilmente</p>
                 </a>
                 
@@ -962,15 +1025,6 @@
                     <p class="tool-description">Valide e formate números de telefone</p>
                 </a>
                 
-                <!-- Planning Poker -->
-                <a href="/planning-poker" class="tool-card">
-                    <div class="tool-icon" style="background: linear-gradient(135deg, #a855f7, #9333ea);">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="tool-title">Planning Poker</h3>
-                    <p class="tool-description">Ferramenta colaborativa para estimativas ágeis</p>
-                </a>
-                
                 <!-- Lorem Ipsum Generator -->
                 <a href="/tools/lorem" class="tool-card">
                     <div class="tool-icon" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
@@ -979,6 +1033,54 @@
                     <h3 class="tool-title">Gerador Lorem Ipsum</h3>
                     <p class="tool-description">Gere texto placeholder personalizado para seus projetos</p>
                 </a>
+                
+                <!-- WhatsApp Link Generator -->
+                <a href="/tools/whatsapp-link" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #25d366, #128c7e);">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 class="tool-title">Gerador de Link WhatsApp</h3>
+                    <p class="tool-description">Crie links diretos para WhatsApp com mensagem personalizada</p>
+                </a>
+                
+                <!-- Network Tools -->
+                <a href="/tools/network-tools" class="tool-card">
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #84cc16, #65a30d);">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="tool-title">Teste de Conexão</h3>
+                    <p class="tool-description">Meça a velocidade da sua internet com ping, download e upload</p>
+                </a>
+                
+                <!-- Webhook Tester - EM BREVE -->
+                <div class="tool-card disabled" style="position: relative; opacity: 0.6; cursor: not-allowed;">
+                    <div class="coming-soon-badge" style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; z-index: 10;">EM BREVE</div>
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #9ca3af, #6b7280);">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <h3 class="tool-title" style="color: #9ca3af;">Testador de Webhook</h3>
+                    <p class="tool-description" style="color: #9ca3af;">Teste e monitore webhooks em tempo real</p>
+                </div>
+                
+                <!-- API Tester - EM BREVE -->
+                <div class="tool-card disabled" style="position: relative; opacity: 0.6; cursor: not-allowed;">
+                    <div class="coming-soon-badge" style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; z-index: 10;">EM BREVE</div>
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #9ca3af, #6b7280);">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="tool-title" style="color: #9ca3af;">Testador de API</h3>
+                    <p class="tool-description" style="color: #9ca3af;">Teste e depure suas APIs com interface intuitiva</p>
+                </div>
+                
+                <!-- Planning Poker - EM BREVE -->
+                <div class="tool-card disabled" style="position: relative; opacity: 0.6; cursor: not-allowed;">
+                    <div class="coming-soon-badge" style="position: absolute; top: 10px; right: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; z-index: 10;">EM BREVE</div>
+                    <div class="tool-icon" style="background: linear-gradient(135deg, #9ca3af, #6b7280);">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="tool-title" style="color: #9ca3af;">Planning Poker</h3>
+                    <p class="tool-description" style="color: #9ca3af;">Ferramenta colaborativa para estimativas ágeis</p>
+                </div>
             </div>
         </section>
     </main>
@@ -1004,12 +1106,14 @@
         let isPlaying = false;
         const playBtn = document.getElementById('playBtn');
         const playIcon = playBtn.querySelector('i');
+        const lofiPlayer = document.querySelector('.lofi-player');
 
         playBtn.addEventListener('click', function() {
             if (isPlaying && audio) {
                 audio.pause();
                 isPlaying = false;
                 playIcon.className = 'fas fa-play';
+                lofiPlayer.classList.remove('playing');
             } else {
                 if (!audio) {
                     const audioUrls = [
@@ -1034,6 +1138,7 @@
                                 console.log('Áudio iniciado:', audioUrls[currentUrlIndex]);
                                 isPlaying = true;
                                 playIcon.className = 'fas fa-pause';
+                                lofiPlayer.classList.add('playing');
                             }).catch(error => {
                                 console.error('Erro:', error);
                                 currentUrlIndex++;
@@ -1047,11 +1152,13 @@
                     audio.addEventListener('pause', function() {
                         isPlaying = false;
                         playIcon.className = 'fas fa-play';
+                        lofiPlayer.classList.remove('playing');
                     });
                     
                     audio.addEventListener('play', function() {
                         isPlaying = true;
                         playIcon.className = 'fas fa-pause';
+                        lofiPlayer.classList.add('playing');
                     });
                     
                     tryNextUrl();
@@ -1059,6 +1166,7 @@
                     audio.play().then(() => {
                         isPlaying = true;
                         playIcon.className = 'fas fa-pause';
+                        lofiPlayer.classList.add('playing');
                     });
                 }
             }

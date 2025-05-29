@@ -183,42 +183,114 @@
             width: 100%;
         }
 
-        /* Lo-fi Player */
+        /* Lo-fi Player - Ultra Minimal (igual ao index) */
         .lofi-player {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(10px);
-            border-radius: 0.75rem;
-            padding: 0.75rem;
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.375rem 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
-            border: 1px solid rgba(71, 85, 105, 0.3);
-            transition: all 0.3s ease;
+            gap: 0.25rem;
+            border: 1px solid rgba(71, 85, 105, 0.1);
+            transition: all 0.2s ease;
         }
 
         .lofi-player:hover {
-            border-color: rgba(234, 179, 8, 0.3);
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(234, 179, 8, 0.2);
         }
 
         .lofi-text {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            font-weight: 500;
+            font-size: 0.7rem;
+            color: var(--accent-400);
+            font-weight: 400;
+            text-transform: none;
         }
 
         .play-btn {
-            background: none;
+            background: transparent;
             border: none;
-            color: #9ca3af;
+            color: var(--accent-400);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             padding: 0.25rem;
             border-radius: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .play-btn:hover {
-            color: var(--accent-400);
-            transform: scale(1.1);
+            color: var(--accent-300);
+        }
+
+        .play-btn i {
+            font-size: 0.5rem;
+            margin-left: 1px;
+        }
+
+        /* Container para as barrinhas */
+        .music-container {
+            width: 0;
+            height: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+        /* Animação de barrinhas */
+        .music-bars {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 0.75rem;
+        }
+
+        .music-bars .bar {
+            width: 2px;
+            background: var(--accent-400);
+            border-radius: 1px;
+            animation: musicBar 1s ease-in-out infinite;
+        }
+
+        .music-bars .bar:nth-child(1) {
+            height: 0.25rem;
+            animation-delay: 0s;
+        }
+
+        .music-bars .bar:nth-child(2) {
+            height: 0.5rem;
+            animation-delay: 0.2s;
+        }
+
+        .music-bars .bar:nth-child(3) {
+            height: 0.375rem;
+            animation-delay: 0.4s;
+        }
+
+        .music-bars .bar:nth-child(4) {
+            height: 0.25rem;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes musicBar {
+            0%, 100% {
+                transform: scaleY(0.3);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        /* Estado Playing - container se expande */
+        .lofi-player.playing .music-container {
+            width: 20px;
         }
 
         /* Main Content */
@@ -384,6 +456,45 @@
             background: var(--accent-500);
         }
 
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+        }
+
+        .status-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
         @yield('styles')
     </style>
 </head>
@@ -405,13 +516,20 @@
             
             <ul class="nav-links">
                 <li><a href="/">Início</a></li>
-                <li><a href="/#tools">Ferramentas</a></li>
-                <li><a href="/support">Suporte</a></li>
+                <li><a href="/tools">Ferramentas</a></li>
                 <li><a href="/contact">Contato</a></li>
             </ul>
             
             <div class="lofi-player">
-                <span class="lofi-text">lo-fi</span>
+                <span class="lofi-text">Lo-fi</span>
+                <div class="music-container">
+                    <div class="music-bars">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                </div>
                 <button class="play-btn" id="playBtn">
                     <i class="fas fa-play"></i>
                 </button>
@@ -445,12 +563,14 @@
         let isPlaying = false;
         const playBtn = document.getElementById('playBtn');
         const playIcon = playBtn.querySelector('i');
+        const lofiPlayer = document.querySelector('.lofi-player');
 
         playBtn.addEventListener('click', function() {
             if (isPlaying && audio) {
                 audio.pause();
                 isPlaying = false;
                 playIcon.className = 'fas fa-play';
+                lofiPlayer.classList.remove('playing');
             } else {
                 if (!audio) {
                     const audioUrls = [
@@ -475,6 +595,7 @@
                                 console.log('Áudio iniciado:', audioUrls[currentUrlIndex]);
                                 isPlaying = true;
                                 playIcon.className = 'fas fa-pause';
+                                lofiPlayer.classList.add('playing');
                             }).catch(error => {
                                 console.error('Erro:', error);
                                 currentUrlIndex++;
@@ -488,11 +609,13 @@
                     audio.addEventListener('pause', function() {
                         isPlaying = false;
                         playIcon.className = 'fas fa-play';
+                        lofiPlayer.classList.remove('playing');
                     });
                     
                     audio.addEventListener('play', function() {
                         isPlaying = true;
                         playIcon.className = 'fas fa-pause';
+                        lofiPlayer.classList.add('playing');
                     });
                     
                     tryNextUrl();
@@ -500,6 +623,7 @@
                     audio.play().then(() => {
                         isPlaying = true;
                         playIcon.className = 'fas fa-pause';
+                        lofiPlayer.classList.add('playing');
                     });
                 }
             }
@@ -538,7 +662,7 @@
             navigator.clipboard.writeText(text).then(() => {
                 showCopyFeedback(buttonElement);
                 showCopyNotification('Copiado para a área de transferência!', 'success');
-            }).catch(err => {
+            }).catch((err) => {
                 console.error('Erro ao copiar:', err);
                 // Fallback para navegadores mais antigos
                 try {

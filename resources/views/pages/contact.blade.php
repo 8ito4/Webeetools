@@ -1,55 +1,119 @@
-@extends('layouts.app')
+@extends('layouts.modern')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold text-gray-900 mb-4">Fale Conosco</h1>
-    <p class="text-gray-700 mb-6">Tem alguma dúvida ou sugestão? Envie uma mensagem!</p>
-
-    @if (session('success'))
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-            <span class="block sm:inline">{{ session('success') }}</span>
+<div class="tool-container">
+    <div class="tool-header">
+        <h1 class="tool-title">Contato</h1>
+        <p class="tool-description">Entre em contato conosco</p>
+    </div>
+    
+    <div class="tool-content">
+        <div class="contact-section">
+            <div class="contact-card">
+                <div class="contact-info">
+                    <div class="info-header">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <h3>E-mail de Contato</h3>
+                    </div>
+                    
+                    <div class="email-display">
+                        <span class="email-text">8ito4.contato@gmail.com</span>
+                    </div>
+                    
+                    <div class="response-info">
+                        <i class="fas fa-clock"></i>
+                        <span>Responderemos em até 24 horas</span>
+                    </div>
+                </div>
+            </div>
         </div>
-    @endif
-
-    <form action="{{ route('contact') }}" method="POST">
-        @csrf
-        <div class="mb-4">
-            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nome:</label>
-            <input type="text" id="name" name="name" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('name') border-red-500 @enderror" value="{{ old('name') }}" required>
-            @error('name')
-                <p class="text-red-500 text-xs italic">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-            <input type="email" id="email" name="email" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('email') border-red-500 @enderror" value="{{ old('email') }}" required>
-             @error('email')
-                <p class="text-red-500 text-xs italic">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-4">
-            <label for="subject" class="block text-gray-700 text-sm font-bold mb-2">Assunto (Opcional):</label>
-            <input type="text" id="subject" name="subject" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('subject') border-red-500 @enderror" value="{{ old('subject') }}">
-             @error('subject')
-                <p class="text-red-500 text-xs italic">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="mb-6">
-            <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Mensagem:</label>
-            <textarea id="message" name="message" rows="4" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('message') border-red-500 @enderror" required>{{ old('message') }}</textarea>
-             @error('message')
-                <p class="text-red-500 text-xs italic">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <div class="flex items-center justify-between">
-            <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-200">
-                Enviar Mensagem
-            </button>
-        </div>
-    </form>
+    </div>
 </div>
+
+<style>
+.contact-section {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact-card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(71, 85, 105, 0.3);
+    border-radius: 1rem;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.contact-card:hover {
+    border-color: rgba(234, 179, 8, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.info-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.contact-icon {
+    font-size: 3rem;
+    color: var(--accent-400);
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.info-header h3 {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.email-display {
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(71, 85, 105, 0.4);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.email-text {
+    color: var(--accent-400);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 500;
+    word-break: break-all;
+}
+
+.response-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #9ca3af;
+    font-size: 0.9rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(71, 85, 105, 0.3);
+}
+
+.response-info i {
+    color: var(--accent-400);
+}
+
+@media (max-width: 640px) {
+    .contact-card {
+        padding: 1.5rem;
+    }
+    
+    .contact-icon {
+        font-size: 2.5rem;
+    }
+    
+    .info-header h3 {
+        font-size: 1.25rem;
+    }
+}
+</style>
 @endsection 
