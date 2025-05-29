@@ -43,6 +43,10 @@ Route::prefix('tools')->group(function () {
     Route::get('/network-tools', [ToolController::class, 'networkTools'])->name('tools.network-tools');
     Route::get('/whatsapp-link', [ToolController::class, 'whatsappLink'])->name('tools.whatsapp-link');
     
+    // Gerador de Currículo
+    Route::get('/resume-generator', [ToolController::class, 'resumeGenerator'])->name('tools.resume-generator');
+    Route::post('/resume-generator/generate', [ToolController::class, 'generateResume'])->name('tools.resume-generator.generate');
+    
     // Route::get('/ai-chat', [ToolController::class, 'aiChat'])->name('tools.ai-chat'); // TEMPORARIAMENTE REMOVIDO
     // Route::get('/api-tester', [ToolController::class, 'apiTester'])->name('tools.api-tester'); // EM BREVE
     // Route::post('/api-tester/send', [ToolController::class, 'sendRequest'])->name('tools.api-tester.send'); // EM BREVE
@@ -56,6 +60,12 @@ Route::get('/documentation', [PageController::class, 'documentation'])->name('do
 // Route::get('/support', [PageController::class, 'support'])->name('support'); // TEMPORARIAMENTE REMOVIDO
 Route::get('/terms', [PageController::class, 'terms'])->name('terms');
 Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+
+// Páginas legais (footer)
+Route::get('/termos-de-uso', [PageController::class, 'termosDeUso'])->name('termos-de-uso');
+Route::get('/politica-privacidade', [PageController::class, 'politicaPrivacidade'])->name('politica-privacidade');
+Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies');
+Route::get('/licensa', [PageController::class, 'licensa'])->name('licensa');
 
 Route::get('/suggestions', [PageController::class, 'suggestions'])->name('suggestions');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact');

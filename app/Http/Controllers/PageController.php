@@ -35,4 +35,25 @@ class PageController extends Controller
     {
         return view('pages.contact');
     }
+
+    // Páginas legais
+    public function termosDeUso()
+    {
+        return view('pages.termos-de-uso');
+    }
+
+    public function politicaPrivacidade()
+    {
+        return view('pages.politica-privacidade');
+    }
+
+    public function cookies()
+    {
+        return view('pages.cookies');
+    }
+
+    public function licensa()
+    {
+        return view('pages.licensa');
+    }
 } 

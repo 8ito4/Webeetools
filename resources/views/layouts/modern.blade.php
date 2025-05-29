@@ -604,6 +604,231 @@
             display: none;
         }
 
+        /* Loading dots para rain player */
+        .loading-dots {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 0.75rem;
+        }
+
+        .loading-dots .dot {
+            width: 2px;
+            height: 2px;
+            background: #60a5fa;
+            border-radius: 50%;
+            animation: loadingDot 1.4s ease-in-out infinite;
+        }
+
+        .loading-dots .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loading-dots .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Estado Loading - container se expande */
+        .rain-player.loading .rain-container {
+            width: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, rgba(2, 6, 23, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            padding: 3rem 1rem 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: start;
+            justify-items: center;
+        }
+
+        .footer-section {
+            text-align: left;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .footer-section h3 {
+            color: var(--accent-400);
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-400);
+            transform: translateX(4px);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: rgba(234, 179, 8, 0.2);
+            border-color: var(--accent-400);
+            color: var(--accent-400);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            padding-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-bottom-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--accent-400);
+        }
+
+        .footer-copyright {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background: linear-gradient(135deg, var(--accent-400), var(--accent-600));
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-950);
+            font-size: 0.875rem;
+        }
+
+        .footer-logo-text {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .footer-logo-text .we {
+            color: #f1f5f9;
+        }
+
+        .footer-logo-text .bee {
+            color: var(--accent-400);
+        }
+
+        .footer-logo-text .tools {
+            color: #f1f5f9;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+                max-width: 100%;
+            }
+            
+            .footer-section {
+                text-align: center;
+            }
+            
+            .footer-bottom-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-social {
+                justify-content: center;
+            }
+        }
+
         @yield('styles')
     </style>
 </head>
@@ -651,6 +876,11 @@
                         <i class="fas fa-cloud-rain"></i>
                     </button>
                     <div class="rain-container">
+                        <div class="loading-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
                         <div class="rain-drops">
                             <div class="drop"></div>
                             <div class="drop"></div>
@@ -666,6 +896,82 @@
     <main class="main-content">
         @yield('content')
     </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Sobre o Webeetools -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <span class="footer-logo-text">
+                            <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                        </span>
+                    </div>
+                    <p>Sua caixa de ferramentas completa para desenvolvimento web. Todas as ferramentas que você precisa, 100% gratuitas e sem coleta de dados.</p>
+                    
+                    <!-- Banner Privacidade -->
+                    <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 0.5rem; padding: 0.75rem 1rem; margin: 1rem 0; text-align: center;">
+                        <span style="color: #10b981; font-weight: 600; font-size: 0.875rem;">
+                            <i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i>
+                            <strong>100% Privado</strong> - Sem coleta de dados
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Ferramentas -->
+                <div class="footer-section">
+                    <h3>🛠️ Ferramentas</h3>
+                    <ul class="footer-links">
+                        <li><a href="/tools/json"><i class="fas fa-code"></i> Formatador JSON</a></li>
+                        <li><a href="/tools/password"><i class="fas fa-key"></i> Gerador de Senhas</a></li>
+                        <li><a href="/tools/whatsapp-link"><i class="fab fa-whatsapp"></i> Link WhatsApp</a></li>
+                        <li><a href="/tools/network-tools"><i class="fas fa-tachometer-alt"></i> Teste de Conexão</a></li>
+                        <li><a href="/tools/lorem"><i class="fas fa-paragraph"></i> Lorem Ipsum</a></li>
+                        <li><a href="/tools/document"><i class="fas fa-file-alt"></i> Gerador CPF/CNPJ</a></li>
+                        <li><a href="/tools/resume-generator"><i class="fas fa-file-pdf"></i> Gerador de Currículo</a></li>
+                    </ul>
+                    
+                    <!-- Redes Sociais -->
+                    <div class="footer-social">
+                        <a href="https://github.com/8ito4" target="_blank" class="social-btn" title="GitHub - Douglas Soares">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/douglas-soares-204084235/" target="_blank" class="social-btn" title="LinkedIn - Douglas Soares">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Informações Legais -->
+                <div class="footer-section">
+                    <h3>⚖️ Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="/termos-de-uso"><i class="fas fa-file-contract"></i> Termos de Uso</a></li>
+                        <li><a href="/politica-privacidade"><i class="fas fa-shield-alt"></i> Política de Privacidade</a></li>
+                        <li><a href="/cookies"><i class="fas fa-cookie-bite"></i> Política de Cookies</a></li>
+                        <li><a href="/licensa"><i class="fas fa-balance-scale"></i> Licença</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-links">
+                    <a href="/">Início</a>
+                    <a href="/#tools">Ferramentas</a>
+                    <a href="/termos-de-uso">Termos de Uso</a>
+                    <a href="/politica-privacidade">Política de Privacidade</a>
+                    <a href="/contact">Contato</a>
+                </div>
+                <p class="footer-copyright">
+                    © 2024 <strong>Webeetools</strong>. Todos os direitos reservados. 
+                    <span style="margin-left: 1rem;">Feito com <i class="fas fa-heart" style="color: #ef4444;"></i> para desenvolvedores</span>
+                </p>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // Particles Animation
@@ -800,241 +1106,280 @@
             });
         });
 
-        // Rain Audio Player
+        // Rain Audio Player - STREAMS COM LOADING VISUAL
         let rainAudio = null;
         let isRainPlaying = false;
+        let currentRainUrlIndex = 0;
         const rainBtn = document.getElementById('rainBtn');
         const rainIcon = rainBtn.querySelector('i');
         const rainPlayer = document.querySelector('.rain-player');
+        const loadingDots = rainPlayer.querySelector('.loading-dots');
+        const rainDrops = rainPlayer.querySelector('.rain-drops');
+
+        // URLs de streams REAIS de chuva especializados
+        const rainUrls = [
+            'https://stream.rcast.net/272984', // NATURE RADIO RAIN - Spa Radiance Rain Shower Ambience
+            'https://radiosuitenetwork.torontocast.stream/nature-radio-rain/', // Nature Radio Rain Direct
+            'https://stream.rcast.net/247619', // NATURE RADIO RAIN - Rain relax Rainy Weather  
+            'https://stream.rcast.net/283464', // NATURE RADIO SLEEP - Pro Sound Effects Library City Rain
+            'https://stream.rcast.net/281503', // Ambi Nature Radio - Rain at the Lake House
+            'https://maggie.torontocast.com:8108/stream', // Nature Rain Direct Stream
+            'http://79.111.14.76:8000/soundnat', // Radio Caprice Nature
+            'https://kathy.torontocast.com:3250/stream', // Channel Chill Zen Garden Rainforest
+        ];
 
         rainBtn.addEventListener('click', function() {
-            if (isRainPlaying && rainAudio) {
-                rainAudio.pause();
-                isRainPlaying = false;
-                rainIcon.className = 'fas fa-cloud-rain';
-                rainPlayer.classList.remove('playing');
-            } else if (isRainPlaying && window.rainContext) {
-                // Parar som gerado
-                window.rainContext.close();
-                window.rainContext = null;
-                isRainPlaying = false;
-                rainIcon.className = 'fas fa-cloud-rain';
-                rainPlayer.classList.remove('playing');
+            if (isRainPlaying) {
+                // Parar chuva
+                stopRain();
             } else {
-                if (!rainAudio) {
-                    // URLs específicos de som de chuva real
-                    const rainUrls = [
-                        'https://stream.rcast.net/272984', // NATURE RADIO RAIN - Spa Radiance Rain Shower Ambience
-                        'https://stream.rcast.net/283464', // NATURE RADIO SLEEP - Pro Sound Effects Library City Rain
-                        'https://stream.rcast.net/247619', // NATURE RADIO RAIN - Rain relax - Rainy Weather
-                        'https://stream.rcast.net/281503', // Ambi Nature Radio - Rain at the Lake House
-                        'https://kathy.torontocast.com:3250/stream', // Channel Chill: Zen Garden - Echoes Of Nature Rainforest
-                        'https://radiosuitenetwork.torontocast.stream/nature-radio-rain/', // Nature Radio Rain direct stream
-                        'http://maggie.torontocast.com:8108/stream' // Nature Radio Rain alternative
-                    ];
-                    
-                    rainAudio = new Audio();
-                    rainAudio.loop = true;
-                    rainAudio.volume = 0.2; // Volume mais baixo para streams
-                    
-                    let currentRainUrlIndex = 0;
-                    
-                    function tryNextRainUrl() {
-                        if (currentRainUrlIndex < rainUrls.length) {
-                            console.log(`Tentando stream ${currentRainUrlIndex + 1}/${rainUrls.length}:`, rainUrls[currentRainUrlIndex]);
-                            
-                            rainAudio.src = rainUrls[currentRainUrlIndex];
-                            rainAudio.load();
-                            
-                            // Timeout rápido para cada tentativa (1 segundo)
-                            const timeoutId = setTimeout(() => {
-                                console.log('Timeout - próximo stream...');
-                                currentRainUrlIndex++;
-                                tryNextRainUrl();
-                            }, 1000);
-                            
-                            // Event listener temporário para detecção rápida de erro
-                            const onError = () => {
-                                clearTimeout(timeoutId);
-                                rainAudio.removeEventListener('error', onError);
-                                console.log('Erro detectado - próximo stream...');
-                                currentRainUrlIndex++;
-                                if (currentRainUrlIndex < rainUrls.length) {
-                                    tryNextRainUrl();
-                                } else {
-                                    generateRainSound();
-                                }
-                            };
-                            
-                            rainAudio.addEventListener('error', onError);
-                            
-                            rainAudio.play().then(() => {
-                                clearTimeout(timeoutId);
-                                rainAudio.removeEventListener('error', onError);
-                                console.log('✅ Chuva iniciada:', rainUrls[currentRainUrlIndex]);
-                                isRainPlaying = true;
-                                rainIcon.className = 'fas fa-cloud'; // Ícone para desativar
-                                rainPlayer.classList.add('playing');
-                            }).catch(error => {
-                                clearTimeout(timeoutId);
-                                rainAudio.removeEventListener('error', onError);
-                                console.error('❌ Erro:', error.message);
-                                currentRainUrlIndex++;
-                                if (currentRainUrlIndex < rainUrls.length) {
-                                    tryNextRainUrl();
-                                } else {
-                                    generateRainSound();
-                                }
-                            });
-                        } else {
-                            generateRainSound();
-                        }
-                    }
-                    
-                    function generateRainSound() {
-                        try {
-                            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                            
-                            // Master gain para controle de volume (mais baixo)
-                            const masterGain = audioContext.createGain();
-                            masterGain.gain.value = 0.15;
-                            
-                            // Som base muito suave
-                            const baseNoise = audioContext.createScriptProcessor(4096, 1, 1);
-                            const baseFilter1 = audioContext.createBiquadFilter();
-                            const baseFilter2 = audioContext.createBiquadFilter();
-                            const baseGain = audioContext.createGain();
-                            
-                            // Dois filtros em série para suavizar mais
-                            baseFilter1.type = 'lowpass';
-                            baseFilter1.frequency.value = 1200;
-                            baseFilter1.Q.value = 0.5;
-                            
-                            baseFilter2.type = 'highpass';
-                            baseFilter2.frequency.value = 200;
-                            baseFilter2.Q.value = 0.3;
-                            
-                            baseGain.gain.value = 0.08; // Bem baixo
-                            
-                            // Ruído branco mais suave
-                            baseNoise.onaudioprocess = function(e) {
-                                const output = e.outputBuffer.getChannelData(0);
-                                for (let i = 0; i < output.length; i++) {
-                                    // Ruído mais suave
-                                    output[i] = (Math.random() * 2 - 1) * 0.3;
-                                }
-                            };
-                            
-                            // Gotas mais naturais
-                            function createSoftRainDrop() {
-                                const oscillator = audioContext.createOscillator();
-                                const gainNode = audioContext.createGain();
-                                const filter = audioContext.createBiquadFilter();
-                                const filter2 = audioContext.createBiquadFilter();
-                                
-                                // Filtros mais suaves
-                                filter.type = 'bandpass';
-                                filter.frequency.value = 1000 + Math.random() * 1500; // 1000-2500Hz
-                                filter.Q.value = 2; // Mais focado
-                                
-                                filter2.type = 'lowpass';
-                                filter2.frequency.value = 3000;
-                                filter2.Q.value = 0.5;
-                                
-                                // Oscilador mais suave
-                                oscillator.type = 'sine'; // Mais suave que sawtooth
-                                oscillator.frequency.value = 1200 + Math.random() * 800;
-                                
-                                // Envelope muito suave
-                                const now = audioContext.currentTime;
-                                const attack = 0.005; // Ataque mais lento
-                                const decay = 0.2 + Math.random() * 0.3; // Decay mais longo
-                                
-                                gainNode.gain.setValueAtTime(0, now);
-                                gainNode.gain.linearRampToValueAtTime(0.03, now + attack); // Volume muito baixo
-                                gainNode.gain.exponentialRampToValueAtTime(0.001, now + attack + decay);
-                                
-                                // Conectar em série: osc -> filter -> filter2 -> gain -> master
-                                oscillator.connect(filter);
-                                filter.connect(filter2);
-                                filter2.connect(gainNode);
-                                gainNode.connect(masterGain);
-                                
-                                oscillator.start(now);
-                                oscillator.stop(now + attack + decay);
-                            }
-                            
-                            // Conectar som base com filtros em série
-                            baseNoise.connect(baseFilter1);
-                            baseFilter1.connect(baseFilter2);
-                            baseFilter2.connect(baseGain);
-                            baseGain.connect(masterGain);
-                            masterGain.connect(audioContext.destination);
-                            
-                            // Gotas mais esparsas e naturais
-                            function scheduleGentleRain() {
-                                if (window.rainContext && window.rainContext.state === 'running') {
-                                    // Menos gotas, mais espaçadas
-                                    const shouldDrop = Math.random() > 0.6; // 40% chance de gota
-                                    if (shouldDrop) {
-                                        createSoftRainDrop();
-                                    }
-                                    
-                                    // Intervalo mais variado e longo
-                                    const nextInterval = 80 + Math.random() * 120; // 80-200ms
-                                    setTimeout(scheduleGentleRain, nextInterval);
-                                }
-                            }
-                            
-                            // Variação muito lenta dos filtros
-                            function slowFilterVariation() {
-                                if (window.rainContext && window.rainContext.state === 'running') {
-                                    const newFreq = 800 + Math.random() * 800; // 800-1600Hz
-                                    baseFilter1.frequency.linearRampToValueAtTime(newFreq, audioContext.currentTime + 10);
-                                    setTimeout(slowFilterVariation, 15000 + Math.random() * 20000); // 15-35s
-                                }
-                            }
-                            
-                            scheduleGentleRain();
-                            slowFilterVariation();
-                            
-                            console.log('🌧️ Som de chuva suave criado!');
-                            isRainPlaying = true;
-                            rainIcon.className = 'fas fa-cloud';
-                            rainPlayer.classList.add('playing');
-                            
-                            // Guardar referências
-                            window.rainContext = audioContext;
-                            window.rainMasterGain = masterGain;
-                            window.rainBaseNoise = baseNoise;
-                            
-                        } catch (error) {
-                            console.error('Erro ao gerar som de chuva:', error);
-                        }
-                    }
-                    
-                    rainAudio.addEventListener('pause', function() {
-                        isRainPlaying = false;
-                        rainIcon.className = 'fas fa-cloud-rain';
-                        rainPlayer.classList.remove('playing');
-                    });
-                    
-                    rainAudio.addEventListener('play', function() {
-                        isRainPlaying = true;
-                        rainIcon.className = 'fas fa-cloud';
-                        rainPlayer.classList.add('playing');
-                    });
-                    
-                    tryNextRainUrl();
-                } else {
-                    rainAudio.play().then(() => {
-                        isRainPlaying = true;
-                        rainIcon.className = 'fas fa-cloud';
-                        rainPlayer.classList.add('playing');
-                    });
-                }
+                // Iniciar chuva com feedback imediato
+                startRainWithLoading();
             }
         });
+
+        function startRainWithLoading() {
+            // 1. FEEDBACK VISUAL IMEDIATO
+            rainIcon.className = 'fas fa-cloud'; // Muda ícone imediatamente
+            rainPlayer.classList.add('loading'); // Mostra loading dots
+            loadingDots.style.display = 'flex';
+            rainDrops.style.display = 'none';
+            console.log('🌧️ Iniciando busca por streams...');
+            
+            // 2. TENTAR STREAMS REAIS
+            currentRainUrlIndex = 0;
+            tryRainStreams();
+        }
+
+        function tryRainStreams() {
+            if (currentRainUrlIndex >= rainUrls.length) {
+                console.log('🎧 Streams falharam, usando gerador...');
+                startGeneratedRain();
+                return;
+            }
+
+            const url = rainUrls[currentRainUrlIndex];
+            console.log(`🔄 Tentando stream ${currentRainUrlIndex + 1}/${rainUrls.length}`);
+            
+            rainAudio = new Audio();
+            rainAudio.crossOrigin = 'anonymous';
+            rainAudio.volume = 0.25;
+            rainAudio.loop = true;
+            
+            const timeoutId = setTimeout(() => {
+                console.log('⏱️ Timeout - próximo...');
+                currentRainUrlIndex++;
+                tryRainStreams();
+            }, 4000);
+            
+            const onSuccess = () => {
+                clearTimeout(timeoutId);
+                rainAudio.removeEventListener('canplaythrough', onSuccess);
+                rainAudio.removeEventListener('error', onError);
+                
+                // SUCESSO - TROCAR PARA ANIMAÇÃO DE CHUVA
+                showRainAnimation();
+                console.log('✅ Stream conectado!');
+                
+                rainAudio.play().catch(() => {
+                    currentRainUrlIndex++;
+                    tryRainStreams();
+                });
+            };
+            
+            const onError = () => {
+                clearTimeout(timeoutId);
+                rainAudio.removeEventListener('canplaythrough', onSuccess);
+                rainAudio.removeEventListener('error', onError);
+                console.log('❌ Erro - próximo...');
+                currentRainUrlIndex++;
+                tryRainStreams();
+            };
+            
+            rainAudio.addEventListener('canplaythrough', onSuccess);
+            rainAudio.addEventListener('error', onError);
+            rainAudio.src = url;
+            rainAudio.load();
+        }
+
+        function startGeneratedRain() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                window.rainContext = audioContext;
+                
+                const masterGain = audioContext.createGain();
+                masterGain.gain.value = 0.15;
+                masterGain.connect(audioContext.destination);
+                
+                const noiseNode = audioContext.createScriptProcessor(4096, 1, 1);
+                const rainFilter = audioContext.createBiquadFilter();
+                
+                rainFilter.type = 'lowpass';
+                rainFilter.frequency.value = 800;
+                rainFilter.Q.value = 0.5;
+                
+                noiseNode.onaudioprocess = function(e) {
+                    const output = e.outputBuffer.getChannelData(0);
+                    for (let i = 0; i < output.length; i++) {
+                        output[i] = (Math.random() * 2 - 1) * 0.4;
+                    }
+                };
+                
+                noiseNode.connect(rainFilter);
+                rainFilter.connect(masterGain);
+                
+                function createRainDrop() {
+                    if (window.rainContext && window.rainContext.state === 'running') {
+                        const drop = audioContext.createOscillator();
+                        const dropGain = audioContext.createGain();
+                        const dropFilter = audioContext.createBiquadFilter();
+                        
+                        dropFilter.type = 'bandpass';
+                        dropFilter.frequency.value = 1000 + Math.random() * 2000;
+                        dropFilter.Q.value = 2;
+                        
+                        drop.type = 'sine';
+                        drop.frequency.value = 600 + Math.random() * 1000;
+                        
+                        const now = audioContext.currentTime;
+                        dropGain.gain.setValueAtTime(0, now);
+                        dropGain.gain.linearRampToValueAtTime(0.05, now + 0.005);
+                        dropGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                        
+                        drop.connect(dropFilter);
+                        dropFilter.connect(dropGain);
+                        dropGain.connect(masterGain);
+                        
+                        drop.start(now);
+                        drop.stop(now + 0.08);
+                        
+                        setTimeout(createRainDrop, 80 + Math.random() * 150);
+                    }
+                }
+                
+                createRainDrop();
+                showRainAnimation();
+                console.log('✅ Gerador iniciado');
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                showRainAnimation(); // Pelo menos mostra a animação
+            }
+        }
+
+        function showRainAnimation() {
+            // TROCAR DE LOADING PARA ANIMAÇÃO DE CHUVA
+            isRainPlaying = true;
+            rainPlayer.classList.remove('loading');
+            rainPlayer.classList.add('playing');
+            loadingDots.style.display = 'none';
+            rainDrops.style.display = 'flex';
+        }
+
+        function stopRain() {
+            // Parar tudo
+            if (rainAudio) {
+                rainAudio.pause();
+                rainAudio.src = '';
+                rainAudio = null;
+            }
+            
+            if (window.rainContext) {
+                try {
+                    window.rainContext.close();
+                } catch (e) {
+                    console.log('Context fechado');
+                }
+                window.rainContext = null;
+            }
+            
+            isRainPlaying = false;
+            rainIcon.className = 'fas fa-cloud-rain';
+            rainPlayer.classList.remove('loading', 'playing');
+            loadingDots.style.display = 'none';
+            rainDrops.style.display = 'none';
+            console.log('🔇 Chuva parada');
+        }
+
+        // Footer Functions
+        function reportBug() {
+            const subject = encodeURIComponent('🐛 Reportar Bug - Webeetools');
+            const body = encodeURIComponent(`
+Olá equipe Webeetools,
+
+Encontrei um possível bug e gostaria de reportar:
+
+🔍 **Descrição do Bug:**
+[Descreva detalhadamente o problema encontrado]
+
+📱 **Ambiente:**
+- Navegador: ${navigator.userAgent}
+- URL: ${window.location.href}
+- Data/Hora: ${new Date().toLocaleString('pt-BR')}
+
+🔄 **Passos para Reproduzir:**
+1. [Primeiro passo]
+2. [Segundo passo]
+3. [Terceiro passo]
+
+✅ **Comportamento Esperado:**
+[O que deveria acontecer]
+
+❌ **Comportamento Atual:**
+[O que está acontecendo]
+
+📷 **Screenshots/Evidências:**
+[Se possível, anexe capturas de tela]
+
+Obrigado pela atenção!
+            `);
+            
+            window.open(`mailto:contato@webeetools.com?subject=${subject}&body=${body}`, '_blank');
+        }
+
+        function requestFeature() {
+            const subject = encodeURIComponent('💡 Sugestão de Nova Feature - Webeetools');
+            const body = encodeURIComponent(`
+Olá equipe Webeetools,
+
+Tenho uma sugestão de nova funcionalidade:
+
+💡 **Nome da Feature:**
+[Nome ou título da funcionalidade]
+
+📝 **Descrição Detalhada:**
+[Explique detalhadamente como a funcionalidade deveria funcionar]
+
+🎯 **Objetivo/Problema que Resolve:**
+[Qual problema esta feature resolveria ou que benefício traria]
+
+👥 **Público-Alvo:**
+[Quem se beneficiaria desta funcionalidade]
+
+🔧 **Funcionalidades Esperadas:**
+- [Funcionalidade 1]
+- [Funcionalidade 2]
+- [Funcionalidade 3]
+
+📱 **Plataformas:**
+- [ ] Web (Desktop)
+- [ ] Web (Mobile)
+- [ ] API
+
+🌟 **Prioridade (na sua opinião):**
+- [ ] Baixa
+- [ ] Média
+- [ ] Alta
+- [ ] Crítica
+
+💭 **Informações Adicionais:**
+[Qualquer informação adicional que possa ser útil]
+
+Obrigado pela consideração!
+            `);
+            
+            window.open(`mailto:contato@webeetools.com?subject=${subject}&body=${body}`, '_blank');
+        }
 
         @yield('scripts')
     </script>
