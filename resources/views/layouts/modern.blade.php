@@ -183,6 +183,13 @@
             width: 100%;
         }
 
+        /* Audio Players Container */
+        .audio-players {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem; /* Espaçamento pequeno entre os players */
+        }
+
         /* Lo-fi Player - Ultra Minimal (igual ao index) */
         .lofi-player {
             background: rgba(30, 41, 59, 0.3);
@@ -291,6 +298,108 @@
         /* Estado Playing - container se expande */
         .lofi-player.playing .music-container {
             width: 20px;
+        }
+
+        /* Rain Player - Apenas ícones */
+        .rain-player {
+            background: transparent;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .rain-text {
+            font-size: 0.7rem;
+            color: #60a5fa;
+            font-weight: 400;
+            text-transform: none;
+        }
+
+        .rain-btn {
+            background: transparent;
+            border: none;
+            color: #60a5fa;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rain-btn:hover {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .rain-btn i {
+            font-size: 0.75rem; /* Ícone um pouco maior */
+        }
+
+        /* Container para as gotinhas - do lado direito */
+        .rain-container {
+            width: 0;
+            height: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            order: 3; /* Fica por último (direita) */
+        }
+
+        /* Animação de gotinhas */
+        .rain-drops {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 0.75rem;
+        }
+
+        .rain-drops .drop {
+            width: 2px;
+            height: 4px;
+            background: #60a5fa;
+            border-radius: 0 0 50% 50%;
+            animation: rainDrop 1.5s ease-in-out infinite;
+        }
+
+        .rain-drops .drop:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .rain-drops .drop:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .rain-drops .drop:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes rainDrop {
+            0% {
+                opacity: 0;
+                transform: translateY(-4px) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(4px) scale(0.5);
+            }
+        }
+
+        /* Estado Playing - container se expande */
+        .rain-player.playing .rain-container {
+            width: 16px;
         }
 
         /* Main Content */
@@ -516,23 +625,39 @@
             
             <ul class="nav-links">
                 <li><a href="/">Início</a></li>
-                <li><a href="/tools">Ferramentas</a></li>
+                <li><a href="/#tools">Ferramentas</a></li>
                 <li><a href="/contact">Contato</a></li>
             </ul>
             
-            <div class="lofi-player">
-                <span class="lofi-text">Lo-fi</span>
-                <div class="music-container">
-                    <div class="music-bars">
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
+            <div class="audio-players">
+                <div class="lofi-player">
+                    <span class="lofi-text">Lo-fi</span>
+                    <div class="music-container">
+                        <div class="music-bars">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    <button class="play-btn" id="playBtn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+                
+                <!-- Rain Player -->
+                <div class="rain-player">
+                    <button class="rain-btn" id="rainBtn">
+                        <i class="fas fa-cloud-rain"></i>
+                    </button>
+                    <div class="rain-container">
+                        <div class="rain-drops">
+                            <div class="drop"></div>
+                            <div class="drop"></div>
+                            <div class="drop"></div>
+                        </div>
                     </div>
                 </div>
-                <button class="play-btn" id="playBtn">
-                    <i class="fas fa-play"></i>
-                </button>
             </div>
         </div>
     </nav>
@@ -632,6 +757,283 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             createParticles();
+        });
+
+        // Smooth Scrolling - Corrigido para lidar com links absolutos
+        document.querySelectorAll('a[href*="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                let targetId = '';
+                
+                // Verificar se é um link absoluto com fragment (/#tools) ou apenas fragment (#tools)
+                if (href.includes('/#')) {
+                    targetId = '#' + href.split('/#')[1];
+                } else if (href.startsWith('#')) {
+                    targetId = href;
+                } else {
+                    return; // Se não é um link com fragment, deixar comportamento padrão
+                }
+                
+                // Se não estivermos na página inicial e o link for absoluto, redirecionar
+                if (href.includes('/#') && window.location.pathname !== '/') {
+                    window.location.href = href;
+                    return;
+                }
+                
+                e.preventDefault();
+                
+                // Se for o link "Início", rolar para o topo absoluto
+                if (targetId === '#home' || href === '/') {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    const target = document.querySelector(targetId);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Rain Audio Player
+        let rainAudio = null;
+        let isRainPlaying = false;
+        const rainBtn = document.getElementById('rainBtn');
+        const rainIcon = rainBtn.querySelector('i');
+        const rainPlayer = document.querySelector('.rain-player');
+
+        rainBtn.addEventListener('click', function() {
+            if (isRainPlaying && rainAudio) {
+                rainAudio.pause();
+                isRainPlaying = false;
+                rainIcon.className = 'fas fa-cloud-rain';
+                rainPlayer.classList.remove('playing');
+            } else if (isRainPlaying && window.rainContext) {
+                // Parar som gerado
+                window.rainContext.close();
+                window.rainContext = null;
+                isRainPlaying = false;
+                rainIcon.className = 'fas fa-cloud-rain';
+                rainPlayer.classList.remove('playing');
+            } else {
+                if (!rainAudio) {
+                    // URLs específicos de som de chuva real
+                    const rainUrls = [
+                        'https://stream.rcast.net/272984', // NATURE RADIO RAIN - Spa Radiance Rain Shower Ambience
+                        'https://stream.rcast.net/283464', // NATURE RADIO SLEEP - Pro Sound Effects Library City Rain
+                        'https://stream.rcast.net/247619', // NATURE RADIO RAIN - Rain relax - Rainy Weather
+                        'https://stream.rcast.net/281503', // Ambi Nature Radio - Rain at the Lake House
+                        'https://kathy.torontocast.com:3250/stream', // Channel Chill: Zen Garden - Echoes Of Nature Rainforest
+                        'https://radiosuitenetwork.torontocast.stream/nature-radio-rain/', // Nature Radio Rain direct stream
+                        'http://maggie.torontocast.com:8108/stream' // Nature Radio Rain alternative
+                    ];
+                    
+                    rainAudio = new Audio();
+                    rainAudio.loop = true;
+                    rainAudio.volume = 0.2; // Volume mais baixo para streams
+                    
+                    let currentRainUrlIndex = 0;
+                    
+                    function tryNextRainUrl() {
+                        if (currentRainUrlIndex < rainUrls.length) {
+                            console.log(`Tentando stream ${currentRainUrlIndex + 1}/${rainUrls.length}:`, rainUrls[currentRainUrlIndex]);
+                            
+                            rainAudio.src = rainUrls[currentRainUrlIndex];
+                            rainAudio.load();
+                            
+                            // Timeout rápido para cada tentativa (1 segundo)
+                            const timeoutId = setTimeout(() => {
+                                console.log('Timeout - próximo stream...');
+                                currentRainUrlIndex++;
+                                tryNextRainUrl();
+                            }, 1000);
+                            
+                            // Event listener temporário para detecção rápida de erro
+                            const onError = () => {
+                                clearTimeout(timeoutId);
+                                rainAudio.removeEventListener('error', onError);
+                                console.log('Erro detectado - próximo stream...');
+                                currentRainUrlIndex++;
+                                if (currentRainUrlIndex < rainUrls.length) {
+                                    tryNextRainUrl();
+                                } else {
+                                    generateRainSound();
+                                }
+                            };
+                            
+                            rainAudio.addEventListener('error', onError);
+                            
+                            rainAudio.play().then(() => {
+                                clearTimeout(timeoutId);
+                                rainAudio.removeEventListener('error', onError);
+                                console.log('✅ Chuva iniciada:', rainUrls[currentRainUrlIndex]);
+                                isRainPlaying = true;
+                                rainIcon.className = 'fas fa-cloud'; // Ícone para desativar
+                                rainPlayer.classList.add('playing');
+                            }).catch(error => {
+                                clearTimeout(timeoutId);
+                                rainAudio.removeEventListener('error', onError);
+                                console.error('❌ Erro:', error.message);
+                                currentRainUrlIndex++;
+                                if (currentRainUrlIndex < rainUrls.length) {
+                                    tryNextRainUrl();
+                                } else {
+                                    generateRainSound();
+                                }
+                            });
+                        } else {
+                            generateRainSound();
+                        }
+                    }
+                    
+                    function generateRainSound() {
+                        try {
+                            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                            
+                            // Master gain para controle de volume (mais baixo)
+                            const masterGain = audioContext.createGain();
+                            masterGain.gain.value = 0.15;
+                            
+                            // Som base muito suave
+                            const baseNoise = audioContext.createScriptProcessor(4096, 1, 1);
+                            const baseFilter1 = audioContext.createBiquadFilter();
+                            const baseFilter2 = audioContext.createBiquadFilter();
+                            const baseGain = audioContext.createGain();
+                            
+                            // Dois filtros em série para suavizar mais
+                            baseFilter1.type = 'lowpass';
+                            baseFilter1.frequency.value = 1200;
+                            baseFilter1.Q.value = 0.5;
+                            
+                            baseFilter2.type = 'highpass';
+                            baseFilter2.frequency.value = 200;
+                            baseFilter2.Q.value = 0.3;
+                            
+                            baseGain.gain.value = 0.08; // Bem baixo
+                            
+                            // Ruído branco mais suave
+                            baseNoise.onaudioprocess = function(e) {
+                                const output = e.outputBuffer.getChannelData(0);
+                                for (let i = 0; i < output.length; i++) {
+                                    // Ruído mais suave
+                                    output[i] = (Math.random() * 2 - 1) * 0.3;
+                                }
+                            };
+                            
+                            // Gotas mais naturais
+                            function createSoftRainDrop() {
+                                const oscillator = audioContext.createOscillator();
+                                const gainNode = audioContext.createGain();
+                                const filter = audioContext.createBiquadFilter();
+                                const filter2 = audioContext.createBiquadFilter();
+                                
+                                // Filtros mais suaves
+                                filter.type = 'bandpass';
+                                filter.frequency.value = 1000 + Math.random() * 1500; // 1000-2500Hz
+                                filter.Q.value = 2; // Mais focado
+                                
+                                filter2.type = 'lowpass';
+                                filter2.frequency.value = 3000;
+                                filter2.Q.value = 0.5;
+                                
+                                // Oscilador mais suave
+                                oscillator.type = 'sine'; // Mais suave que sawtooth
+                                oscillator.frequency.value = 1200 + Math.random() * 800;
+                                
+                                // Envelope muito suave
+                                const now = audioContext.currentTime;
+                                const attack = 0.005; // Ataque mais lento
+                                const decay = 0.2 + Math.random() * 0.3; // Decay mais longo
+                                
+                                gainNode.gain.setValueAtTime(0, now);
+                                gainNode.gain.linearRampToValueAtTime(0.03, now + attack); // Volume muito baixo
+                                gainNode.gain.exponentialRampToValueAtTime(0.001, now + attack + decay);
+                                
+                                // Conectar em série: osc -> filter -> filter2 -> gain -> master
+                                oscillator.connect(filter);
+                                filter.connect(filter2);
+                                filter2.connect(gainNode);
+                                gainNode.connect(masterGain);
+                                
+                                oscillator.start(now);
+                                oscillator.stop(now + attack + decay);
+                            }
+                            
+                            // Conectar som base com filtros em série
+                            baseNoise.connect(baseFilter1);
+                            baseFilter1.connect(baseFilter2);
+                            baseFilter2.connect(baseGain);
+                            baseGain.connect(masterGain);
+                            masterGain.connect(audioContext.destination);
+                            
+                            // Gotas mais esparsas e naturais
+                            function scheduleGentleRain() {
+                                if (window.rainContext && window.rainContext.state === 'running') {
+                                    // Menos gotas, mais espaçadas
+                                    const shouldDrop = Math.random() > 0.6; // 40% chance de gota
+                                    if (shouldDrop) {
+                                        createSoftRainDrop();
+                                    }
+                                    
+                                    // Intervalo mais variado e longo
+                                    const nextInterval = 80 + Math.random() * 120; // 80-200ms
+                                    setTimeout(scheduleGentleRain, nextInterval);
+                                }
+                            }
+                            
+                            // Variação muito lenta dos filtros
+                            function slowFilterVariation() {
+                                if (window.rainContext && window.rainContext.state === 'running') {
+                                    const newFreq = 800 + Math.random() * 800; // 800-1600Hz
+                                    baseFilter1.frequency.linearRampToValueAtTime(newFreq, audioContext.currentTime + 10);
+                                    setTimeout(slowFilterVariation, 15000 + Math.random() * 20000); // 15-35s
+                                }
+                            }
+                            
+                            scheduleGentleRain();
+                            slowFilterVariation();
+                            
+                            console.log('🌧️ Som de chuva suave criado!');
+                            isRainPlaying = true;
+                            rainIcon.className = 'fas fa-cloud';
+                            rainPlayer.classList.add('playing');
+                            
+                            // Guardar referências
+                            window.rainContext = audioContext;
+                            window.rainMasterGain = masterGain;
+                            window.rainBaseNoise = baseNoise;
+                            
+                        } catch (error) {
+                            console.error('Erro ao gerar som de chuva:', error);
+                        }
+                    }
+                    
+                    rainAudio.addEventListener('pause', function() {
+                        isRainPlaying = false;
+                        rainIcon.className = 'fas fa-cloud-rain';
+                        rainPlayer.classList.remove('playing');
+                    });
+                    
+                    rainAudio.addEventListener('play', function() {
+                        isRainPlaying = true;
+                        rainIcon.className = 'fas fa-cloud';
+                        rainPlayer.classList.add('playing');
+                    });
+                    
+                    tryNextRainUrl();
+                } else {
+                    rainAudio.play().then(() => {
+                        isRainPlaying = true;
+                        rainIcon.className = 'fas fa-cloud';
+                        rainPlayer.classList.add('playing');
+                    });
+                }
+            }
         });
 
         @yield('scripts')
