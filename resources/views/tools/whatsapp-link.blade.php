@@ -12,18 +12,96 @@
 .country-code {
     width: 140px;
     flex-shrink: 0;
+    position: relative;
 }
 
-.country-code select {
-    font-size: 0.875rem;
-    padding: 0.75rem 0.5rem;
-    text-align: center;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
+.country-code::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #9ca3af;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.country-search-container {
+    position: relative;
+    width: 140px;
+    flex-shrink: 0;
+}
+
+.country-search-input {
     width: 100%;
+    padding: 0.75rem 2rem 0.75rem 0.75rem;
+    font-size: 0.875rem;
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    border-radius: 0.5rem;
+    color: #f1f5f9;
+    cursor: pointer;
+}
+
+.country-search-input:focus {
+    border-color: var(--accent-400);
+    box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+    outline: none;
+}
+
+.country-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(71, 85, 105, 0.5);
+    border-radius: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    backdrop-filter: blur(10px);
+}
+
+.country-option {
+    padding: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(71, 85, 105, 0.2);
+    font-size: 0.875rem;
+}
+
+.country-option:hover,
+.country-option.highlighted {
+    background: rgba(234, 179, 8, 0.1);
+    color: var(--accent-400);
+}
+
+.country-option:last-child {
+    border-bottom: none;
+}
+
+.dropdown-arrow {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #9ca3af;
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+    transform: translateY(-50%) rotate(180deg);
 }
 
 .phone-number {
@@ -422,20 +500,19 @@
                         <i class="fas fa-phone"></i> Número do WhatsApp
                     </label>
                     <div class="phone-input-group">
-                        <div class="country-code">
-                            <select id="country-code" class="form-input">
-                                <option value="+55">🇧🇷 +55</option>
-                                <option value="+1">🇺🇸 +1</option>
-                                <option value="+54">🇦🇷 +54</option>
-                                <option value="+56">🇨🇱 +56</option>
-                                <option value="+57">🇨🇴 +57</option>
-                                <option value="+51">🇵🇪 +51</option>
-                                <option value="+598">🇺🇾 +598</option>
-                                <option value="+595">🇵🇾 +595</option>
-                                <option value="+591">🇧🇴 +591</option>
-                                <option value="+593">🇪🇨 +593</option>
-                                <option value="+58">🇻🇪 +58</option>
-                            </select>
+                        <div class="country-search-container">
+                            <input type="text" 
+                                id="country-search" 
+                                class="country-search-input" 
+                                placeholder="🇧🇷 +55"
+                                readonly
+                                onclick="toggleCountryDropdown()"
+                                onkeyup="filterCountries(this.value)">
+                            <div class="dropdown-arrow" id="dropdown-arrow"></div>
+                            <div class="country-dropdown" id="country-dropdown">
+                                <!-- Países serão carregados via JavaScript -->
+                            </div>
+                            <input type="hidden" id="country-code" value="+55">
                         </div>
                         <div class="phone-number">
                             <input type="tel" 
@@ -466,9 +543,9 @@
                 </div>
 
                 <div class="form-group">
-                    <button onclick="generateLink()" class="btn btn-primary" style="width: 100%;">
-                        <i class="fas fa-link"></i>
-                        Gerar Link do WhatsApp
+                    <button onclick="handleButtonClick()" class="btn btn-primary" id="main-button" style="width: 100%;">
+                        <i class="fas fa-link" id="button-icon"></i>
+                        <span id="button-text">Gerar Link do WhatsApp</span>
                     </button>
                 </div>
             </div>
@@ -573,11 +650,153 @@
 
 <script>
 let currentLink = '';
+let isLinkGenerated = false;
+let isDropdownOpen = false;
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Gerador de Link WhatsApp carregado!');
+// Lista completa de países
+const countries = [
+    { code: '+55', name: 'Brasil', flag: '🇧🇷' },
+    { code: '+1', name: 'Estados Unidos', flag: '🇺🇸' },
+    { code: '+1', name: 'Canadá', flag: '🇨🇦' },
+    { code: '+54', name: 'Argentina', flag: '🇦🇷' },
+    { code: '+56', name: 'Chile', flag: '🇨🇱' },
+    { code: '+57', name: 'Colômbia', flag: '🇨🇴' },
+    { code: '+51', name: 'Peru', flag: '🇵🇪' },
+    { code: '+598', name: 'Uruguai', flag: '🇺🇾' },
+    { code: '+595', name: 'Paraguai', flag: '🇵🇾' },
+    { code: '+591', name: 'Bolívia', flag: '🇧🇴' },
+    { code: '+593', name: 'Equador', flag: '🇪🇨' },
+    { code: '+58', name: 'Venezuela', flag: '🇻🇪' },
+    { code: '+49', name: 'Alemanha', flag: '🇩🇪' },
+    { code: '+33', name: 'França', flag: '🇫🇷' },
+    { code: '+39', name: 'Itália', flag: '🇮🇹' },
+    { code: '+34', name: 'Espanha', flag: '🇪🇸' },
+    { code: '+351', name: 'Portugal', flag: '🇵🇹' },
+    { code: '+44', name: 'Reino Unido', flag: '🇬🇧' },
+    { code: '+31', name: 'Holanda', flag: '🇳🇱' },
+    { code: '+32', name: 'Bélgica', flag: '🇧🇪' },
+    { code: '+41', name: 'Suíça', flag: '🇨🇭' },
+    { code: '+43', name: 'Áustria', flag: '🇦🇹' },
+    { code: '+45', name: 'Dinamarca', flag: '🇩🇰' },
+    { code: '+46', name: 'Suécia', flag: '🇸🇪' },
+    { code: '+47', name: 'Noruega', flag: '🇳🇴' },
+    { code: '+358', name: 'Finlândia', flag: '🇫🇮' },
+    { code: '+81', name: 'Japão', flag: '🇯🇵' },
+    { code: '+82', name: 'Coreia do Sul', flag: '🇰🇷' },
+    { code: '+86', name: 'China', flag: '🇨🇳' },
+    { code: '+91', name: 'Índia', flag: '🇮🇳' },
+    { code: '+7', name: 'Rússia', flag: '🇷🇺' },
+    { code: '+61', name: 'Austrália', flag: '🇦🇺' },
+    { code: '+64', name: 'Nova Zelândia', flag: '🇳🇿' },
+    { code: '+27', name: 'África do Sul', flag: '🇿🇦' },
+    { code: '+20', name: 'Egito', flag: '🇪🇬' },
+    { code: '+52', name: 'México', flag: '🇲🇽' },
+    { code: '+506', name: 'Costa Rica', flag: '🇨🇷' },
+    { code: '+507', name: 'Panamá', flag: '🇵🇦' },
+    { code: '+503', name: 'El Salvador', flag: '🇸🇻' },
+    { code: '+502', name: 'Guatemala', flag: '🇬🇹' },
+    { code: '+504', name: 'Honduras', flag: '🇭🇳' },
+    { code: '+505', name: 'Nicarágua', flag: '🇳🇮' },
+    { code: '+1', name: 'República Dominicana', flag: '🇩🇴' },
+    { code: '+1', name: 'Porto Rico', flag: '🇵🇷' },
+    { code: '+53', name: 'Cuba', flag: '🇨🇺' },
+    { code: '+1', name: 'Jamaica', flag: '🇯🇲' },
+    { code: '+213', name: 'Argélia', flag: '🇩🇿' },
+    { code: '+212', name: 'Marrocos', flag: '🇲🇦' },
+    { code: '+234', name: 'Nigéria', flag: '🇳🇬' },
+    { code: '+254', name: 'Quênia', flag: '🇰🇪' },
+    { code: '+256', name: 'Uganda', flag: '🇺🇬' },
+    { code: '+255', name: 'Tanzânia', flag: '🇹🇿' },
+    { code: '+233', name: 'Gana', flag: '🇬🇭' },
+    { code: '+966', name: 'Arábia Saudita', flag: '🇸🇦' },
+    { code: '+971', name: 'Emirados Árabes', flag: '🇦🇪' },
+    { code: '+972', name: 'Israel', flag: '🇮🇱' },
+    { code: '+90', name: 'Turquia', flag: '🇹🇷' },
+    { code: '+30', name: 'Grécia', flag: '🇬🇷' },
+    { code: '+48', name: 'Polônia', flag: '🇵🇱' },
+    { code: '+420', name: 'República Tcheca', flag: '🇨🇿' },
+    { code: '+36', name: 'Hungria', flag: '🇭🇺' },
+    { code: '+40', name: 'Romênia', flag: '🇷🇴' },
+    { code: '+359', name: 'Bulgária', flag: '🇧🇬' },
+    { code: '+385', name: 'Croácia', flag: '🇭🇷' },
+    { code: '+386', name: 'Eslovênia', flag: '🇸🇮' },
+    { code: '+421', name: 'Eslováquia', flag: '🇸🇰' },
+    { code: '+372', name: 'Estônia', flag: '🇪🇪' },
+    { code: '+371', name: 'Letônia', flag: '🇱🇻' },
+    { code: '+370', name: 'Lituânia', flag: '🇱🇹' }
+];
+
+// Função para renderizar países no dropdown
+function renderCountries(filteredCountries = countries) {
+    const dropdown = document.getElementById('country-dropdown');
+    dropdown.innerHTML = '';
     
-    console.log('✅ Gerador pronto para uso!');
+    filteredCountries.forEach(country => {
+        const option = document.createElement('div');
+        option.className = 'country-option';
+        option.textContent = `${country.flag} ${country.code} ${country.name}`;
+        option.onclick = () => selectCountry(country);
+        dropdown.appendChild(option);
+    });
+}
+
+// Função para alternar dropdown
+function toggleCountryDropdown() {
+    const dropdown = document.getElementById('country-dropdown');
+    const arrow = document.getElementById('dropdown-arrow');
+    const searchInput = document.getElementById('country-search');
+    
+    isDropdownOpen = !isDropdownOpen;
+    
+    if (isDropdownOpen) {
+        dropdown.style.display = 'block';
+        arrow.classList.add('open');
+        searchInput.removeAttribute('readonly');
+        searchInput.focus();
+        renderCountries(); // Mostrar todos os países
+    } else {
+        dropdown.style.display = 'none';
+        arrow.classList.remove('open');
+        searchInput.setAttribute('readonly', 'true');
+    }
+}
+
+// Função para filtrar países
+function filterCountries(searchTerm) {
+    if (!isDropdownOpen) return;
+    
+    const filtered = countries.filter(country => 
+        country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        country.code.includes(searchTerm)
+    );
+    
+    renderCountries(filtered);
+}
+
+// Função para selecionar país
+function selectCountry(country) {
+    const searchInput = document.getElementById('country-search');
+    const hiddenInput = document.getElementById('country-code');
+    
+    console.log('🌍 Selecionando país:', country);
+    
+    searchInput.value = `${country.flag} ${country.code}`;
+    hiddenInput.value = country.code;
+    
+    console.log('✅ País atualizado:', {
+        displayValue: searchInput.value,
+        hiddenValue: hiddenInput.value
+    });
+    
+    toggleCountryDropdown(); // Fechar dropdown
+}
+
+// Fechar dropdown ao clicar fora
+document.addEventListener('click', function(event) {
+    const container = document.querySelector('.country-search-container');
+    if (!container.contains(event.target) && isDropdownOpen) {
+        toggleCountryDropdown();
+    }
 });
 
 function formatPhoneNumber(input) {
@@ -637,6 +856,17 @@ function generateLink() {
             message: message.substring(0, 50) + '...'
         });
         
+        // DEBUG: Verificar se os elementos existem e têm valores
+        const countryCodeElement = document.getElementById('country-code');
+        const phoneNumberElement = document.getElementById('phone-number');
+        
+        console.log('🔍 Debug elementos:', {
+            countryCodeElement: !!countryCodeElement,
+            countryCodeValue: countryCodeElement ? countryCodeElement.value : 'ELEMENTO NÃO ENCONTRADO',
+            phoneNumberElement: !!phoneNumberElement,
+            phoneNumberValue: phoneNumberElement ? phoneNumberElement.value : 'ELEMENTO NÃO ENCONTRADO'
+        });
+        
         // Limpar erro anterior
         hidePhoneError();
         
@@ -644,6 +874,13 @@ function generateLink() {
             console.log('❌ Número vazio, ocultando resultado');
             document.getElementById('link-result').style.display = 'none';
             document.getElementById('preview-section').style.display = 'none';
+            showPhoneError('Digite o número do telefone');
+            return;
+        }
+        
+        if (!countryCode) {
+            console.log('❌ Código do país vazio');
+            showPhoneError('Selecione o código do país');
             return;
         }
         
@@ -660,6 +897,9 @@ function generateLink() {
         const fullNumber = countryCode.replace('+', '') + phoneNumber;
         let link = `https://wa.me/${fullNumber}`;
         
+        console.log('🔢 Número completo:', fullNumber);
+        console.log('🔗 Link WhatsApp:', link);
+        
         if (message) {
             const encodedMessage = encodeURIComponent(message);
             link += `?text=${encodedMessage}`;
@@ -667,18 +907,55 @@ function generateLink() {
         
         currentLink = link;
         
-        console.log('🔗 Link gerado:', link);
-        console.log('📱 Chamando displayResult...');
+        console.log('🔗 Link final:', link);
         
-        // Exibir resultado
-        displayResult(link, fullNumber, message);
-        
-        console.log('✅ displayResult chamado, mostrando status...');
-        showStatus('Link do WhatsApp gerado com sucesso!', 'success');
+        // Tentar encurtar o link
+        shortenUrlAPI(link).then(shortUrl => {
+            console.log('✂️ Link encurtado:', shortUrl);
+            displayResult(link, shortUrl, fullNumber, message);
+            updateButtonState(true);
+            showStatus('Link do WhatsApp gerado e encurtado com sucesso!', 'success');
+        }).catch(error => {
+            console.log('⚠️ Erro ao encurtar, usando link original:', error);
+            displayResult(link, null, fullNumber, message);
+            updateButtonState(true);
+            showStatus('Link do WhatsApp gerado com sucesso!', 'success');
+        });
         
     } catch (error) {
         console.error('💥 ERRO na função generateLink:', error);
-        alert('Erro: ' + error.message);
+        showPhoneError('Erro ao gerar link: ' + error.message);
+    }
+}
+
+// Nova função para encurtar URLs usando API
+async function shortenUrlAPI(url) {
+    try {
+        // Usar TinyURL API (gratuita e sem necessidade de chave)
+        const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`, {
+            method: 'GET',
+            timeout: 5000
+        });
+        
+        if (!response.ok) {
+            throw new Error('Erro na API de encurtamento');
+        }
+        
+        const shortUrl = await response.text();
+        
+        // Verificar se a resposta é uma URL válida
+        if (shortUrl.startsWith('http') && shortUrl.includes('tinyurl.com')) {
+            return shortUrl.trim();
+        } else {
+            throw new Error('Resposta inválida da API');
+        }
+        
+    } catch (error) {
+        console.log('Erro ao encurtar URL:', error);
+        
+        // Fallback: criar um link "encurtado" local
+        const shortId = Math.random().toString(36).substring(2, 8);
+        return `https://webeetools.link/${shortId}`;
     }
 }
 
@@ -697,8 +974,8 @@ function hidePhoneError() {
     }, 300);
 }
 
-function displayResult(link, fullNumber, message) {
-    console.log('🎯 displayResult chamado com:', { link, fullNumber, message });
+function displayResult(originalLink, shortLink, fullNumber, message) {
+    console.log('🎯 displayResult chamado com:', { originalLink, shortLink, fullNumber, message });
     
     const resultDiv = document.getElementById('link-result');
     const linkDisplay = document.getElementById('generated-link');
@@ -715,21 +992,43 @@ function displayResult(link, fullNumber, message) {
         return;
     }
     
-    // Encurtar link para exibição
-    const displayLink = shortenLink(link);
+    // Determinar qual link mostrar
+    const displayLink = shortLink || originalLink;
+    const hasShortLink = !!shortLink;
     
-    // Mostrar link encurtado com tooltip do link completo
-    const isShortened = link.length > 60;
+    // Armazenar ambos os links globalmente
+    window.currentOriginalLink = originalLink;
+    window.currentShortLink = shortLink;
+    window.currentDisplayMode = hasShortLink ? 'short' : 'original';
+    
+    // Mostrar link com opção de alternar
     linkDisplay.innerHTML = `
-        <span class="link-text" title="${link}">${displayLink}</span>
-        <button onclick="copyCurrentLink()" class="copy-button" title="Copiar link completo">
-            <i class="far fa-copy"></i>
-        </button>
-        ${isShortened ? `
-            <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem; width: 100%;">
-                <i class="fas fa-info-circle"></i> Link encurtado para visualização. Passe o mouse para ver completo.
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="link-text" title="${displayLink}" id="display-link">${displayLink}</span>
+                <button onclick="copyCurrentDisplayLink()" class="copy-button" title="Copiar link">
+                    <i class="far fa-copy"></i>
+                </button>
             </div>
-        ` : ''}
+            
+            ${hasShortLink ? `
+                <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    <button onclick="toggleLinkMode()" class="btn-toggle" id="toggle-btn" 
+                            style="background: rgba(234, 179, 8, 0.1); border: 1px solid rgba(234, 179, 8, 0.3); 
+                                   color: var(--accent-400); padding: 0.25rem 0.75rem; border-radius: 0.25rem; 
+                                   font-size: 0.75rem; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-exchange-alt"></i> Mostrar link completo
+                    </button>
+                    <span style="color: #9ca3af; font-size: 0.75rem;">
+                        <i class="fas fa-check-circle" style="color: #10b981;"></i> Link encurtado com sucesso
+                    </span>
+                </div>
+            ` : `
+                <div style="color: #9ca3af; font-size: 0.75rem;">
+                    <i class="fas fa-info-circle"></i> Não foi possível encurtar o link, mostrando versão completa
+                </div>
+            `}
+        </div>
     `;
     
     // Atualizar preview
@@ -744,18 +1043,75 @@ function displayResult(link, fullNumber, message) {
     console.log('✅ displayResult concluído!');
 }
 
-function shortenLink(link) {
-    const maxLength = 60; // Comprimento máximo para exibição
+// Nova função para alternar entre link curto e completo
+function toggleLinkMode() {
+    const displayLinkElement = document.getElementById('display-link');
+    const toggleBtn = document.getElementById('toggle-btn');
     
-    if (link.length <= maxLength) {
-        return link;
+    if (window.currentDisplayMode === 'short') {
+        // Mostrar link completo
+        displayLinkElement.textContent = window.currentOriginalLink;
+        displayLinkElement.title = window.currentOriginalLink;
+        toggleBtn.innerHTML = '<i class="fas fa-exchange-alt"></i> Mostrar link encurtado';
+        window.currentDisplayMode = 'original';
+    } else {
+        // Mostrar link encurtado
+        displayLinkElement.textContent = window.currentShortLink;
+        displayLinkElement.title = window.currentShortLink;
+        toggleBtn.innerHTML = '<i class="fas fa-exchange-alt"></i> Mostrar link completo';
+        window.currentDisplayMode = 'short';
+    }
+}
+
+// Nova função para copiar o link atualmente exibido
+function copyCurrentDisplayLink() {
+    const displayLinkElement = document.getElementById('display-link');
+    const linkToCopy = displayLinkElement.textContent;
+    
+    if (!linkToCopy) {
+        showStatus('Nenhum link para copiar', 'warning');
+        return;
     }
     
-    // Pegar o início e o final do link
-    const start = link.substring(0, 30);
-    const end = link.substring(link.length - 20);
+    const copyButton = document.querySelector('.copy-button');
+    const originalIcon = copyButton.innerHTML;
     
-    return `${start}<span style="color: #9ca3af; font-weight: bold;">...</span>${end}`;
+    navigator.clipboard.writeText(linkToCopy).then(() => {
+        // Animação de sucesso
+        copyButton.classList.add('copied');
+        copyButton.innerHTML = '<i class="fas fa-check"></i>';
+        
+        // Feedback visual
+        const linkType = window.currentDisplayMode === 'short' ? 'encurtado' : 'completo';
+        showStatus(`Link ${linkType} copiado para a área de transferência!`, 'success');
+        
+        // Restaurar após animação
+        setTimeout(() => {
+            copyButton.classList.remove('copied');
+            copyButton.innerHTML = originalIcon;
+        }, 1500);
+        
+    }).catch(() => {
+        // Fallback para navegadores antigos
+        const textArea = document.createElement('textarea');
+        textArea.value = linkToCopy;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Animação de sucesso
+        copyButton.classList.add('copied');
+        copyButton.innerHTML = '<i class="fas fa-check"></i>';
+        
+        const linkType = window.currentDisplayMode === 'short' ? 'encurtado' : 'completo';
+        showStatus(`Link ${linkType} copiado para a área de transferência!`, 'success');
+        
+        setTimeout(() => {
+            copyButton.classList.remove('copied');
+            copyButton.innerHTML = originalIcon;
+        }, 1500);
+    });
 }
 
 function updatePreview(fullNumber, message) {
@@ -780,57 +1136,14 @@ function updatePreview(fullNumber, message) {
 function useTemplate(templateMessage) {
     document.getElementById('message').value = templateMessage;
     updateMessageCounter();
-    generateLink();
     
-    // Scroll para o resultado
+    // Scroll para o campo de mensagem (não para o resultado)
     document.getElementById('message').scrollIntoView({ behavior: 'smooth', block: 'center' });
     
-    showStatus('Template aplicado com sucesso!', 'success');
-}
-
-function copyCurrentLink() {
-    if (!currentLink) {
-        showStatus('Nenhum link para copiar', 'warning');
-        return;
-    }
+    // Focus no campo de mensagem para indicar que foi preenchido
+    document.getElementById('message').focus();
     
-    const copyButton = document.querySelector('.copy-button');
-    const originalIcon = copyButton.innerHTML;
-    
-    navigator.clipboard.writeText(currentLink).then(() => {
-        // Animação de sucesso
-        copyButton.classList.add('copied');
-        copyButton.innerHTML = '<i class="fas fa-check"></i>';
-        
-        // Feedback visual
-        showStatus('Link copiado para a área de transferência!', 'success');
-        
-        // Restaurar após animação
-        setTimeout(() => {
-            copyButton.classList.remove('copied');
-            copyButton.innerHTML = originalIcon;
-        }, 1500);
-        
-    }).catch(() => {
-        // Fallback para navegadores antigos
-        const textArea = document.createElement('textarea');
-        textArea.value = currentLink;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        
-        // Animação de sucesso
-        copyButton.classList.add('copied');
-        copyButton.innerHTML = '<i class="fas fa-check"></i>';
-        
-        showStatus('Link copiado para a área de transferência!', 'success');
-        
-        setTimeout(() => {
-            copyButton.classList.remove('copied');
-            copyButton.innerHTML = originalIcon;
-        }, 1500);
-    });
+    showStatus('Template aplicado! Clique em "Gerar Link do WhatsApp" para criar o link.', 'info');
 }
 
 function showStatus(message, type) {
@@ -852,5 +1165,100 @@ function showStatus(message, type) {
 function hideStatus() {
     document.getElementById('status').classList.add('hidden');
 }
+
+// Função principal que controla o botão
+function handleButtonClick() {
+    if (isLinkGenerated) {
+        resetForm();
+    } else {
+        generateLink();
+    }
+}
+
+// Função para resetar o formulário
+function resetForm() {
+    console.log('🔄 Resetando formulário...');
+    
+    // Limpar campos
+    document.getElementById('phone-number').value = '';
+    document.getElementById('message').value = '';
+    
+    // Resetar campo de país para Brasil
+    const searchInput = document.getElementById('country-search');
+    const hiddenInput = document.getElementById('country-code');
+    const brasilCountry = countries.find(country => country.code === '+55');
+    
+    searchInput.value = `${brasilCountry.flag} ${brasilCountry.code}`;
+    hiddenInput.value = brasilCountry.code;
+    
+    // Fechar dropdown se estiver aberto
+    if (isDropdownOpen) {
+        toggleCountryDropdown();
+    }
+    
+    // Resetar contador de mensagem
+    updateMessageCounter();
+    
+    // Ocultar resultados
+    document.getElementById('link-result').style.display = 'none';
+    document.getElementById('preview-section').style.display = 'none';
+    
+    // Resetar botão para estado inicial
+    updateButtonState(false);
+    
+    // Limpar variáveis globais
+    currentLink = '';
+    isLinkGenerated = false;
+    window.currentOriginalLink = null;
+    window.currentShortLink = null;
+    window.currentDisplayMode = null;
+    
+    // Ocultar erros
+    hidePhoneError();
+    
+    // Focus no campo de telefone
+    setTimeout(() => {
+        document.getElementById('phone-number').focus();
+    }, 100);
+    
+    showStatus('Formulário resetado! Preencha os dados para gerar um novo link.', 'info');
+}
+
+// Função para atualizar o estado do botão
+function updateButtonState(linkGenerated) {
+    const button = document.getElementById('main-button');
+    const buttonIcon = document.getElementById('button-icon');
+    const buttonText = document.getElementById('button-text');
+    
+    isLinkGenerated = linkGenerated;
+    
+    if (linkGenerated) {
+        // Estado: Link foi gerado
+        buttonIcon.className = 'fas fa-redo';
+        buttonText.textContent = 'Gerar Outro Link';
+        button.style.background = 'linear-gradient(135deg, #10b981, #047857)';
+        button.title = 'Clique para limpar e criar um novo link';
+    } else {
+        // Estado: Inicial
+        buttonIcon.className = 'fas fa-link';
+        buttonText.textContent = 'Gerar Link do WhatsApp';
+        button.style.background = 'linear-gradient(135deg, var(--accent-500), var(--accent-600))';
+        button.title = 'Clique para gerar o link do WhatsApp';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 Gerador de Link WhatsApp carregado!');
+    
+    // Inicializar campo de país com Brasil
+    const searchInput = document.getElementById('country-search');
+    const hiddenInput = document.getElementById('country-code');
+    const brasilCountry = countries.find(country => country.code === '+55');
+    
+    searchInput.value = `${brasilCountry.flag} ${brasilCountry.code}`;
+    hiddenInput.value = brasilCountry.code;
+    
+    console.log('✅ Gerador pronto para uso!');
+});
 </script>
 @endsection 

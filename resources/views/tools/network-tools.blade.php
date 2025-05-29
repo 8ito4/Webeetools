@@ -192,6 +192,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
+    position: relative;
 }
 
 .server-icon {
@@ -203,6 +204,15 @@
     align-items: center;
     justify-content: center;
     color: var(--dark-950);
+    flex-shrink: 0;
+}
+
+.server-details {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: calc(100% - 4rem);
 }
 
 .server-details h4 {
