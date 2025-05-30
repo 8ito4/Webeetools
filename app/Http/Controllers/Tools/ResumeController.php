@@ -17,7 +17,7 @@ class ResumeController extends Controller
 
     public function index(): View
     {
-        return view('tools.resume');
+        return view('tools.resume-generator');
     }
 
     public function generate(GenerateResumeRequest $request): Response
