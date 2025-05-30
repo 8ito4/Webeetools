@@ -49,7 +49,7 @@
                         Copyright Notice
                     </p>
                     <p style="color: #bfdbfe; margin-top: 0.5rem;">
-                        © 2024 <strong>Webeetools</strong>. Todos os direitos reservados.
+                        © 2025 <strong>Webeetools</strong>. Todos os direitos reservados.
                     </p>
                 </div>
                 <p style="margin-bottom: 1rem;">
