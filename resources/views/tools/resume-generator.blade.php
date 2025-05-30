@@ -890,7 +890,7 @@ function downloadWithFormSubmit() {
     // Criar form temporário para download
     const form = document.createElement('form');
     form.method = 'POST';
-    form.action = '/tools/resume-generator/generate';
+    form.action = '/tools/resume/generate';
     form.target = '_blank'; // Abrir em nova aba
     form.style.display = 'none';
     

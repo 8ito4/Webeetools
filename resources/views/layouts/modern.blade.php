@@ -931,7 +931,7 @@
                         <li><a href="/tools/network-tools"><i class="fas fa-tachometer-alt"></i> Teste de Conexão</a></li>
                         <li><a href="/tools/lorem"><i class="fas fa-paragraph"></i> Lorem Ipsum</a></li>
                         <li><a href="/tools/document"><i class="fas fa-file-alt"></i> Gerador CPF/CNPJ</a></li>
-                        <li><a href="/tools/resume-generator"><i class="fas fa-file-pdf"></i> Gerador de Currículo</a></li>
+                        <li><a href="/tools/resume"><i class="fas fa-file-pdf"></i> Gerador de Currículo</a></li>
                     </ul>
                     
                     <!-- Redes Sociais -->
@@ -966,7 +966,7 @@
                     <a href="/contact">Contato</a>
                 </div>
                 <p class="footer-copyright">
-                    © 2024 <strong>Webeetools</strong>. Todos os direitos reservados. 
+                    © 2025 <strong>Webeetools</strong>. Todos os direitos reservados. 
                     <span style="margin-left: 1rem;">Feito com <i class="fas fa-heart" style="color: #ef4444;"></i> para desenvolvedores</span>
                 </p>
             </div>
