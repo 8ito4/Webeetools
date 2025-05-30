@@ -13,6 +13,31 @@ class ResumeGeneratorService
             'template' => $data['template']
         ]);
 
+        // Verificações detalhadas da TCPDF
+        Log::info('Verificando TCPDF', [
+            'class_exists_TCPDF' => class_exists('TCPDF'),
+            'autoload_files' => get_included_files(),
+            'vendor_path' => base_path('vendor/tecnickcom/tcpdf/tcpdf.php'),
+            'vendor_exists' => file_exists(base_path('vendor/tecnickcom/tcpdf/tcpdf.php'))
+        ]);
+
+        if (!class_exists('TCPDF')) {
+            // Tentar carregar manualmente
+            $tcpdfPath = base_path('vendor/tecnickcom/tcpdf/tcpdf.php');
+            if (file_exists($tcpdfPath)) {
+                Log::info('Tentando carregar TCPDF manualmente', ['path' => $tcpdfPath]);
+                require_once $tcpdfPath;
+                
+                if (class_exists('TCPDF')) {
+                    Log::info('TCPDF carregada manualmente com sucesso');
+                } else {
+                    Log::error('TCPDF não foi carregada mesmo após require manual');
+                }
+            } else {
+                Log::error('Arquivo TCPDF não encontrado', ['path' => $tcpdfPath]);
+            }
+        }
+
         if (!class_exists('TCPDF')) {
             // Log técnico para desenvolvedores
             Log::error('Biblioteca TCPDF não encontrada', [
@@ -90,7 +115,38 @@ class ResumeGeneratorService
 
     private function createResumePDF(array $data): string
     {
-        $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+        // Tentar diferentes formas de carregar TCPDF
+        try {
+            // Método 1: Autoload padrão
+            if (!class_exists('TCPDF')) {
+                Log::info('TCPDF não encontrada via autoload, tentando require manual');
+                require_once base_path('vendor/tecnickcom/tcpdf/tcpdf.php');
+            }
+            
+            $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+            
+        } catch (\Throwable $e) {
+            Log::error('Erro ao instanciar TCPDF', [
+                'erro' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Tentar método alternativo
+            try {
+                Log::info('Tentando método alternativo para TCPDF');
+                if (!defined('K_TCPDF_EXTERNAL_CONFIG')) {
+                    define('K_TCPDF_EXTERNAL_CONFIG', true);
+                }
+                require_once base_path('vendor/tecnickcom/tcpdf/tcpdf.php');
+                $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+                
+            } catch (\Throwable $e2) {
+                Log::error('Segundo método também falhou', [
+                    'erro' => $e2->getMessage()
+                ]);
+                throw new \Exception('Serviço temporariamente indisponível. Tente novamente em alguns minutos.');
+            }
+        }
         
         $pdf->SetCreator('Webeetools');
         $pdf->SetAuthor($data['personal']['fullName']);
