@@ -28,7 +28,7 @@ class GenerateResumeRequest extends FormRequest
             'experience.*.company' => 'nullable|string|max:255',
             'experience.*.startDate' => 'nullable|string|max:50',
             'experience.*.endDate' => 'nullable|string|max:50',
-            'experience.*.current' => 'nullable|boolean',
+            'experience.*.current' => 'sometimes|boolean',
             'experience.*.description' => 'nullable|string',
             'education' => 'nullable|array',
             'education.*.degree' => 'nullable|string|max:255',
@@ -52,11 +52,11 @@ class GenerateResumeRequest extends FormRequest
     {
         return [
             'fullName.required' => 'O nome completo é obrigatório.',
-            'position.required' => 'O cargo é obrigatório.',
-            'email.required' => 'O e-mail é obrigatório.',
-            'email.email' => 'O e-mail deve ter um formato válido.',
+            'position.required' => 'O cargo/profissão é obrigatório.',
+            'email.required' => 'O email é obrigatório.',
+            'email.email' => 'Por favor, insira um email válido.',
             'phone.required' => 'O telefone é obrigatório.',
-            'template.in' => 'O template selecionado é inválido.',
+            'template.in' => 'Template selecionado é inválido.',
         ];
     }
 } 
