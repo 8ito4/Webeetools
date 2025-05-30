@@ -72,10 +72,20 @@ class ResumeController extends Controller
             Log::error('Erro ao gerar currículo', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'input' => $request->all()
+                'input' => $request->all(),
+                'user_ip' => $request->ip(),
+                'user_agent' => $request->userAgent()
             ]);
 
-            return back()->withErrors(['error' => 'Erro ao gerar currículo: ' . $e->getMessage()]);
+            // Mensagem genérica para o usuário, sem expor detalhes técnicos
+            $userMessage = 'Não foi possível gerar o currículo no momento. Tente novamente em alguns minutos.';
+            
+            // Em desenvolvimento, pode mostrar mais detalhes
+            if (config('app.debug')) {
+                $userMessage = 'Erro ao gerar currículo: ' . $e->getMessage();
+            }
+
+            return back()->withErrors(['error' => $userMessage]);
         }
     }
     
@@ -105,10 +115,17 @@ class ResumeController extends Controller
         } catch (\Throwable $e) {
             Log::error('Erro ao fazer download do currículo', [
                 'message' => $e->getMessage(),
-                'filename' => $filename
+                'filename' => $filename,
+                'user_ip' => request()->ip(),
+                'trace' => $e->getTraceAsString()
             ]);
             
-            abort(404, 'Arquivo não encontrado');
+            // Mensagem genérica em produção
+            if (config('app.debug')) {
+                abort(404, 'Erro ao baixar arquivo: ' . $e->getMessage());
+            } else {
+                abort(404, 'Arquivo não encontrado ou expirado');
+            }
         }
     }
 } 

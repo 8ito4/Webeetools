@@ -14,7 +14,14 @@ class ResumeGeneratorService
         ]);
 
         if (!class_exists('TCPDF')) {
-            throw new \Exception('Biblioteca TCPDF não encontrada. Execute: composer require tecnickcom/tcpdf');
+            // Log técnico para desenvolvedores
+            Log::error('Biblioteca TCPDF não encontrada', [
+                'erro' => 'TCPDF class not found',
+                'solucao' => 'Execute: composer require tecnickcom/tcpdf'
+            ]);
+            
+            // Mensagem genérica para usuário
+            throw new \Exception('Serviço temporariamente indisponível. Tente novamente em alguns minutos.');
         }
 
         Log::info('Dados coletados para o PDF', ['template' => $data['template']]);
