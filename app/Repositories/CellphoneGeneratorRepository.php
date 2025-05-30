@@ -2,18 +2,15 @@
 
 namespace App\Repositories;
 
-use App\Services\CellphoneGeneratorService;
+use App\Services\Tools\CellphoneGeneratorService;
 
 class CellphoneGeneratorRepository
 {
-    protected $service;
+    public function __construct(
+        private CellphoneGeneratorService $service
+    ) {}
 
-    public function __construct(CellphoneGeneratorService $service)
-    {
-        $this->service = $service;
-    }
-
-    public function generate($ddd = null)
+    public function generate($ddd = null): string
     {
         return $this->service->generate($ddd);
     }

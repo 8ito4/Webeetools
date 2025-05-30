@@ -2,8 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ToolController;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Webhook\WebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,19 +20,23 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::any('/webhook/{identifier}', [ToolController::class, 'webhookReceive'])->name('api.webhook.receive');
+// Webhook com rate limiting específico
+Route::middleware([\App\Http\Middleware\RateLimitMiddleware::class . ':20,1'])
+    ->any('/webhook/{identifier}', [WebhookController::class, 'receive'])
+    ->name('api.webhook.receive');
 
-// API v1 Routes
-Route::prefix('v1')->group(function () {
-    // WhatsApp API
-    Route::post('/whatsapp/generate', [ApiController::class, 'generateWhatsAppLink']);
+// API v1 Routes com rate limiting
+Route::prefix('v1')->name('api.v1.')->group(function () {
+    Route::controller(ApiController::class)
+        ->middleware([\App\Http\Middleware\RateLimitMiddleware::class . ':100,1'])
+        ->group(function () {
+            Route::post('/whatsapp/generate', 'generateWhatsAppLink')->name('whatsapp.generate');
+            Route::post('/json/format', 'formatJson')->name('json.format');
+            Route::get('/lorem/generate', 'generateLorem')->name('lorem.generate');
+        });
     
-    // JSON API
-    Route::post('/json/format', [ApiController::class, 'formatJson']);
-    
-    // Password API
-    Route::get('/password/generate', [ApiController::class, 'generatePassword']);
-    
-    // Lorem Ipsum API
-    Route::get('/lorem/generate', [ApiController::class, 'generateLorem']);
+    // Password generation com rate limiting mais restritivo
+    Route::middleware([\App\Http\Middleware\RateLimitMiddleware::class . ':30,1'])
+        ->get('/password/generate', [ApiController::class, 'generatePassword'])
+        ->name('password.generate');
 }); 
