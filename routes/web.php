@@ -50,8 +50,10 @@ Route::prefix('tools')->name('tools.')->group(function () {
     });
     
     Route::controller(ResumeController::class)->group(function () {
-        Route::get('/resume', 'index')->name('resume');
+        Route::get('/resume', 'index')->name('resume.index');
         Route::post('/resume/generate', 'generate')->name('resume.generate');
+        Route::get('/resume/success', 'success')->name('resume.success');
+        Route::get('/resume/download/{filename}', 'download')->name('resume.download');
     });
     
     Route::controller(WebhookController::class)->group(function () {
