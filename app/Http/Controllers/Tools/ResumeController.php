@@ -26,7 +26,33 @@ class ResumeController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            $pdfContent = $this->resumeGeneratorService->generatePdf($validatedData);
+            
+            // Log dos dados recebidos
+            Log::info('Dados recebidos para geração de currículo', $validatedData);
+            
+            // Reorganizar dados para o formato esperado pelo serviço
+            $formattedData = [
+                'personal' => [
+                    'fullName' => $validatedData['fullName'],
+                    'position' => $validatedData['position'],
+                    'email' => $validatedData['email'],
+                    'phone' => $validatedData['phone'],
+                    'linkedin' => $validatedData['linkedin'] ?? '',
+                    'website' => $validatedData['website'] ?? '',
+                    'location' => $validatedData['location'] ?? '',
+                    'summary' => $validatedData['summary'] ?? '',
+                ],
+                'template' => $validatedData['template'] ?? 'modern',
+                'experience' => $validatedData['experience'] ?? [],
+                'education' => $validatedData['education'] ?? [],
+                'skills' => $validatedData['skills'] ?? [],
+                'languages' => $validatedData['languages'] ?? [],
+                'additional' => $validatedData['additional'] ?? [],
+            ];
+            
+            Log::info('Dados formatados para o serviço', $formattedData);
+            
+            $pdfContent = $this->resumeGeneratorService->generatePdf($formattedData);
 
             // Gerar nome único para o arquivo
             $filename = 'curriculo_' . time() . '.pdf';
@@ -35,19 +61,21 @@ class ResumeController extends Controller
             Storage::disk('local')->put('temp/resumes/' . $filename, $pdfContent);
             
             // Salvar filename na sessão para download posterior
-            session(['resume_filename' => $filename]);
+            session(['resume_filename' => $filename, 'resume_content' => $pdfContent]);
             
-            // Redirecionar para página de sucesso
-            return redirect()->route('tools.resume.success');
+            // Redirecionar diretamente para página de sucesso
+            return redirect()->route('tools.resume.success')
+                ->with('success', 'Currículo gerado com sucesso!')
+                ->with('download_ready', true);
 
         } catch (\Throwable $e) {
             Log::error('Erro ao gerar currículo', [
                 'message' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
-                'input' => $request->validated()
+                'input' => $request->all()
             ]);
 
-            return back()->withErrors(['error' => 'Erro ao gerar currículo. Tente novamente.']);
+            return back()->withErrors(['error' => 'Erro ao gerar currículo: ' . $e->getMessage()]);
         }
     }
     

@@ -15,6 +15,22 @@
     </div>
 
     <div class="tool-content">
+        
+        <!-- Exibir erros de validação -->
+        @if ($errors->any())
+            <div class="status-message status-error">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Erro ao gerar currículo:</strong>
+                    <ul style="margin: 0.5rem 0 0 1rem;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+        
         <!-- Template Selection -->
         <div class="template-section">
             <h3 style="color: var(--accent-400); margin-bottom: 1rem;">
@@ -63,8 +79,11 @@
         </div>
 
         <!-- Resume Form -->
-        <form id="resumeForm" class="resume-form">
+        <form id="resumeForm" class="resume-form" method="POST" action="{{ route('tools.resume.generate') }}">
             @csrf
+            
+            <!-- Hidden template field -->
+            <input type="hidden" name="template" value="modern" id="templateField">
             
             <!-- Personal Information -->
             <div class="form-section">
@@ -145,8 +164,9 @@
                             <div class="form-group">
                                 <label class="form-label">Data Fim</label>
                                 <input type="month" name="experience[0][endDate]" class="form-input">
+                                <input type="hidden" name="experience[0][current]" value="0">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" name="experience[0][current]" class="current-job">
+                                    <input type="checkbox" name="experience[0][current]" class="current-job" value="1">
                                     Trabalho atual
                                 </label>
                             </div>
@@ -654,10 +674,39 @@ let selectedTemplate = 'modern';
 // Template Selection
 document.querySelectorAll('.template-card').forEach(card => {
     card.addEventListener('click', function() {
+        // Remove active from all cards
         document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+        // Add active to clicked card
         this.classList.add('active');
+        // Update selected template
         selectedTemplate = this.dataset.template;
+        document.getElementById('templateField').value = selectedTemplate;
+        console.log('Template selecionado:', selectedTemplate);
     });
+});
+
+// Form Submission - VERSÃO SIMPLIFICADA
+document.getElementById('resumeForm').addEventListener('submit', function(e) {
+    console.log('Formulário sendo submetido...');
+    
+    // Validar campos obrigatórios
+    const fullName = document.querySelector('input[name="fullName"]').value.trim();
+    const position = document.querySelector('input[name="position"]').value.trim();
+    const email = document.querySelector('input[name="email"]').value.trim();
+    const phone = document.querySelector('input[name="phone"]').value.trim();
+    
+    if (!fullName || !position || !email || !phone) {
+        e.preventDefault();
+        alert('Por favor, preencha todos os campos obrigatórios (marcados com *)');
+        return false;
+    }
+    
+    // Mostrar loading
+    document.querySelector('.tool-content').style.display = 'none';
+    document.getElementById('loadingState').classList.remove('hidden');
+    
+    // Deixar o formulário submeter normalmente
+    console.log('Submetendo formulário...');
 });
 
 // Add Experience
@@ -685,8 +734,9 @@ function addExperience() {
             <div class="form-group">
                 <label class="form-label">Data Fim</label>
                 <input type="month" name="experience[${experienceCount}][endDate]" class="form-input">
+                <input type="hidden" name="experience[${experienceCount}][current]" value="0">
                 <label class="checkbox-label">
-                    <input type="checkbox" name="experience[${experienceCount}][current]" class="current-job">
+                    <input type="checkbox" name="experience[${experienceCount}][current]" class="current-job" value="1">
                     Trabalho atual
                 </label>
             </div>
@@ -827,85 +877,6 @@ document.addEventListener('change', function(e) {
     }
 });
 
-// Form Submission
-document.getElementById('resumeForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Garantir que estamos começando do estado correto
-    document.getElementById('successState').classList.add('hidden');
-    document.getElementById('loadingState').classList.add('hidden');
-    
-    // Show loading state
-    document.querySelector('.tool-content').style.display = 'none';
-    document.getElementById('loadingState').classList.remove('hidden');
-    
-    // Scroll para o topo para mostrar o loading
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-    
-    // Usar método direto de form submit que é mais compatível
-    downloadWithFormSubmit();
-});
-
-// Método de download usando form submit (mais confiável)
-function downloadWithFormSubmit() {
-    // Criar form temporário para download
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/tools/resume/generate';
-    form.style.display = 'none';
-    
-    // Adicionar CSRF token
-    const csrfToken = document.querySelector('meta[name="csrf-token"]');
-    if (csrfToken) {
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = '_token';
-        csrfInput.value = csrfToken.getAttribute('content');
-        form.appendChild(csrfInput);
-        console.log('CSRF Token adicionado:', csrfInput.value);
-    } else {
-        console.error('CSRF Token não encontrado!');
-    }
-    
-    // Adicionar template
-    const templateInput = document.createElement('input');
-    templateInput.type = 'hidden';
-    templateInput.name = 'template';
-    templateInput.value = selectedTemplate;
-    form.appendChild(templateInput);
-    
-    // Adicionar todos os dados do formulário
-    const originalForm = document.getElementById('resumeForm');
-    const formData = new FormData(originalForm);
-    
-    console.log('Dados do formulário:');
-    for (let [key, value] of formData.entries()) {
-        if (key !== 'template' && key !== '_token') { // template e token já foram adicionados
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = key;
-            input.value = value;
-            form.appendChild(input);
-            console.log(key + ':', value);
-        }
-    }
-    
-    document.body.appendChild(form);
-    
-    console.log('Enviando formulário para:', form.action);
-    form.submit();
-    
-    // Remover form após um pequeno delay
-    setTimeout(() => {
-        if (form.parentNode) {
-            document.body.removeChild(form);
-        }
-    }, 1000);
-}
-
 // Clear Form
 function clearForm() {
     if (confirm('Tem certeza que deseja limpar todo o formulário?')) {
@@ -933,6 +904,7 @@ function clearForm() {
         document.querySelectorAll('.template-card').forEach(card => card.classList.remove('active'));
         document.querySelector('[data-template="modern"]').classList.add('active');
         selectedTemplate = 'modern';
+        document.getElementById('templateField').value = 'modern';
     }
 }
 

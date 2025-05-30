@@ -181,8 +181,8 @@ class ResumeGeneratorService
                 $pdf->SetFont('helvetica', '', 10);
                 $pdf->SetXY(20, $y);
                 $period = '';
-                if ($exp['startDate']) $period .= $exp['startDate'];
-                if ($exp['endDate']) $period .= ' - ' . $exp['endDate'];
+                if (isset($exp['startDate']) && $exp['startDate']) $period .= $exp['startDate'];
+                if (isset($exp['endDate']) && $exp['endDate']) $period .= ' - ' . $exp['endDate'];
                 $pdf->Cell(0, 5, $exp['company'] . ($period ? ' (' . $period . ')' : ''), 0, 1, 'L');
                 $y += 6;
                 
@@ -308,8 +308,8 @@ class ResumeGeneratorService
                 $pdf->SetFont('helvetica', '', 9);
                 $pdf->SetXY(20, $y);
                 $period = '';
-                if ($exp['startDate']) $period .= $exp['startDate'];
-                if ($exp['endDate']) $period .= ' - ' . $exp['endDate'];
+                if (isset($exp['startDate']) && $exp['startDate']) $period .= $exp['startDate'];
+                if (isset($exp['endDate']) && $exp['endDate']) $period .= ' - ' . $exp['endDate'];
                 if ($period) {
                     $pdf->Cell(0, 5, $period, 0, 1, 'L');
                     $y += 5;
@@ -422,8 +422,8 @@ class ResumeGeneratorService
                 $pdf->SetFont('helvetica', '', 10);
                 $pdf->SetXY(70, $y);
                 $period = '';
-                if ($exp['startDate']) $period .= $exp['startDate'];
-                if ($exp['endDate']) $period .= ' - ' . $exp['endDate'];
+                if (isset($exp['startDate']) && $exp['startDate']) $period .= $exp['startDate'];
+                if (isset($exp['endDate']) && $exp['endDate']) $period .= ' - ' . $exp['endDate'];
                 $pdf->Cell(0, 5, $exp['company'] . ($period ? ' (' . $period . ')' : ''), 0, 1, 'L');
                 $y += 6;
                 
