@@ -322,42 +322,6 @@
             <div class="loading-spinner"></div>
             <p>Gerando seu currículo profissional...</p>
         </div>
-
-        <!-- Success State -->
-        <div id="successState" class="success-state hidden">
-            <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3>Currículo Gerado com Sucesso!</h3>
-            <p>Seu currículo profissional foi criado e já deve ter iniciado o download.</p>
-            <div class="success-actions">
-                <a href="#" id="downloadLink" class="btn btn-primary">
-                    <i class="fas fa-download"></i>
-                    Baixar Novamente
-                </a>
-                <button type="button" class="btn btn-success" onclick="generateAnother()">
-                    <i class="fas fa-plus"></i>
-                    Criar Novo Currículo
-                </button>
-                <button type="button" class="btn btn-secondary" onclick="resetForm()">
-                    <i class="fas fa-edit"></i>
-                    Editar Atual
-                </button>
-            </div>
-            
-            <!-- Dica melhorada -->
-            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 0.75rem;">
-                <h4 style="color: #10b981; font-size: 1rem; margin: 0 0 0.5rem 0; font-weight: 600;">
-                    <i class="fas fa-lightbulb" style="margin-right: 0.5rem;"></i>
-                    Dicas Profissionais:
-                </h4>
-                <ul style="color: #10b981; font-size: 0.875rem; margin: 0; padding-left: 1.5rem;">
-                    <li>Experimente diferentes templates para sua área</li>
-                    <li>Personalize o conteúdo para cada vaga</li>
-                    <li>Use palavras-chave relevantes da sua profissão</li>
-                </ul>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -891,7 +855,6 @@ function downloadWithFormSubmit() {
     const form = document.createElement('form');
     form.method = 'POST';
     form.action = '/tools/resume/generate';
-    form.target = '_blank'; // Abrir em nova aba
     form.style.display = 'none';
     
     // Adicionar CSRF token
@@ -941,43 +904,6 @@ function downloadWithFormSubmit() {
             document.body.removeChild(form);
         }
     }, 1000);
-    
-    // SEMPRE mostrar sucesso após um delay menor - não depender do resultado do download
-    setTimeout(() => {
-        showSuccessState();
-    }, 2000); // Reduzido para 2 segundos
-}
-
-// Função separada para mostrar o estado de sucesso
-function showSuccessState() {
-    // Primeiro fazer scroll para o topo
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-    
-    // Depois mostrar o success state
-    setTimeout(() => {
-        document.getElementById('loadingState').classList.add('hidden');
-        document.querySelector('.tool-content').style.display = 'block'; // Garantir que o content esteja visível
-        document.getElementById('successState').classList.remove('hidden');
-        
-        // Configurar link de download para repetir o processo
-        const downloadLink = document.getElementById('downloadLink');
-        downloadLink.href = '#';
-        downloadLink.onclick = function(e) {
-            e.preventDefault();
-            // Mostrar loading novamente
-            document.getElementById('successState').classList.add('hidden');
-            document.getElementById('loadingState').classList.remove('hidden');
-            
-            // Executar download novamente
-            setTimeout(() => {
-                downloadWithFormSubmit();
-            }, 500);
-            return false;
-        };
-    }, 300); // Pequeno delay para o scroll completar
 }
 
 // Clear Form
@@ -1008,76 +934,6 @@ function clearForm() {
         document.querySelector('[data-template="modern"]').classList.add('active');
         selectedTemplate = 'modern';
     }
-}
-
-// Generate Another Resume (starts fresh)
-function generateAnother() {
-    // Mostrar uma breve confirmação
-    if (confirm('Deseja criar um novo currículo? Isso irá limpar todos os dados atuais.')) {
-        // Limpar formulário
-        document.getElementById('resumeForm').reset();
-        
-        // Reset dynamic items
-        experienceCount = 1;
-        educationCount = 1;
-        languageCount = 1;
-        
-        // Remove extra items
-        ['experienceContainer', 'educationContainer', 'languageContainer'].forEach(containerId => {
-            const container = document.getElementById(containerId);
-            while (container.children.length > 1) {
-                container.removeChild(container.lastChild);
-            }
-        });
-        
-        // Update remove buttons
-        updateRemoveButtons('experience');
-        updateRemoveButtons('education');
-        updateRemoveButtons('language');
-        
-        // Reset template selection
-        document.querySelectorAll('.template-card').forEach(card => card.classList.remove('active'));
-        document.querySelector('[data-template="modern"]').classList.add('active');
-        selectedTemplate = 'modern';
-        
-        // Show form again
-        document.getElementById('successState').classList.add('hidden');
-        document.querySelector('.tool-content').style.display = 'block';
-        
-        // Scroll to top smoothly
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-        
-        // Focus on first input after animation
-        setTimeout(() => {
-            document.querySelector('input[name="fullName"]').focus();
-        }, 800);
-        
-        // Mostrar mensagem de sucesso
-        setTimeout(() => {
-            alert('Formulário limpo! Você pode criar um novo currículo.');
-        }, 1000);
-    }
-}
-
-// Reset Form (edit current - just go back to form)
-function resetForm() {
-    // Esconder success state e mostrar form
-    document.getElementById('successState').classList.add('hidden');
-    document.querySelector('.tool-content').style.display = 'block';
-    
-    // Scroll to top smoothly
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-    
-    // Focus no primeiro campo após scroll
-    setTimeout(() => {
-        document.querySelector('input[name="fullName"]').focus();
-    }, 500);
 }
 
 // Fill Example Data

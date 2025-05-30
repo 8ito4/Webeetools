@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Tools\GenerateResumeRequest;
 use App\Services\Resume\ResumeGeneratorService;
 use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class ResumeController extends Controller
 {
@@ -20,15 +22,23 @@ class ResumeController extends Controller
         return view('tools.resume-generator');
     }
 
-    public function generate(GenerateResumeRequest $request): Response
+    public function generate(GenerateResumeRequest $request): RedirectResponse|Response
     {
         try {
             $validatedData = $request->validated();
             $pdfContent = $this->resumeGeneratorService->generatePdf($validatedData);
 
-            return response($pdfContent)
-                ->header('Content-Type', 'application/pdf')
-                ->header('Content-Disposition', 'attachment; filename="curriculo.pdf"');
+            // Gerar nome único para o arquivo
+            $filename = 'curriculo_' . time() . '.pdf';
+            
+            // Salvar temporariamente o PDF
+            Storage::disk('local')->put('temp/resumes/' . $filename, $pdfContent);
+            
+            // Salvar filename na sessão para download posterior
+            session(['resume_filename' => $filename]);
+            
+            // Redirecionar para página de sucesso
+            return redirect()->route('tools.resume.success');
 
         } catch (\Throwable $e) {
             Log::error('Erro ao gerar currículo', [
@@ -37,7 +47,40 @@ class ResumeController extends Controller
                 'input' => $request->validated()
             ]);
 
-            return response('Erro interno no servidor.', 500);
+            return back()->withErrors(['error' => 'Erro ao gerar currículo. Tente novamente.']);
+        }
+    }
+    
+    public function success(): View
+    {
+        return view('tools.resume-success');
+    }
+    
+    public function download(string $filename): Response
+    {
+        try {
+            $filePath = 'temp/resumes/' . $filename;
+            
+            if (!Storage::disk('local')->exists($filePath)) {
+                abort(404, 'Arquivo não encontrado');
+            }
+            
+            $pdfContent = Storage::disk('local')->get($filePath);
+            
+            // Remover arquivo temporário após download
+            Storage::disk('local')->delete($filePath);
+            
+            return response($pdfContent)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'attachment; filename="curriculo.pdf"');
+                
+        } catch (\Throwable $e) {
+            Log::error('Erro ao fazer download do currículo', [
+                'message' => $e->getMessage(),
+                'filename' => $filename
+            ]);
+            
+            abort(404, 'Arquivo não encontrado');
         }
     }
 } 
