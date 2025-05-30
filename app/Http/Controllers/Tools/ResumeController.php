@@ -27,6 +27,26 @@ class ResumeController extends Controller
         try {
             $validatedData = $request->validated();
             
+            // Diagnóstico completo do ambiente
+            Log::info('=== DIAGNÓSTICO COMPLETO DO AMBIENTE ===', [
+                'php_version' => PHP_VERSION,
+                'environment' => app()->environment(),
+                'debug_mode' => config('app.debug'),
+                'base_path' => base_path(),
+                'vendor_path' => base_path('vendor'),
+                'tcpdf_file_exists' => file_exists(base_path('vendor/tecnickcom/tcpdf/tcpdf.php')),
+                'tcpdf_readable' => is_readable(base_path('vendor/tecnickcom/tcpdf/tcpdf.php')),
+                'autoload_exists' => file_exists(base_path('vendor/autoload.php')),
+                'memory_limit' => ini_get('memory_limit'),
+                'max_execution_time' => ini_get('max_execution_time'),
+                'loaded_extensions' => get_loaded_extensions(),
+                'include_path' => get_include_path(),
+                'current_working_directory' => getcwd(),
+                'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'unknown',
+                'document_root' => $_SERVER['DOCUMENT_ROOT'] ?? 'unknown',
+                'script_filename' => $_SERVER['SCRIPT_FILENAME'] ?? 'unknown'
+            ]);
+            
             // Log dos dados recebidos
             Log::info('Dados recebidos para geração de currículo', $validatedData);
             
@@ -69,12 +89,18 @@ class ResumeController extends Controller
                 ->with('download_ready', true);
 
         } catch (\Throwable $e) {
-            Log::error('Erro ao gerar currículo', [
+            Log::error('=== ERRO COMPLETO AO GERAR CURRÍCULO ===', [
                 'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
                 'trace' => $e->getTraceAsString(),
                 'input' => $request->all(),
                 'user_ip' => $request->ip(),
-                'user_agent' => $request->userAgent()
+                'user_agent' => $request->userAgent(),
+                'php_version' => PHP_VERSION,
+                'environment' => app()->environment(),
+                'memory_usage' => memory_get_usage(true),
+                'memory_peak' => memory_get_peak_usage(true)
             ]);
 
             // Mensagem genérica para o usuário, sem expor detalhes técnicos
