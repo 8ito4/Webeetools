@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node.js e NPM: Configuração Completa - Webeetools</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛠️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --dark-950: #020617;
+            --dark-900: #0f172a;
+            --dark-800: #1e293b;
+            --dark-700: #334155;
+            --dark-600: #475569;
+            --accent-300: #fde047;
+            --accent-400: #facc15;
+            --accent-500: #eab308;
+            --accent-600: #ca8a04;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--dark-950) 0%, var(--dark-900) 25%, var(--dark-800) 50%, var(--dark-900) 75%, var(--dark-950) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #f1f5f9;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: linear-gradient(135deg, rgba(2, 6, 23, 0.9) 0%, rgba(15, 23, 42, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-400), var(--accent-600));
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-950);
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.1) rotate(12deg);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text .we { color: #f1f5f9; }
+        .logo-text .bee { color: var(--accent-400); }
+        .logo-text .tools { color: #f1f5f9; }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-400);
+            transform: scale(1.05);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-400);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Tutorial Header */
+        .tutorial-header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+        }
+
+        .tutorial-icon {
+            width: 5rem;
+            height: 5rem;
+            background: linear-gradient(135deg, #10b981, #047857);
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+        }
+
+        .tutorial-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f1f5f9 0%, var(--accent-400) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tutorial-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .meta-item i {
+            color: var(--accent-400);
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb a {
+            color: var(--accent-400);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-300);
+        }
+
+        .breadcrumb .separator {
+            color: #64748b;
+        }
+
+        /* OS Tabs */
+        .os-tabs {
+            display: flex;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            margin-bottom: 2rem;
+            gap: 0.5rem;
+        }
+
+        .os-tab {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .os-tab.active {
+            background: var(--accent-400);
+            color: var(--dark-950);
+            font-weight: 600;
+        }
+
+        .os-tab:hover:not(.active) {
+            background: rgba(71, 85, 105, 0.5);
+            color: #f1f5f9;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tutorial Content */
+        .tutorial-section {
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-400);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .step-number {
+            background: var(--accent-400);
+            color: var(--dark-950);
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        /* Code Blocks */
+        .code-block {
+            position: relative;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            background: #1a1a1a;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+
+        .code-language {
+            color: #94a3b8;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .copy-btn {
+            background: rgba(234, 179, 8, 0.2);
+            border: 1px solid var(--accent-400);
+            color: var(--accent-400);
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-400);
+            color: var(--dark-950);
+        }
+
+        .copy-btn.copied {
+            background: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+
+        .code-content {
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #f1f5f9;
+            overflow-x: auto;
+        }
+
+        .code-content .comment {
+            color: #6b7280;
+        }
+
+        .code-content .command {
+            color: #fbbf24;
+        }
+
+        .code-content .string {
+            color: #34d399;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .warning-box .icon {
+            color: #f59e0b;
+            font-size: 1.125rem;
+            margin-top: 0.125rem;
+        }
+
+        .warning-content {
+            flex: 1;
+        }
+
+        .warning-title {
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 0.5rem;
+        }
+
+        .warning-text {
+            color: #fbbf24;
+            font-size: 0.875rem;
+        }
+
+        /* Success Box */
+        .success-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .success-box .icon {
+            color: #10b981;
+            font-size: 1.125rem;
+            margin-top: 0.125rem;
+        }
+
+        .success-content {
+            flex: 1;
+        }
+
+        .success-title {
+            font-weight: 600;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-text {
+            color: #34d399;
+            font-size: 0.875rem;
+        }
+
+        /* Navigation Buttons */
+        .tutorial-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 3rem;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .nav-btn-back {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(71, 85, 105, 0.5);
+            color: #f1f5f9;
+        }
+
+        .nav-btn-back:hover {
+            background: rgba(51, 65, 85, 0.8);
+            border-color: var(--accent-400);
+        }
+
+        .nav-btn-next {
+            background: linear-gradient(135deg, var(--accent-500), var(--accent-600));
+            border: 1px solid var(--accent-600);
+            color: var(--dark-950);
+        }
+
+        .nav-btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(234, 179, 8, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tutorial-title {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .os-tabs {
+                flex-direction: column;
+            }
+            
+            .tutorial-nav {
+                flex-direction: column;
+            }
+            
+            .tutorial-meta {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--dark-950) 0%, var(--dark-900) 50%, var(--dark-800) 100%);
+            padding: 4rem 1rem 2rem;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-section:first-child {
+            max-width: 400px;
+        }
+
+        .footer-section:not(:first-child) {
+            align-items: flex-start;
+        }
+
+        .footer-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-400);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-400);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 0.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.125rem;
+        }
+
+        .social-btn:hover {
+            background: var(--accent-400);
+            color: var(--dark-950);
+            border-color: var(--accent-400);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            padding-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-bottom-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--accent-400);
+        }
+
+        .footer-copyright {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-400), var(--accent-600));
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-950);
+            font-size: 1.125rem;
+        }
+
+        .footer-logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-logo-text .we { color: #f1f5f9; }
+        .footer-logo-text .bee { color: var(--accent-400); }
+        .footer-logo-text .tools { color: #f1f5f9; }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-section {
+                text-align: center;
+            }
+            
+            .footer-bottom-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-social {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <span class="logo-text">
+                    <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                </span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/tutoriais">Tutoriais</a></li>
+                <li><a href="/#tools">Ferramentas</a></li>
+                <li><a href="/contact">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Tutorial Header -->
+            <div class="tutorial-header">
+                <div class="tutorial-icon">
+                    <i class="fab fa-node-js"></i>
+                </div>
+                <h1 class="tutorial-title">Node.js e NPM: Configuração Completa</h1>
+                <div class="tutorial-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        20 minutos
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-signal"></i>
+                        Iniciante
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-tags"></i>
+                        Runtime JavaScript
+                    </div>
+                </div>
+            </div>
+
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="/">Home</a>
+                <span class="separator">/</span>
+                <a href="/tutoriais">Tutoriais</a>
+                <span class="separator">/</span>
+                <span>Node.js</span>
+            </div>
+
+            <!-- OS Tabs -->
+            <div class="os-tabs">
+                <button class="os-tab active" data-os="ubuntu">
+                    <i class="fab fa-ubuntu"></i>
+                    Ubuntu/Debian
+                </button>
+                <button class="os-tab" data-os="windows">
+                    <i class="fab fa-windows"></i>
+                    Windows
+                </button>
+                <button class="os-tab" data-os="macos">
+                    <i class="fab fa-apple"></i>
+                    macOS
+                </button>
+            </div>
+
+            <!-- Ubuntu Tab Content -->
+            <div class="tab-content active" id="ubuntu-content">
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">1</span>
+                        Instalando o Node.js
+                    </h2>
+                    <p>Instale o Node.js usando o repositório oficial NodeSource:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs</div>
+                    </div>
+
+                    <p>Verifique a instalação:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">node --version
+npm --version</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">2</span>
+                        Configurando o NPM
+                    </h2>
+                    <p>Configure as informações básicas do NPM:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">npm config set init-author-name "Seu Nome"
+npm config set init-author-email "seu.email@exemplo.com"
+npm config set init-license "MIT"</div>
+                    </div>
+
+                    <p>Configurar pasta global (opcional):</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">3</span>
+                        Criando seu Primeiro Projeto
+                    </h2>
+                    <p>Crie uma pasta e inicialize um projeto Node.js:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">mkdir meu-projeto-node
+cd meu-projeto-node
+npm init -y</div>
+                    </div>
+
+                    <p>Crie um arquivo index.js básico:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">echo 'console.log("Olá, Node.js!");' > index.js
+node index.js</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">4</span>
+                        Gerenciando Pacotes com NPM
+                    </h2>
+                    <p>Comandos essenciais para gerenciar dependências:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content"># Instalar pacote como dependência
+npm install express
+
+# Instalar como dependência de desenvolvimento
+npm install --save-dev nodemon
+
+# Instalar globalmente
+npm install -g yarn
+
+# Ver pacotes instalados
+npm list
+
+# Atualizar pacotes
+npm update</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">5</span>
+                        Scripts NPM
+                    </h2>
+                    <p>Configure scripts úteis no package.json:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">json</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">{
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"No tests yet\" && exit 0"
+  }
+}</div>
+                    </div>
+
+                    <p>Executar scripts:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">npm start
+npm run dev
+npm test</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">6</span>
+                        Servidor HTTP Básico
+                    </h2>
+                    <p>Crie um servidor web simples com Node.js:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">javascript</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">const http = require('http');
+
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/html' });
+  res.end('<h1>Olá do Node.js!</h1>');
+});
+
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});</div>
+                    </div>
+
+                    <p>Execute o servidor:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">node server.js</div>
+                    </div>
+
+                    <div class="success-box">
+                        <i class="fas fa-check-circle icon"></i>
+                        <div class="success-content">
+                            <div class="success-title">Servidor Funcionando</div>
+                            <div class="success-text">Acesse http://localhost:3000 para ver seu servidor!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">7</span>
+                        Ferramentas Úteis
+                    </h2>
+                    <p>Pacotes globais recomendados para desenvolvimento:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content"># Nodemon - reinicia automaticamente o servidor
+npm install -g nodemon
+
+# PM2 - gerenciador de processos
+npm install -g pm2
+
+# Yarn - alternativa ao NPM
+npm install -g yarn
+
+# Serve - servidor estático simples
+npm install -g serve</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Windows Tab Content -->
+            <div class="tab-content" id="windows-content">
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">1</span>
+                        Download do Docker
+                    </h2>
+                    <p>Baixe a versão mais recente do Docker para Windows:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">url</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">https://docs.docker.com/docker-for-windows/install/</div>
+                    </div>
+
+                    <p>Baixe o arquivo <strong>Docker Desktop Installer</strong> (versão estável)</p>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">2</span>
+                        Extraindo e Configurando
+                    </h2>
+                    <p>Extraia o arquivo ZIP para uma pasta (exemplo: C:\Program Files\Docker):</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">cmd</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">C:\Program Files\Docker\
+├── bin/
+├── docker.exe
+├── docker-compose.exe
+└── resources/</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">3</span>
+                        Iniciando o Docker
+                    </h2>
+                    <p>Abra o Prompt de Comando como Administrador e navegue para a pasta do Docker:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">cmd</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">cd C:\Program Files\Docker
+docker.exe</div>
+                    </div>
+
+                    <p>Para parar o Docker:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">cmd</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">docker.exe -H 0.0.0.0:2375 -H npipe://</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">4</span>
+                        Configuração como Serviço
+                    </h2>
+                    <p>Para executar o Docker como serviço do Windows, use o NSSM:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">url</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">https://nssm.cc/download</div>
+                    </div>
+
+                    <p>Instale o serviço:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">cmd</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">nssm install docker C:\Program Files\Docker\docker.exe
+nssm start docker</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">5</span>
+                        Testando a Instalação
+                    </h2>
+                    <p>Acesse no navegador:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">url</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">http://localhost</div>
+                    </div>
+
+                    <div class="success-box">
+                        <i class="fas fa-check-circle icon"></i>
+                        <div class="success-content">
+                            <div class="success-title">Instalação Completa</div>
+                            <div class="success-text">O Docker está funcionando no Windows!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- macOS Tab Content -->
+            <div class="tab-content" id="macos-content">
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">1</span>
+                        Instalando o Homebrew
+                    </h2>
+                    <p>Se você não tem o Homebrew instalado:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">2</span>
+                        Instalando o Docker
+                    </h2>
+                    <p>Use o Homebrew para instalar o Docker:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">brew install docker</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">3</span>
+                        Iniciando o Docker
+                    </h2>
+                    <p>Inicie o serviço do Docker:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">brew services start docker</div>
+                    </div>
+
+                    <p>Para parar o serviço:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">brew services stop docker</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">4</span>
+                        Configuração
+                    </h2>
+                    <p>Os arquivos de configuração estão em:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">docker config: /usr/local/etc/docker/daemon.json
+documentroot: /usr/local/var/lib/docker</div>
+                    </div>
+
+                    <p>Edite a configuração:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">nano /usr/local/etc/docker/daemon.json</div>
+                    </div>
+                </div>
+
+                <div class="tutorial-section">
+                    <h2 class="section-title">
+                        <span class="step-number">5</span>
+                        Testando a Instalação
+                    </h2>
+                    <p>Acesse no navegador:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">url</span>
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                        </div>
+                        <div class="code-content">http://localhost:8080</div>
+                    </div>
+
+                    <div class="success-box">
+                        <i class="fas fa-check-circle icon"></i>
+                        <div class="success-content">
+                            <div class="success-title">Instalação Completa</div>
+                            <div class="success-text">O Docker está funcionando no macOS!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <div class="tutorial-nav">
+                <a href="/tutoriais" class="nav-btn nav-btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar aos Tutoriais
+                </a>
+                <a href="/tutoriais" class="nav-btn nav-btn-next">
+                    Ver Todos os Tutoriais
+                    <i class="fas fa-list"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Sobre o Webeetools -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <span class="footer-logo-text">
+                            <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                        </span>
+                    </div>
+                    <p>Sua caixa de ferramentas completa para desenvolvimento web. Todas as ferramentas que você precisa, 100% gratuitas e sem coleta de dados.</p>
+                    
+                    <!-- Banner Privacidade -->
+                    <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 0.5rem; padding: 0.75rem 1rem; margin: 1rem 0; text-align: center;">
+                        <span style="color: #10b981; font-weight: 600; font-size: 0.875rem;">
+                            <i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i>
+                            <strong>100% Privado</strong> - Sem coleta de dados
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Ferramentas -->
+                <div class="footer-section">
+                    <h3>🛠️ Ferramentas</h3>
+                    <ul class="footer-links">
+                        <li><a href="/tools/json"><i class="fas fa-code"></i> Formatador JSON</a></li>
+                        <li><a href="/tools/password"><i class="fas fa-key"></i> Gerador de Senhas</a></li>
+                        <li><a href="/tools/whatsapp-link"><i class="fab fa-whatsapp"></i> Link WhatsApp</a></li>
+                        <li><a href="/tools/network-tools"><i class="fas fa-tachometer-alt"></i> Teste de Conexão</a></li>
+                        <li><a href="/tools/lorem"><i class="fas fa-paragraph"></i> Lorem Ipsum</a></li>
+                        <li><a href="/tools/document"><i class="fas fa-file-alt"></i> Gerador CPF/CNPJ</a></li>
+                        <li><a href="/tools/resume"><i class="fas fa-file-pdf"></i> Gerador de Currículo</a></li>
+                        <li><a href="/tutoriais"><i class="fas fa-graduation-cap"></i> Tutoriais</a></li>
+                    </ul>
+                    
+                    <!-- Redes Sociais -->
+                    <div class="footer-social">
+                        <a href="https://github.com/8ito4" target="_blank" class="social-btn" title="GitHub - Douglas Soares">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/douglas-soares-204084235/" target="_blank" class="social-btn" title="LinkedIn - Douglas Soares">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Informações Legais -->
+                <div class="footer-section">
+                    <h3>⚖️ Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="/termos-de-uso"><i class="fas fa-file-contract"></i> Termos de Uso</a></li>
+                        <li><a href="/politica-privacidade"><i class="fas fa-shield-alt"></i> Política de Privacidade</a></li>
+                        <li><a href="/cookies"><i class="fas fa-cookie-bite"></i> Política de Cookies</a></li>
+                        <li><a href="/licensa"><i class="fas fa-balance-scale"></i> Licença</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-links">
+                    <a href="/">Início</a>
+                    <a href="/#tools">Ferramentas</a>
+                    <a href="/tutoriais">Tutoriais</a>
+                    <a href="/termos-de-uso">Termos de Uso</a>
+                    <a href="/politica-privacidade">Política de Privacidade</a>
+                    <a href="/contact">Contato</a>
+                </div>
+                <p class="footer-copyright">
+                    © 2025 <strong>Webeetools</strong>. Todos os direitos reservados. 
+                    <span style="margin-left: 1rem;">Feito com <i class="fas fa-heart" style="color: #ef4444;"></i> para desenvolvedores</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.os-tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const os = this.getAttribute('data-os');
+                    
+                    // Remove active class from all tabs and contents
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(os + '-content').classList.add('active');
+                });
+            });
+        });
+
+        // Copy code functionality
+        function copyCode(button) {
+            const codeBlock = button.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(function() {
+                const originalText = button.textContent;
+                button.textContent = 'Copiado!';
+                button.classList.add('copied');
+                
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html> 
