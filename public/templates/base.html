@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{page_title}} - Webeetools</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛠️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+    
+    <!-- Page-specific CSS -->
+    {{page_css}}
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="{{page_description}}">
+    <meta name="keywords" content="{{page_keywords}}">
+    <meta name="author" content="Webeetools">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="{{page_title}} - Webeetools">
+    <meta property="og:description" content="{{page_description}}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{page_url}}">
+    <meta property="og:image" content="/assets/images/og-image.png">
+    
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{page_title}} - Webeetools">
+    <meta name="twitter:description" content="{{page_description}}">
+    <meta name="twitter:image" content="/assets/images/twitter-card.png">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only sr-only-focusable">Pular para o conteúdo principal</a>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <span class="logo-text">
+                    <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                </span>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/tutoriais">Tutoriais</a></li>
+                <li><a href="/#tools">Ferramentas</a></li>
+                <li><a href="/contact">Contato</a></li>
+            </ul>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" aria-label="Abrir menu de navegação">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/tutoriais">Tutoriais</a></li>
+                <li><a href="/#tools">Ferramentas</a></li>
+                <li><a href="/contact">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        {{page_content}}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Sobre o Webeetools -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <span class="footer-logo-text">
+                            <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                        </span>
+                    </div>
+                    <p>Sua caixa de ferramentas completa para desenvolvimento web. Todas as ferramentas que você precisa, 100% gratuitas e sem coleta de dados.</p>
+                    
+                    <!-- Banner Privacidade -->
+                    <div class="privacy-banner">
+                        <i class="fas fa-shield-alt"></i>
+                        <strong>100% Privado</strong> - Sem coleta de dados
+                    </div>
+                </div>
+
+                <!-- Ferramentas -->
+                <div class="footer-section">
+                    <h3>🛠️ Ferramentas</h3>
+                    <ul class="footer-links">
+                        <li><a href="/tools/json"><i class="fas fa-code"></i> Formatador JSON</a></li>
+                        <li><a href="/tools/password"><i class="fas fa-key"></i> Gerador de Senhas</a></li>
+                        <li><a href="/tools/whatsapp-link"><i class="fab fa-whatsapp"></i> Link WhatsApp</a></li>
+                        <li><a href="/tools/network-tools"><i class="fas fa-tachometer-alt"></i> Teste de Conexão</a></li>
+                        <li><a href="/tools/lorem"><i class="fas fa-paragraph"></i> Lorem Ipsum</a></li>
+                        <li><a href="/tools/document"><i class="fas fa-file-alt"></i> Gerador CPF/CNPJ</a></li>
+                        <li><a href="/tools/resume"><i class="fas fa-file-pdf"></i> Gerador de Currículo</a></li>
+                        <li><a href="/tutoriais"><i class="fas fa-graduation-cap"></i> Tutoriais</a></li>
+                    </ul>
+                    
+                    <!-- Redes Sociais -->
+                    <div class="footer-social">
+                        <a href="https://github.com/8ito4" target="_blank" class="social-btn" title="GitHub - Douglas Soares">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/douglas-soares-204084235/" target="_blank" class="social-btn" title="LinkedIn - Douglas Soares">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Informações Legais -->
+                <div class="footer-section">
+                    <h3>⚖️ Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="/termos-de-uso"><i class="fas fa-file-contract"></i> Termos de Uso</a></li>
+                        <li><a href="/politica-privacidade"><i class="fas fa-shield-alt"></i> Política de Privacidade</a></li>
+                        <li><a href="/cookies"><i class="fas fa-cookie-bite"></i> Política de Cookies</a></li>
+                        <li><a href="/licensa"><i class="fas fa-balance-scale"></i> Licença</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-links">
+                    <a href="/">Início</a>
+                    <a href="/#tools">Ferramentas</a>
+                    <a href="/tutoriais">Tutoriais</a>
+                    <a href="/termos-de-uso">Termos de Uso</a>
+                    <a href="/politica-privacidade">Política de Privacidade</a>
+                    <a href="/contact">Contato</a>
+                </div>
+                <p class="footer-copyright">
+                    © 2025 <strong>Webeetools</strong>. Todos os direitos reservados. 
+                    <span class="footer-heart">Feito com <i class="fas fa-heart"></i> para desenvolvedores</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core JavaScript -->
+    <script src="/assets/js/utils/helpers.js"></script>
+    <script src="/assets/js/components/navbar.js"></script>
+    <script src="/assets/js/components/footer.js"></script>
+    
+    <!-- Page-specific JavaScript -->
+    {{page_js}}
+    
+    <!-- Analytics and Performance -->
+    <script>
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            if ('performance' in window) {
+                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                console.log(`Page loaded in ${loadTime}ms`);
+            }
+        });
+    </script>
+</body>
+</html> 
