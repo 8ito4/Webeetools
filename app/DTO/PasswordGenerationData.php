@@ -16,7 +16,7 @@ readonly class PasswordGenerationData
     {
         return new self(
             length: $data['length'] ?? 12,
-            uppercase: $data['uppercase'] ?? true,
+            uppercase: $data['uppercase'] ?? true
             lowercase: $data['lowercase'] ?? true,
             numbers: $data['numbers'] ?? true,
             symbols: $data['symbols'] ?? true

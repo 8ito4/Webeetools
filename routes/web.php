@@ -15,6 +15,10 @@ Route::get('/', function () {
     return response()->file(public_path('index.html'));
 })->name('home');
 
+Route::get('/tutoriais', function () {
+    return response()->file(public_path('tutoriais.html'));
+})->name('tutorials.index');
+
 // WEBHOOK - EM BREVE
 /*
 Route::middleware(['throttle:60,1'])->group(function () {
