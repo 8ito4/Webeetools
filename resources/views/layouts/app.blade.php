@@ -48,8 +48,9 @@
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8 mt-3">
                         <a href="{{ route('home') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('home') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Início</a>
-                         <a href="{{ route('suggestions') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('suggestions') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Sugestões</a>
-                         <a href="{{ route('contact') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('contact') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Fale Conosco</a>
+                        <a href="{{ route('tutorials.index') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('tutorials.*') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Tutoriais</a>
+                        <a href="{{ route('suggestions') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('suggestions') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Sugestões</a>
+                        <a href="{{ route('contact') }}" class="inline-flex items-center px-1 pt-1 text-gray-900 hover:text-yellow-600 transition-colors duration-200 {{ Request::routeIs('contact') ? 'text-yellow-600 border-b-2 border-yellow-600' : '' }}">Fale Conosco</a>
                     </div>
                 </div>
 

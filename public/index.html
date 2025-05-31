@@ -1228,6 +1228,7 @@
             
             <ul class="nav-links">
                 <li><a href="/">Início</a></li>
+                <li><a href="/tutoriais">Tutoriais</a></li>
                 <li><a href="/#tools">Ferramentas</a></li>
                 <li><a href="/contact">Contato</a></li>
             </ul>
@@ -1286,6 +1287,10 @@
                 <a href="/#tools" class="btn-primary">
                     <i class="fas fa-rocket"></i>
                     Explorar Ferramentas
+                </a>
+                <a href="/tutoriais" class="btn-secondary">
+                    <i class="fas fa-graduation-cap"></i>
+                    Tutoriais
                 </a>
             </div>
 
@@ -1485,6 +1490,7 @@
                         <li><a href="/tools/lorem"><i class="fas fa-paragraph"></i> Lorem Ipsum</a></li>
                         <li><a href="/tools/document"><i class="fas fa-file-alt"></i> Gerador CPF/CNPJ</a></li>
                         <li><a href="/tools/resume"><i class="fas fa-file-pdf"></i> Gerador de Currículo</a></li>
+                        <li><a href="/tutoriais"><i class="fas fa-graduation-cap"></i> Tutoriais</a></li>
                     </ul>
                     
                     <!-- Redes Sociais -->
@@ -1514,6 +1520,7 @@
                 <div class="footer-bottom-links">
                     <a href="/">Início</a>
                     <a href="/#tools">Ferramentas</a>
+                    <a href="/tutoriais">Tutoriais</a>
                     <a href="/termos-de-uso">Termos de Uso</a>
                     <a href="/politica-privacidade">Política de Privacidade</a>
                     <a href="/contact">Contato</a>
@@ -1576,12 +1583,10 @@
                             audio.load();
                             
                             audio.play().then(() => {
-                                console.log('Áudio iniciado:', audioUrls[currentUrlIndex]);
                                 isPlaying = true;
                                 playIcon.className = 'fas fa-pause';
                                 lofiPlayer.classList.add('playing');
                             }).catch(error => {
-                                console.error('Erro:', error);
                                 currentUrlIndex++;
                                 if (currentUrlIndex < audioUrls.length) {
                                     tryNextUrl();
@@ -1651,7 +1656,6 @@
             rainPlayer.classList.add('loading'); // Mostra loading dots
             loadingDots.style.display = 'flex';
             rainDrops.style.display = 'none';
-            console.log('🌧️ Iniciando busca por streams...');
             
             // 2. TENTAR STREAMS REAIS
             currentRainUrlIndex = 0;
@@ -1660,13 +1664,10 @@
 
         function tryRainStreams() {
             if (currentRainUrlIndex >= rainUrls.length) {
-                console.log('🎧 Streams falharam, usando gerador...');
                 startGeneratedRain();
-                return;
             }
 
             const url = rainUrls[currentRainUrlIndex];
-            console.log(`🔄 Tentando stream ${currentRainUrlIndex + 1}/${rainUrls.length}`);
             
             rainAudio = new Audio();
             rainAudio.crossOrigin = 'anonymous';
@@ -1674,7 +1675,6 @@
             rainAudio.loop = true;
             
             const timeoutId = setTimeout(() => {
-                console.log('⏱️ Timeout - próximo...');
                 currentRainUrlIndex++;
                 tryRainStreams();
             }, 4000);
@@ -1686,7 +1686,6 @@
                 
                 // SUCESSO - TROCAR PARA ANIMAÇÃO DE CHUVA
                 showRainAnimation();
-                console.log('✅ Stream conectado!');
                 
                 rainAudio.play().catch(() => {
                     currentRainUrlIndex++;
@@ -1698,7 +1697,6 @@
                 clearTimeout(timeoutId);
                 rainAudio.removeEventListener('canplaythrough', onSuccess);
                 rainAudio.removeEventListener('error', onError);
-                console.log('❌ Erro - próximo...');
                 currentRainUrlIndex++;
                 tryRainStreams();
             };
@@ -1766,10 +1764,8 @@
                 
                 createRainDrop();
                 showRainAnimation();
-                console.log('✅ Gerador iniciado');
                 
             } catch (error) {
-                console.error('Erro:', error);
                 showRainAnimation(); // Pelo menos mostra a animação
             }
         }
@@ -1795,7 +1791,7 @@
                 try {
                     window.rainContext.close();
                 } catch (e) {
-                    console.log('Context fechado');
+                    // Context fechado
                 }
                 window.rainContext = null;
             }
@@ -1805,7 +1801,6 @@
             rainPlayer.classList.remove('loading', 'playing');
             loadingDots.style.display = 'none';
             rainDrops.style.display = 'none';
-            console.log('🔇 Chuva parada');
         }
 
         // Smooth Scrolling - Corrigido para lidar com links absolutos

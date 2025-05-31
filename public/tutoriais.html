@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriais - Webeetools</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🛠️%3C/text%3E%3C/svg%3E">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --dark-950: #020617;
+            --dark-900: #0f172a;
+            --dark-800: #1e293b;
+            --dark-700: #334155;
+            --dark-600: #475569;
+            --accent-300: #fde047;
+            --accent-400: #facc15;
+            --accent-500: #eab308;
+            --accent-600: #ca8a04;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--dark-950) 0%, var(--dark-900) 25%, var(--dark-800) 50%, var(--dark-900) 75%, var(--dark-950) 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #f1f5f9;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Navigation - COPIADO EXATO DO INDEX.HTML */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: linear-gradient(135deg, rgba(2, 6, 23, 0.8) 0%, rgba(15, 23, 42, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(71, 85, 105, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-400), var(--accent-600));
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-950);
+            font-size: 1.125rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(234, 179, 8, 0.3);
+        }
+
+        .logo-icon .bee-emoji {
+            filter: grayscale(100%) brightness(0);
+            font-size: 1.5rem;
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.1) rotate(12deg);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo-text .we {
+            color: #f1f5f9;
+        }
+
+        .logo-text .bee {
+            color: var(--accent-400);
+        }
+
+        .logo-text .tools {
+            color: #f1f5f9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-400);
+            transform: scale(1.05);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-400);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Audio Players Container */
+        .audio-players {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem; /* Espaçamento pequeno entre os players */
+        }
+
+        /* Lo-fi Player - Ultra Minimal */
+        .lofi-player {
+            background: rgba(30, 41, 59, 0.3);
+            border-radius: 0.5rem;
+            padding: 0.375rem 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            border: 1px solid rgba(71, 85, 105, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .lofi-player:hover {
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(234, 179, 8, 0.2);
+        }
+
+        .lofi-text {
+            font-size: 0.7rem;
+            color: var(--accent-400);
+            font-weight: 400;
+            text-transform: none;
+        }
+
+        .play-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent-400);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-btn:hover {
+            color: var(--accent-300);
+        }
+
+        .play-btn i {
+            font-size: 0.5rem;
+            margin-left: 1px;
+        }
+
+        /* Container para as barrinhas - inicialmente oculto */
+        .music-container {
+            width: 0;
+            height: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: width 0.3s ease;
+        }
+
+        /* Animação de barrinhas */
+        .music-bars {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 0.75rem;
+        }
+
+        .music-bars .bar {
+            width: 2px;
+            background: var(--accent-400);
+            border-radius: 1px;
+            animation: musicBar 1s ease-in-out infinite;
+        }
+
+        .music-bars .bar:nth-child(1) {
+            height: 0.25rem;
+            animation-delay: 0s;
+        }
+
+        .music-bars .bar:nth-child(2) {
+            height: 0.5rem;
+            animation-delay: 0.2s;
+        }
+
+        .music-bars .bar:nth-child(3) {
+            height: 0.375rem;
+            animation-delay: 0.4s;
+        }
+
+        .music-bars .bar:nth-child(4) {
+            height: 0.25rem;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes musicBar {
+            0%, 100% {
+                transform: scaleY(0.3);
+                opacity: 0.6;
+            }
+            50% {
+                transform: scaleY(1);
+                opacity: 1;
+            }
+        }
+
+        /* Estado Playing - container se expande */
+        .lofi-player.playing .music-container {
+            width: 20px;
+        }
+
+        /* Rain Player - Apenas ícones */
+        .rain-player {
+            background: transparent;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .rain-btn {
+            background: transparent;
+            border: none;
+            color: #60a5fa;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rain-btn:hover {
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .rain-btn i {
+            font-size: 0.75rem; /* Ícone um pouco maior */
+        }
+
+        /* Container para as gotinhas - do lado direito */
+        .rain-container {
+            width: 0;
+            height: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            order: 3; /* Fica por último (direita) */
+        }
+
+        /* Animação de gotinhas */
+        .rain-drops {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 0.75rem;
+        }
+
+        .rain-drops .drop {
+            width: 2px;
+            height: 4px;
+            background: #60a5fa;
+            border-radius: 0 0 50% 50%;
+            animation: rainDrop 1.5s ease-in-out infinite;
+        }
+
+        .rain-drops .drop:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .rain-drops .drop:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .rain-drops .drop:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes rainDrop {
+            0% {
+                opacity: 0;
+                transform: translateY(-4px) scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(4px) scale(0.5);
+            }
+        }
+
+        /* Estado Playing - container se expande */
+        .rain-player.playing .rain-container {
+            width: 16px;
+        }
+
+        /* Loading dots para rain player */
+        .loading-dots {
+            display: flex;
+            align-items: center;
+            gap: 1px;
+            height: 0.75rem;
+        }
+
+        .loading-dots .dot {
+            width: 2px;
+            height: 2px;
+            background: #60a5fa;
+            border-radius: 50%;
+            animation: loadingDot 1.4s ease-in-out infinite;
+        }
+
+        .loading-dots .dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .loading-dots .dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dots .dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes loadingDot {
+            0%, 80%, 100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Estado Loading - container se expande */
+        .rain-player.loading .rain-container {
+            width: 16px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 4rem 0 2rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #f1f5f9 0%, var(--accent-400) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            margin-bottom: 3rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(71, 85, 105, 0.3);
+            border-radius: 2rem;
+            color: #f1f5f9;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-400);
+            box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1rem;
+            pointer-events: none;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 0.25rem;
+            border-radius: 50%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .clear-search.visible {
+            opacity: 1;
+        }
+
+        .clear-search:hover {
+            color: var(--accent-400);
+            background: rgba(234, 179, 8, 0.1);
+        }
+
+        /* Search Results */
+        .search-results {
+            display: none;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #94a3b8;
+        }
+
+        .search-results.visible {
+            display: block;
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid var(--dark-600);
+            background: transparent;
+            color: #cbd5e1;
+            border-radius: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--accent-400);
+            color: var(--accent-400);
+            transform: scale(1.05);
+        }
+
+        /* Tutorials Grid */
+        .tutorials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .tutorial-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(51, 65, 85, 0.6) 100%);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tutorial-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-400);
+            box-shadow: 0 20px 40px rgba(234, 179, 8, 0.1);
+        }
+
+        .tutorial-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .tutorial-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .tutorial-meta {
+            text-align: right;
+            font-size: 0.875rem;
+        }
+
+        .tutorial-category {
+            background: rgba(71, 85, 105, 0.5);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .tutorial-duration {
+            color: #94a3b8;
+        }
+
+        .tutorial-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f1f5f9;
+        }
+
+        .tutorial-description {
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .tutorial-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tutorial-tag {
+            background: rgba(234, 179, 8, 0.2);
+            color: var(--accent-400);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tutorial-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            padding-top: 1rem;
+        }
+
+        .tutorial-difficulty {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .difficulty-stars {
+            display: flex;
+            gap: 0.125rem;
+        }
+
+        .difficulty-stars i {
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tutorials-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tutorial-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, var(--dark-950) 0%, var(--dark-900) 50%, var(--dark-800) 100%);
+            padding: 4rem 1rem 2rem;
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .footer-section:first-child {
+            max-width: 400px;
+        }
+
+        .footer-section:not(:first-child) {
+            align-items: flex-start;
+        }
+
+        .footer-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-400);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-400);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(71, 85, 105, 0.3);
+            border-radius: 0.5rem;
+            color: #9ca3af;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.125rem;
+        }
+
+        .social-btn:hover {
+            background: var(--accent-400);
+            color: var(--dark-950);
+            border-color: var(--accent-400);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(71, 85, 105, 0.3);
+            padding-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-bottom-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-bottom-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-bottom-links a:hover {
+            color: var(--accent-400);
+        }
+
+        .footer-copyright {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            background: linear-gradient(135deg, var(--accent-400), var(--accent-600));
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-950);
+            font-size: 1.125rem;
+        }
+
+        .footer-logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-logo-text .we { color: #f1f5f9; }
+        .footer-logo-text .bee { color: var(--accent-400); }
+        .footer-logo-text .tools { color: #f1f5f9; }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-section {
+                text-align: center;
+            }
+            
+            .footer-bottom-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .footer-social {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <span class="logo-text">
+                    <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                </span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="/">Início</a></li>
+                <li><a href="/tutoriais">Tutoriais</a></li>
+                <li><a href="/#tools">Ferramentas</a></li>
+                <li><a href="/contact">Contato</a></li>
+            </ul>
+            
+            <div class="audio-players">
+                <div class="lofi-player">
+                    <span class="lofi-text">Lo-fi</span>
+                    <div class="music-container">
+                        <div class="music-bars">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    <button class="play-btn" id="playBtn">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+                
+                <!-- Rain Player -->
+                <div class="rain-player">
+                    <button class="rain-btn" id="rainBtn">
+                        <i class="fas fa-cloud-rain"></i>
+                    </button>
+                    <div class="rain-container">
+                        <div class="loading-dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <div class="rain-drops">
+                            <div class="drop"></div>
+                            <div class="drop"></div>
+                            <div class="drop"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <h1 class="hero-title">
+                    <i class="fas fa-graduation-cap" style="color: var(--accent-400); margin-right: 1rem;"></i>
+                    Tutoriais
+                </h1>
+                <p class="hero-subtitle">
+                    Aprenda passo a passo com nossos guias detalhados
+                </p>
+            </section>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Pesquisar tutoriais...">
+                    <i class="fas fa-search search-icon"></i>
+                    <button class="clear-search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="servidor">Servidor Web</button>
+                <button class="filter-btn" data-filter="linguagem">Linguagem</button>
+                <button class="filter-btn" data-filter="framework">Framework</button>
+                <button class="filter-btn" data-filter="ferramentas">Ferramentas</button>
+            </div>
+
+            <!-- Search Results -->
+            <div class="search-results">
+                <p id="search-results-text"></p>
+            </div>
+
+            <!-- Tutorials Grid -->
+            <div class="tutorials-grid">
+                <!-- Tutorial NGINX -->
+                <a href="/tutorial-nginx.html" class="tutorial-card" data-category="servidor">
+                    <div class="tutorial-header">
+                        <div class="tutorial-icon" style="background: linear-gradient(135deg, #10b981, #047857);">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <div class="tutorial-meta">
+                            <span class="tutorial-category">Servidor Web</span>
+                            <div class="tutorial-duration">15 min</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="tutorial-title">Como Instalar e Configurar NGINX</h3>
+                    <p class="tutorial-description">
+                        Aprenda a instalar e configurar o servidor web NGINX no Ubuntu, Windows e macOS
+                    </p>
+                    
+                    <div class="tutorial-tags">
+                        <span class="tutorial-tag">#nginx</span>
+                        <span class="tutorial-tag">#servidor</span>
+                        <span class="tutorial-tag">#web</span>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <div class="tutorial-difficulty">
+                            <div class="difficulty-stars">
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                            </div>
+                            <span style="color: #94a3b8; font-size: 0.875rem;">Iniciante</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tutorial PHP -->
+                <a href="/tutorial-php.html" class="tutorial-card" data-category="linguagem">
+                    <div class="tutorial-header">
+                        <div class="tutorial-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+                            <i class="fab fa-php"></i>
+                        </div>
+                        <div class="tutorial-meta">
+                            <span class="tutorial-category">Linguagem de Programação</span>
+                            <div class="tutorial-duration">20 min</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="tutorial-title">Instalar PHP 8.x com Extensões para Laravel</h3>
+                    <p class="tutorial-description">
+                        Instalação completa do PHP 8.x com todas as extensões necessárias para desenvolvimento Laravel
+                    </p>
+                    
+                    <div class="tutorial-tags">
+                        <span class="tutorial-tag">#php</span>
+                        <span class="tutorial-tag">#laravel</span>
+                        <span class="tutorial-tag">#desenvolvimento</span>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <div class="tutorial-difficulty">
+                            <div class="difficulty-stars">
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                            </div>
+                            <span style="color: #94a3b8; font-size: 0.875rem;">Iniciante</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tutorial Laravel -->
+                <a href="/tutorial-laravel.html" class="tutorial-card" data-category="framework">
+                    <div class="tutorial-header">
+                        <div class="tutorial-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+                            <i class="fab fa-laravel"></i>
+                        </div>
+                        <div class="tutorial-meta">
+                            <span class="tutorial-category">Framework</span>
+                            <div class="tutorial-duration">30 min</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="tutorial-title">Configurando um Projeto Laravel do Zero</h3>
+                    <p class="tutorial-description">
+                        Guia completo para criar e configurar um novo projeto Laravel com todas as melhores práticas
+                    </p>
+                    
+                    <div class="tutorial-tags">
+                        <span class="tutorial-tag">#laravel</span>
+                        <span class="tutorial-tag">#php</span>
+                        <span class="tutorial-tag">#framework</span>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <div class="tutorial-difficulty">
+                            <div class="difficulty-stars">
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                            </div>
+                            <span style="color: #94a3b8; font-size: 0.875rem;">Intermediário</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tutorial Docker -->
+                <a href="/tutorial-docker.html" class="tutorial-card" data-category="servidor">
+                    <div class="tutorial-header">
+                        <div class="tutorial-icon" style="background: linear-gradient(135deg, #0ea5e9, #0284c7);">
+                            <i class="fab fa-docker"></i>
+                        </div>
+                        <div class="tutorial-meta">
+                            <span class="tutorial-category">Containerização</span>
+                            <div class="tutorial-duration">25 min</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="tutorial-title">Docker: Instalação e Primeiros Passos</h3>
+                    <p class="tutorial-description">
+                        Aprenda a instalar o Docker e criar seus primeiros containers para desenvolvimento
+                    </p>
+                    
+                    <div class="tutorial-tags">
+                        <span class="tutorial-tag">#docker</span>
+                        <span class="tutorial-tag">#container</span>
+                        <span class="tutorial-tag">#devops</span>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <div class="tutorial-difficulty">
+                            <div class="difficulty-stars">
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                            </div>
+                            <span style="color: #94a3b8; font-size: 0.875rem;">Intermediário</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tutorial Git & GitHub -->
+                <a href="/tutorial-git.html" class="tutorial-card" data-category="ferramentas">
+                    <div class="tutorial-header">
+                        <div class="tutorial-icon" style="background: linear-gradient(135deg, #f97316, #ea580c);">
+                            <i class="fab fa-git-alt"></i>
+                        </div>
+                        <div class="tutorial-meta">
+                            <span class="tutorial-category">Controle de Versão</span>
+                            <div class="tutorial-duration">35 min</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="tutorial-title">Git e GitHub: Do Básico ao Avançado</h3>
+                    <p class="tutorial-description">
+                        Domine o Git e GitHub com comandos essenciais, branches, merges e colaboração em equipe
+                    </p>
+                    
+                    <div class="tutorial-tags">
+                        <span class="tutorial-tag">#git</span>
+                        <span class="tutorial-tag">#github</span>
+                        <span class="tutorial-tag">#versionamento</span>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <div class="tutorial-difficulty">
+                            <div class="difficulty-stars">
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                            </div>
+                            <span style="color: #94a3b8; font-size: 0.875rem;">Iniciante</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tutorial Node.js -->
+                <a href="/tutorial-nodejs.html" class="tutorial-card" data-category="linguagem">
+                    <div class="tutorial-header">
+                        <div class="tutorial-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i class="fab fa-node-js"></i>
+                        </div>
+                        <div class="tutorial-meta">
+                            <span class="tutorial-category">Runtime JavaScript</span>
+                            <div class="tutorial-duration">20 min</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="tutorial-title">Node.js e NPM: Configuração Completa</h3>
+                    <p class="tutorial-description">
+                        Instale o Node.js, configure o NPM e aprenda a gerenciar pacotes e dependências
+                    </p>
+                    
+                    <div class="tutorial-tags">
+                        <span class="tutorial-tag">#nodejs</span>
+                        <span class="tutorial-tag">#npm</span>
+                        <span class="tutorial-tag">#javascript</span>
+                    </div>
+                    
+                    <div class="tutorial-footer">
+                        <div class="tutorial-difficulty">
+                            <div class="difficulty-stars">
+                                <i class="fas fa-star" style="color: var(--accent-400);"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                                <i class="fas fa-star" style="color: #64748b;"></i>
+                            </div>
+                            <span style="color: #94a3b8; font-size: 0.875rem;">Iniciante</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Sobre o Webeetools -->
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <div class="footer-logo-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <span class="footer-logo-text">
+                            <span class="we">We</span><span class="bee">bee</span><span class="tools">tools</span>
+                        </span>
+                    </div>
+                    <p>Sua caixa de ferramentas completa para desenvolvimento web. Todas as ferramentas que você precisa, 100% gratuitas e sem coleta de dados.</p>
+                    
+                    <!-- Banner Privacidade -->
+                    <div style="background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 0.5rem; padding: 0.75rem 1rem; margin: 1rem 0; text-align: center;">
+                        <span style="color: #10b981; font-weight: 600; font-size: 0.875rem;">
+                            <i class="fas fa-shield-alt" style="margin-right: 0.5rem;"></i>
+                            <strong>100% Privado</strong> - Sem coleta de dados
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Ferramentas -->
+                <div class="footer-section">
+                    <h3>🛠️ Ferramentas</h3>
+                    <ul class="footer-links">
+                        <li><a href="/tools/json"><i class="fas fa-code"></i> Formatador JSON</a></li>
+                        <li><a href="/tools/password"><i class="fas fa-key"></i> Gerador de Senhas</a></li>
+                        <li><a href="/tools/whatsapp-link"><i class="fab fa-whatsapp"></i> Link WhatsApp</a></li>
+                        <li><a href="/tools/network-tools"><i class="fas fa-tachometer-alt"></i> Teste de Conexão</a></li>
+                        <li><a href="/tools/lorem"><i class="fas fa-paragraph"></i> Lorem Ipsum</a></li>
+                        <li><a href="/tools/document"><i class="fas fa-file-alt"></i> Gerador CPF/CNPJ</a></li>
+                        <li><a href="/tools/resume"><i class="fas fa-file-pdf"></i> Gerador de Currículo</a></li>
+                        <li><a href="/tutoriais"><i class="fas fa-graduation-cap"></i> Tutoriais</a></li>
+                    </ul>
+                    
+                    <!-- Redes Sociais -->
+                    <div class="footer-social">
+                        <a href="https://github.com/8ito4" target="_blank" class="social-btn" title="GitHub - Douglas Soares">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/douglas-soares-204084235/" target="_blank" class="social-btn" title="LinkedIn - Douglas Soares">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Informações Legais -->
+                <div class="footer-section">
+                    <h3>⚖️ Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="/termos-de-uso"><i class="fas fa-file-contract"></i> Termos de Uso</a></li>
+                        <li><a href="/politica-privacidade"><i class="fas fa-shield-alt"></i> Política de Privacidade</a></li>
+                        <li><a href="/cookies"><i class="fas fa-cookie-bite"></i> Política de Cookies</a></li>
+                        <li><a href="/licensa"><i class="fas fa-balance-scale"></i> Licença</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-links">
+                    <a href="/">Início</a>
+                    <a href="/#tools">Ferramentas</a>
+                    <a href="/tutoriais">Tutoriais</a>
+                    <a href="/termos-de-uso">Termos de Uso</a>
+                    <a href="/politica-privacidade">Política de Privacidade</a>
+                    <a href="/contact">Contato</a>
+                </div>
+                <p class="footer-copyright">
+                    © 2025 <strong>Webeetools</strong>. Todos os direitos reservados. 
+                    <span style="margin-left: 1rem;">Feito com <i class="fas fa-heart" style="color: #ef4444;"></i> para desenvolvedores</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Lo-fi Audio Player
+        let audio = null;
+        let isPlaying = false;
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = playBtn.querySelector('i');
+        const lofiPlayer = document.querySelector('.lofi-player');
+
+        playBtn.addEventListener('click', function() {
+            if (isPlaying && audio) {
+                audio.pause();
+                isPlaying = false;
+                playIcon.className = 'fas fa-play';
+                lofiPlayer.classList.remove('playing');
+            } else {
+                if (!audio) {
+                    const audioUrls = [
+                        'https://stream.zeno.fm/0r0xa792kwzuv',
+                        'https://stream.zeno.fm/f3wvbbqmdg8uv',
+                        'https://stream.rcast.net/70643',
+                        'https://stream.rcast.net/261654'
+                    ];
+                    
+                    audio = new Audio();
+                    audio.loop = true;
+                    audio.volume = 0.3;
+                    
+                    let currentUrlIndex = 0;
+                    
+                    function tryNextUrl() {
+                        if (currentUrlIndex < audioUrls.length) {
+                            audio.src = audioUrls[currentUrlIndex];
+                            audio.load();
+                            
+                            audio.play().then(() => {
+                                isPlaying = true;
+                                playIcon.className = 'fas fa-pause';
+                                lofiPlayer.classList.add('playing');
+                            }).catch(error => {
+                                currentUrlIndex++;
+                                if (currentUrlIndex < audioUrls.length) {
+                                    tryNextUrl();
+                                }
+                            });
+                        }
+                    }
+                    
+                    audio.addEventListener('pause', function() {
+                        isPlaying = false;
+                        playIcon.className = 'fas fa-play';
+                        lofiPlayer.classList.remove('playing');
+                    });
+                    
+                    audio.addEventListener('play', function() {
+                        isPlaying = true;
+                        playIcon.className = 'fas fa-pause';
+                        lofiPlayer.classList.add('playing');
+                    });
+                    
+                    tryNextUrl();
+                } else {
+                    audio.play().then(() => {
+                        isPlaying = true;
+                        playIcon.className = 'fas fa-pause';
+                        lofiPlayer.classList.add('playing');
+                    });
+                }
+            }
+        });
+
+        // Rain Audio Player
+        let rainAudio = null;
+        let isRainPlaying = false;
+        let currentRainUrlIndex = 0;
+        const rainBtn = document.getElementById('rainBtn');
+        const rainIcon = rainBtn.querySelector('i');
+        const rainPlayer = document.querySelector('.rain-player');
+        const loadingDots = rainPlayer.querySelector('.loading-dots');
+        const rainDrops = rainPlayer.querySelector('.rain-drops');
+
+        const rainUrls = [
+            'https://stream.rcast.net/272984',
+            'https://radiosuitenetwork.torontocast.stream/nature-radio-rain/',
+            'https://stream.rcast.net/247619',
+            'https://stream.rcast.net/283464',
+            'https://stream.rcast.net/281503',
+            'https://maggie.torontocast.com:8108/stream',
+            'http://79.111.14.76:8000/soundnat',
+            'https://kathy.torontocast.com:3250/stream',
+        ];
+
+        rainBtn.addEventListener('click', function() {
+            if (isRainPlaying) {
+                stopRain();
+            } else {
+                startRainWithLoading();
+            }
+        });
+
+        function startRainWithLoading() {
+            rainIcon.className = 'fas fa-cloud';
+            rainPlayer.classList.add('loading');
+            loadingDots.style.display = 'flex';
+            rainDrops.style.display = 'none';
+            
+            currentRainUrlIndex = 0;
+            tryRainStreams();
+        }
+
+        function tryRainStreams() {
+            if (currentRainUrlIndex >= rainUrls.length) {
+                startGeneratedRain();
+                return;
+            }
+
+            const url = rainUrls[currentRainUrlIndex];
+            
+            rainAudio = new Audio();
+            rainAudio.crossOrigin = 'anonymous';
+            rainAudio.volume = 0.25;
+            rainAudio.loop = true;
+            
+            const timeoutId = setTimeout(() => {
+                currentRainUrlIndex++;
+                tryRainStreams();
+            }, 4000);
+            
+            const onSuccess = () => {
+                clearTimeout(timeoutId);
+                rainAudio.removeEventListener('canplaythrough', onSuccess);
+                rainAudio.removeEventListener('error', onError);
+                
+                showRainAnimation();
+                
+                rainAudio.play().catch(() => {
+                    currentRainUrlIndex++;
+                    tryRainStreams();
+                });
+            };
+            
+            const onError = () => {
+                clearTimeout(timeoutId);
+                rainAudio.removeEventListener('canplaythrough', onSuccess);
+                rainAudio.removeEventListener('error', onError);
+                currentRainUrlIndex++;
+                tryRainStreams();
+            };
+            
+            rainAudio.addEventListener('canplaythrough', onSuccess);
+            rainAudio.addEventListener('error', onError);
+            rainAudio.src = url;
+            rainAudio.load();
+        }
+
+        function startGeneratedRain() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                window.rainContext = audioContext;
+                
+                const masterGain = audioContext.createGain();
+                masterGain.gain.value = 0.15;
+                masterGain.connect(audioContext.destination);
+                
+                const noiseNode = audioContext.createScriptProcessor(4096, 1, 1);
+                const rainFilter = audioContext.createBiquadFilter();
+                
+                rainFilter.type = 'lowpass';
+                rainFilter.frequency.value = 800;
+                rainFilter.Q.value = 0.5;
+                
+                noiseNode.onaudioprocess = function(e) {
+                    const output = e.outputBuffer.getChannelData(0);
+                    for (let i = 0; i < output.length; i++) {
+                        output[i] = (Math.random() * 2 - 1) * 0.4;
+                    }
+                };
+                
+                noiseNode.connect(rainFilter);
+                rainFilter.connect(masterGain);
+                
+                function createRainDrop() {
+                    if (window.rainContext && window.rainContext.state === 'running') {
+                        const drop = audioContext.createOscillator();
+                        const dropGain = audioContext.createGain();
+                        const dropFilter = audioContext.createBiquadFilter();
+                        
+                        dropFilter.type = 'bandpass';
+                        dropFilter.frequency.value = 1000 + Math.random() * 2000;
+                        dropFilter.Q.value = 2;
+                        
+                        drop.type = 'sine';
+                        drop.frequency.value = 600 + Math.random() * 1000;
+                        
+                        const now = audioContext.currentTime;
+                        dropGain.gain.setValueAtTime(0, now);
+                        dropGain.gain.linearRampToValueAtTime(0.05, now + 0.005);
+                        dropGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+                        
+                        drop.connect(dropFilter);
+                        dropFilter.connect(dropGain);
+                        dropGain.connect(masterGain);
+                        
+                        drop.start(now);
+                        drop.stop(now + 0.08);
+                        
+                        setTimeout(createRainDrop, 80 + Math.random() * 150);
+                    }
+                }
+                
+                createRainDrop();
+                showRainAnimation();
+                
+            } catch (error) {
+                showRainAnimation();
+            }
+        }
+
+        function showRainAnimation() {
+            isRainPlaying = true;
+            rainPlayer.classList.remove('loading');
+            rainPlayer.classList.add('playing');
+            loadingDots.style.display = 'none';
+            rainDrops.style.display = 'flex';
+        }
+
+        function stopRain() {
+            if (rainAudio) {
+                rainAudio.pause();
+                rainAudio.src = '';
+                rainAudio = null;
+            }
+            
+            if (window.rainContext) {
+                try {
+                    window.rainContext.close();
+                } catch (e) {
+                    // Context fechado
+                }
+                window.rainContext = null;
+            }
+            
+            isRainPlaying = false;
+            rainIcon.className = 'fas fa-cloud-rain';
+            rainPlayer.classList.remove('loading', 'playing');
+            loadingDots.style.display = 'none';
+            rainDrops.style.display = 'none';
+        }
+
+        // Sistema de filtros e busca
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const tutorialCards = document.querySelectorAll('.tutorial-card');
+            const searchInput = document.querySelector('.search-input');
+            const clearSearchBtn = document.querySelector('.clear-search');
+            const searchResults = document.querySelector('.search-results');
+            const searchResultsText = document.getElementById('search-results-text');
+            
+            let currentFilter = 'all';
+            let currentSearch = '';
+
+            // Funcionalidade de busca
+            searchInput.addEventListener('input', function() {
+                currentSearch = this.value.toLowerCase().trim();
+                
+                // Mostrar/ocultar botão de limpar
+                if (currentSearch.length > 0) {
+                    clearSearchBtn.classList.add('visible');
+                } else {
+                    clearSearchBtn.classList.remove('visible');
+                }
+                
+                applyFilters();
+            });
+
+            // Limpar busca
+            clearSearchBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                currentSearch = '';
+                this.classList.remove('visible');
+                applyFilters();
+                searchInput.focus();
+            });
+
+            // Filtros de categoria
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    currentFilter = this.getAttribute('data-filter');
+                    
+                    // Atualizar botões ativos
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    applyFilters();
+                });
+            });
+
+            // Função para aplicar filtros combinados
+            function applyFilters() {
+                let visibleCount = 0;
+                
+                tutorialCards.forEach(card => {
+                    const category = card.getAttribute('data-category');
+                    const title = card.querySelector('.tutorial-title').textContent.toLowerCase();
+                    const description = card.querySelector('.tutorial-description').textContent.toLowerCase();
+                    const tags = Array.from(card.querySelectorAll('.tutorial-tag')).map(tag => tag.textContent.toLowerCase()).join(' ');
+                    
+                    // Verificar filtro de categoria
+                    const categoryMatch = currentFilter === 'all' || category === currentFilter;
+                    
+                    // Verificar busca de texto
+                    const searchMatch = currentSearch === '' || 
+                        title.includes(currentSearch) || 
+                        description.includes(currentSearch) || 
+                        tags.includes(currentSearch);
+                    
+                    if (categoryMatch && searchMatch) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Mostrar resultados da busca
+                updateSearchResults(visibleCount);
+            }
+
+            function updateSearchResults(count) {
+                if (currentSearch.length > 0) {
+                    searchResults.classList.add('visible');
+                    
+                    if (count === 0) {
+                        searchResultsText.innerHTML = `
+                            <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+                            Nenhum tutorial encontrado para "<strong style="color: var(--accent-400);">${currentSearch}</strong>"
+                        `;
+                    } else if (count === 1) {
+                        searchResultsText.innerHTML = `
+                            <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+                            1 tutorial encontrado para "<strong style="color: var(--accent-400);">${currentSearch}</strong>"
+                        `;
+                    } else {
+                        searchResultsText.innerHTML = `
+                            <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+                            ${count} tutoriais encontrados para "<strong style="color: var(--accent-400);">${currentSearch}</strong>"
+                        `;
+                    }
+                } else {
+                    searchResults.classList.remove('visible');
+                }
+            }
+
+            // Inicializar
+            applyFilters();
+        });
+    </script>
+</body>
+</html> 
